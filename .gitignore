@@ -10,6 +10,7 @@ __pycache__
 .pytest_cache
 .venv
 venv
+ARCHITECTURE.md
 README.md
 DESIGN.md
 design_system.md
