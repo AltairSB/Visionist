@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+dist
+build
+.env
+.env.local
+frontend/.env.local
+__pycache__
+.pytest_cache
+.venv
+venv
+README.md
+DESIGN.md
+design_system.md
+.cursor/rules
