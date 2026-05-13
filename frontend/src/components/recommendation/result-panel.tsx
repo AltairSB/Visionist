@@ -12,7 +12,7 @@ type ResultPanelProps = {
 export const ResultPanel = ({ recommendation, onCheaperRequest }: ResultPanelProps) => {
   return (
     <aside className="space-y-5">
-      <section className="rounded-[2rem] bg-plum p-7 text-white shadow-card">
+      <section className="rounded-[2rem] bg-gradient-to-br from-plum to-violet p-7 text-white shadow-card">
         <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-lilac">
           <Sparkles size={18} />
           AI Gerekçesi
@@ -42,7 +42,7 @@ export const ResultPanel = ({ recommendation, onCheaperRequest }: ResultPanelPro
             -{Math.round((recommendation.savings / recommendation.list_total) * 100)}%
           </span>
         </div>
-        <div className="mt-5 flex items-center justify-between rounded-2xl bg-lilac p-4 font-bold text-plum">
+        <div className="mt-5 flex items-center justify-between rounded-2xl bg-plum p-4 font-bold text-white">
           <span className="flex items-center gap-2">
             <BadgePercent size={18} />
             Tasarruf Miktarı
@@ -60,7 +60,7 @@ export const ResultPanel = ({ recommendation, onCheaperRequest }: ResultPanelPro
           </Button>
         </div>
       </section>
-      <section className="flex gap-4 rounded-[2rem] border border-violet/15 bg-lilac p-5 text-plum shadow-card">
+      <section className="flex gap-4 rounded-[2rem] border border-plum/10 bg-white/82 p-5 text-plum shadow-card backdrop-blur">
         <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-plum text-white">
           <TrendingDown size={22} />
         </span>

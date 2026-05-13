@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Hanken_Grotesk } from 'next/font/google'
+import { Cormorant_Garamond, Hanken_Grotesk } from 'next/font/google'
 
 import './globals.css'
 
@@ -8,8 +8,14 @@ const hanken = Hanken_Grotesk({
   variable: '--font-hanken',
 })
 
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  variable: '--font-cormorant',
+})
+
 export const metadata: Metadata = {
-  title: 'Stil & Ekonomi',
+  title: 'Visionist',
   description: 'AI destekli ekonomik kombin asistanı',
 }
 
@@ -20,7 +26,7 @@ type RootLayoutProps = {
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <html lang="tr">
-      <body className={`${hanken.variable} font-sans antialiased`}>
+      <body className={`${hanken.variable} ${cormorant.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

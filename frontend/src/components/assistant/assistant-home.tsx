@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, BadgePercent, Camera, PiggyBank, Sparkles, UsersRound } from 'lucide-react'
+import { ArrowRight, BadgePercent, Camera, Lock, PiggyBank, Sparkles, UsersRound } from 'lucide-react'
 import type { FormEvent } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -18,6 +18,8 @@ type AssistantHomeProps = {
   onPromptChange: (prompt: string) => void
   onSubmit: () => void
   onCheaperRequest: () => void
+  isAuthenticated: boolean
+  onRequireAuth: () => void
 }
 
 export const AssistantHome = ({
@@ -26,6 +28,8 @@ export const AssistantHome = ({
   onPromptChange,
   onSubmit,
   onCheaperRequest,
+  isAuthenticated,
+  onRequireAuth,
 }: AssistantHomeProps) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -35,7 +39,7 @@ export const AssistantHome = ({
   return (
     <section id="assistant" className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-3xl text-center">
-        <span className="inline-flex size-16 items-center justify-center rounded-full bg-plum text-lilac shadow-atelier">
+        <span className="inline-flex size-16 animate-orbit-pulse items-center justify-center rounded-full bg-plum text-lilac shadow-atelier">
           <Sparkles size={30} />
         </span>
         <p className="mt-6 text-sm font-bold uppercase tracking-[0.28em] text-violet">Adım 3 / 3</p>
@@ -48,9 +52,9 @@ export const AssistantHome = ({
       </div>
       <form
         onSubmit={handleSubmit}
-        className="mx-auto mt-9 max-w-4xl rounded-[2rem] border border-plum/10 bg-white/75 p-4 shadow-atelier backdrop-blur"
+        className="mx-auto mt-9 max-w-4xl rounded-[2rem] border border-white/80 bg-white/82 p-4 shadow-atelier backdrop-blur"
       >
-        <div className="rounded-3xl bg-lilac/70 p-4">
+        <div className="rounded-3xl border border-plum/10 bg-gradient-to-br from-white to-lilac/45 p-4">
           <textarea
             value={prompt}
             onChange={(event) => onPromptChange(event.target.value)}
@@ -59,7 +63,7 @@ export const AssistantHome = ({
             className="min-h-28 w-full resize-none bg-transparent text-lg text-ink outline-none placeholder:text-ink/35"
           />
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-            <Button type="button" variant="secondary" className="bg-white/70" aria-label="Görsel yükleme ipucu">
+            <Button type="button" variant="secondary" aria-label="Görsel yükleme ipucu">
               <Camera size={17} />
               Buna ne uyar?
             </Button>
@@ -78,7 +82,7 @@ export const AssistantHome = ({
               key={chip}
               type="button"
               onClick={() => onPromptChange(chip)}
-              className="rounded-full border border-violet/15 bg-lilac px-4 py-2 text-sm font-semibold text-plum transition hover:bg-plum hover:text-white"
+            className="rounded-full border border-plum/15 bg-white px-4 py-2 text-sm font-semibold text-plum shadow-card transition hover:-translate-y-0.5 hover:bg-plum hover:text-white"
             >
               {chip}
             </button>
@@ -86,8 +90,8 @@ export const AssistantHome = ({
         </div>
       </div>
       <div className="mt-14 grid gap-5 lg:grid-cols-[0.8fr_1.6fr]">
-        <aside className="rounded-[2rem] border border-plum/10 bg-lilac p-6 shadow-card">
-          <div className="inline-flex rounded-xl bg-white p-3 text-plum">
+        <aside className="rounded-[2rem] border border-plum/10 bg-white/80 p-6 shadow-card backdrop-blur">
+          <div className="inline-flex rounded-xl bg-plum p-3 text-white">
             <PiggyBank size={22} />
           </div>
           <h2 className="mt-5 text-sm font-bold uppercase tracking-[0.18em] text-plum">Akıllı Tasarruf</h2>
@@ -97,7 +101,7 @@ export const AssistantHome = ({
           <button
             type="button"
             onClick={onCheaperRequest}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-plum px-4 py-2 text-sm font-bold text-white transition hover:bg-violet"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-violet px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-plum hover:shadow-card"
           >
             <BadgePercent size={17} />
             Daha ucuzunu ara
@@ -138,6 +142,29 @@ export const AssistantHome = ({
           <UsersRound className="absolute bottom-6 right-6 text-lilac/50" size={42} />
         </div>
       </div>
+      <section className="mt-6 rounded-[2rem] border border-plum/10 bg-white/82 p-6 shadow-card backdrop-blur md:flex md:items-center md:justify-between md:gap-6">
+        <div>
+          <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-violet">
+            <Lock size={17} />
+            Dolabım
+          </p>
+          <h2 className="mt-2 text-2xl font-bold tracking-[-0.03em] text-ink">
+            Kendi parçalarını kaydetmek üyeye özel.
+          </h2>
+          <p className="mt-2 max-w-2xl leading-7 text-ink/65">
+            Hesap açmadan kombin önerisi alabilirsin. Dolabım alanı, kayıtlı ürünler ve kişisel stil hafızası için giriş gerekir.
+          </p>
+        </div>
+        <Button
+          type="button"
+          variant={isAuthenticated ? 'primary' : 'ghost'}
+          className="mt-5 md:mt-0"
+          onClick={onRequireAuth}
+        >
+          {isAuthenticated ? 'Dolabıma Git' : 'Giriş Yap ve Aç'}
+          <ArrowRight size={18} />
+        </Button>
+      </section>
     </section>
   )
 }

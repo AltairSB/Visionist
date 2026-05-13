@@ -56,7 +56,7 @@ export const ProfileStep = ({
         </div>
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink/70">Adım 2 / 3</p>
       </div>
-      <div className="mt-10 rounded-[2rem] border border-plum/10 bg-white/70 p-6 shadow-atelier backdrop-blur md:p-10">
+      <div className="mt-10 rounded-[2rem] border border-white/80 bg-white/82 p-6 shadow-atelier backdrop-blur md:p-10">
         <h1 className="text-4xl font-bold tracking-[-0.04em] text-ink">
           Sizi biraz daha yakından tanıyalım.
         </h1>
@@ -66,7 +66,7 @@ export const ProfileStep = ({
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           <label className="block">
             <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Boy (cm)</span>
-            <span className="mt-2 flex items-center gap-3 rounded-2xl border border-plum/15 bg-lilac/55 px-4 py-3 focus-within:border-plum">
+            <span className="mt-2 flex items-center gap-3 rounded-2xl border border-plum/15 bg-mist px-4 py-3 transition focus-within:border-violet focus-within:ring-4 focus-within:ring-violet/10">
               <Ruler className="text-plum" size={18} />
               <input
                 type="number"
@@ -79,7 +79,7 @@ export const ProfileStep = ({
           </label>
           <label className="block">
             <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Kilo (kg)</span>
-            <span className="mt-2 flex items-center gap-3 rounded-2xl border border-plum/15 bg-lilac/55 px-4 py-3 focus-within:border-plum">
+            <span className="mt-2 flex items-center gap-3 rounded-2xl border border-plum/15 bg-mist px-4 py-3 transition focus-within:border-violet focus-within:ring-4 focus-within:ring-violet/10">
               <Dumbbell className="text-plum" size={18} />
               <input
                 type="number"
@@ -127,7 +127,7 @@ export const ProfileStep = ({
           </div>
         </div>
         <div className="mt-9 flex flex-col-reverse gap-3 sm:flex-row">
-          <Button type="button" variant="secondary" className="sm:w-40" onClick={onBack}>
+          <Button type="button" variant="ghost" className="sm:w-40" onClick={onBack}>
             Geri
           </Button>
           <Button type="button" className="flex-1" onClick={onContinue} disabled={!hasValidProfile}>
@@ -135,7 +135,7 @@ export const ProfileStep = ({
             <ArrowRight size={18} />
           </Button>
         </div>
-        <div className="mt-5 rounded-2xl border border-violet/15 bg-lilac/70 p-4 text-sm text-ink/75">
+        <div className="mt-5 rounded-2xl border border-violet/15 bg-white p-4 text-sm text-ink/75">
           <span className="font-bold text-plum">Asistan Notu:</span> Vücut ölçülerinize göre mağaza indirimlerinde daha iyi beden uyumuna sahip ürünleri önceliklendiririz.
         </div>
       </div>

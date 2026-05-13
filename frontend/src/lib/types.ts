@@ -9,6 +9,12 @@ export type UserProfile = {
   style: StylePreference
 }
 
+export type Account = {
+  name: string
+  email: string
+  createdAt: string
+}
+
 export type Product = {
   id: number
   name: string

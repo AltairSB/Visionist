@@ -52,10 +52,10 @@ export const SegmentStep = ({ selectedSegment, onSelectSegment }: SegmentStepPro
               type="button"
               onClick={() => onSelectSegment(segment.id)}
               className={cn(
-                'group rounded-3xl border p-8 text-left transition focus:outline-none focus:ring-4 focus:ring-violet/20',
+                'group rounded-3xl border p-8 text-left transition duration-300 focus:outline-none focus:ring-4 focus:ring-violet/20',
                 isSelected
                   ? 'border-plum bg-plum text-white shadow-atelier'
-                  : 'border-plum/10 bg-white/70 text-ink shadow-card hover:-translate-y-1 hover:bg-lilac/80',
+                  : 'border-white/80 bg-white/82 text-ink shadow-card hover:-translate-y-1 hover:border-violet/25 hover:bg-white',
               )}
               aria-pressed={isSelected}
             >
@@ -76,13 +76,13 @@ export const SegmentStep = ({ selectedSegment, onSelectSegment }: SegmentStepPro
         })}
       </div>
       <div className="mt-10 grid gap-5 md:grid-cols-2">
-        <div className="rounded-2xl border border-plum/10 bg-lilac/90 p-6 shadow-card">
+        <div className="rounded-2xl border border-plum/10 bg-white/80 p-6 shadow-card backdrop-blur">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-plum">Yapay Zeka Destekli Stil</p>
           <p className="mt-2 text-ink/70">
             Seçtiğiniz segmente göre katalogdaki ürünleri sizin için eleyip kombin mantığıyla sıralar.
           </p>
         </div>
-        <div className="rounded-2xl border border-plum/10 bg-plum p-6 text-white shadow-card">
+        <div className="rounded-2xl border border-plum/10 bg-gradient-to-br from-plum to-violet p-6 text-white shadow-card">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-lilac">Maksimum Tasarruf</p>
           <p className="mt-2 text-white/75">
             Sadece şıklığı değil, aynı zamanda bütçenizi koruyan indirimli parçaları öne çıkarır.
