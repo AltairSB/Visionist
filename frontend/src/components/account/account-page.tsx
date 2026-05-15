@@ -1,8 +1,10 @@
 'use client'
 
-import { LogOut, Save, Shirt, Sparkles, UserRound } from 'lucide-react'
+import { CheckCircle2, LogOut, Save, Sparkles, UserRound, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { getGenderLabels } from '@/lib/style-images'
 import type { Account, Segment, StylePreference, UserProfile } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
@@ -16,12 +18,15 @@ const styleOptions: { id: StylePreference; label: string }[] = [
   { id: 'classic', label: 'Klasik' },
   { id: 'sport', label: 'Spor' },
   { id: 'daily', label: 'Günlük' },
+  { id: 'chic', label: 'Şık' },
+  { id: 'vintage', label: 'Vintage' },
+  { id: 'minimal', label: 'Minimal' },
 ]
 
 type AccountPageProps = {
   account: Account
   profile: UserProfile
-  onProfileChange: (profile: UserProfile) => void
+  onProfileSave: (profile: UserProfile) => void
   onBackToAssistant: () => void
   onSignOut: () => void
 }
@@ -29,12 +34,30 @@ type AccountPageProps = {
 export const AccountPage = ({
   account,
   profile,
-  onProfileChange,
+  onProfileSave,
   onBackToAssistant,
   onSignOut,
 }: AccountPageProps) => {
-  const handleProfileChange = (nextProfile: Partial<UserProfile>) => {
-    onProfileChange({ ...profile, ...nextProfile })
+  const [draftProfile, setDraftProfile] = useState(profile)
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
+
+  useEffect(() => {
+    setDraftProfile(profile)
+  }, [profile])
+
+  const genderOptions = getGenderLabels(draftProfile.segment)
+
+  const handleDraftChange = (nextProfile: Partial<UserProfile>) => {
+    setDraftProfile((current) => ({ ...current, ...nextProfile }))
+  }
+
+  const handleSave = () => {
+    onProfileSave(draftProfile)
+    setIsSaveModalOpen(true)
+  }
+
+  const handleCloseSaveModal = () => {
+    setIsSaveModalOpen(false)
   }
 
   return (
@@ -76,13 +99,33 @@ export const AccountPage = ({
             <h2 className="mt-2 text-3xl font-bold tracking-[-0.04em] text-ink">
               Bilgilerini sonradan güncelle.
             </h2>
+            <div className="mt-7">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Cinsiyet</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {genderOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => handleDraftChange({ gender: option.id })}
+                    className={cn(
+                      'rounded-full border px-4 py-2 text-sm font-bold transition',
+                      draftProfile.gender === option.id
+                        ? 'border-violet bg-violet text-white'
+                        : 'border-plum/15 bg-white text-plum hover:bg-lilac/60',
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="mt-7 grid gap-5 sm:grid-cols-2">
               <label className="block">
                 <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Boy (cm)</span>
                 <input
                   type="number"
-                  value={profile.height}
-                  onChange={(event) => handleProfileChange({ height: Number(event.target.value) })}
+                  value={draftProfile.height}
+                  onChange={(event) => handleDraftChange({ height: Number(event.target.value) })}
                   className="mt-2 w-full rounded-2xl border border-plum/15 bg-mist px-4 py-3 outline-none transition focus:border-violet focus:ring-4 focus:ring-violet/10"
                 />
               </label>
@@ -90,8 +133,8 @@ export const AccountPage = ({
                 <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Kilo (kg)</span>
                 <input
                   type="number"
-                  value={profile.weight}
-                  onChange={(event) => handleProfileChange({ weight: Number(event.target.value) })}
+                  value={draftProfile.weight}
+                  onChange={(event) => handleDraftChange({ weight: Number(event.target.value) })}
                   className="mt-2 w-full rounded-2xl border border-plum/15 bg-mist px-4 py-3 outline-none transition focus:border-violet focus:ring-4 focus:ring-violet/10"
                 />
               </label>
@@ -104,10 +147,10 @@ export const AccountPage = ({
                     <button
                       key={segment.id}
                       type="button"
-                      onClick={() => handleProfileChange({ segment: segment.id })}
+                      onClick={() => handleDraftChange({ segment: segment.id })}
                       className={cn(
                         'rounded-full border px-4 py-2 text-sm font-bold transition',
-                        profile.segment === segment.id
+                        draftProfile.segment === segment.id
                           ? 'border-plum bg-plum text-white'
                           : 'border-plum/15 bg-white text-plum hover:bg-lilac/60',
                       )}
@@ -124,10 +167,10 @@ export const AccountPage = ({
                     <button
                       key={style.id}
                       type="button"
-                      onClick={() => handleProfileChange({ style: style.id })}
+                      onClick={() => handleDraftChange({ style: style.id })}
                       className={cn(
                         'rounded-full border px-4 py-2 text-sm font-bold transition',
-                        profile.style === style.id
+                        draftProfile.style === style.id
                           ? 'border-violet bg-violet text-white'
                           : 'border-plum/15 bg-white text-plum hover:bg-lilac/60',
                       )}
@@ -138,28 +181,43 @@ export const AccountPage = ({
                 </div>
               </div>
             </div>
-            <div className="mt-8 rounded-2xl bg-lilac/70 p-4 text-sm font-semibold text-plum">
-              <Save className="mr-2 inline" size={17} />
-              Değişiklikler otomatik olarak bu cihazda kaydedilir.
-            </div>
-          </section>
-          <section id="wardrobe" className="rounded-[2rem] border border-plum/10 bg-plum p-6 text-white shadow-card sm:p-8">
-            <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.22em] text-lilac">
-              <Shirt size={18} />
-              Dolabım
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-[-0.04em]">Üyeye özel stil hafızası</h2>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {['Lacivert blazer', 'Bej kazak', 'Beyaz sneaker'].map((item) => (
-                <div key={item} className="rounded-2xl border border-white/12 bg-white/10 p-4">
-                  <span className="block h-28 rounded-xl bg-gradient-to-br from-lilac/70 to-white/15" />
-                  <p className="mt-3 font-bold">{item}</p>
-                </div>
-              ))}
+            <div className="mt-8">
+              <Button type="button" className="w-full sm:w-auto" onClick={handleSave}>
+                <Save size={18} />
+                Güncellemeleri Kaydet
+              </Button>
             </div>
           </section>
         </div>
       </div>
+      {isSaveModalOpen ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-ink/55 px-5 backdrop-blur-md">
+          <div
+            role="dialog"
+            aria-label="Profil kaydedildi"
+            className="relative w-full max-w-md rounded-[2rem] border border-white/20 bg-mist p-8 text-center shadow-atelier"
+          >
+            <button
+              type="button"
+              onClick={handleCloseSaveModal}
+              aria-label="Bildirimi kapat"
+              className="absolute right-4 top-4 rounded-full bg-white/80 p-2 text-plum transition hover:bg-white"
+            >
+              <X size={18} />
+            </button>
+            <span className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-plum text-lilac">
+              <CheckCircle2 size={32} />
+            </span>
+            <h3 className="mt-6 text-2xl font-bold tracking-[-0.03em] text-ink">Profil güncellendi</h3>
+            <p className="mt-3 leading-7 text-ink/65">
+              Tercihleriniz kaydedildi. Kombin önerileri yeni bilgilerinize göre hazırlanacak.
+            </p>
+            <Button type="button" className="mt-7 w-full" onClick={handleCloseSaveModal}>
+              Tamam
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </section>
   )
 }

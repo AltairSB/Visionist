@@ -3,16 +3,20 @@
 import { useEffect, useState } from 'react'
 
 import { AccountPage } from '@/components/account/account-page'
+import { WardrobePage } from '@/components/wardrobe/wardrobe-page'
 import { AssistantHome } from '@/components/assistant/assistant-home'
-import { AuthModal } from '@/components/auth/auth-modal'
+import { AuthModal, type AuthMode } from '@/components/auth/auth-modal'
 import { ProfileStep } from '@/components/onboarding/profile-step'
 import { SegmentStep } from '@/components/onboarding/segment-step'
-import { RecommendationResults } from '@/components/recommendation/recommendation-results'
+import { RecommendationModal } from '@/components/recommendation/recommendation-modal'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { requestRecommendation } from '@/lib/api'
+import { saveOutfitToWardrobe } from '@/lib/wardrobe-storage'
+import { defaultProfile, normalizeProfile } from '@/lib/profile'
 import type {
   Account,
+  Gender,
   PreferenceMode,
   RecommendationResponse,
   Segment,
@@ -20,14 +24,28 @@ import type {
   UserProfile,
 } from '@/lib/types'
 
-const defaultProfile: UserProfile = {
-  segment: 'adult',
-  height: 178,
-  weight: 72,
-  style: 'classic',
+const ONBOARDING_KEY = 'visionist-onboarding-complete'
+const VIEW_KEY = 'visionist-view'
+
+type AppView = 'assistant' | 'account' | 'wardrobe'
+
+const getOnboardingComplete = (): boolean => {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  return window.localStorage.getItem(ONBOARDING_KEY) === 'true'
 }
 
-const getStoredProfile = () => {
+const setOnboardingComplete = (isComplete: boolean) => {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.localStorage.setItem(ONBOARDING_KEY, isComplete ? 'true' : 'false')
+}
+
+const getStoredProfile = (): UserProfile => {
   if (typeof window === 'undefined') {
     return defaultProfile
   }
@@ -39,13 +57,13 @@ const getStoredProfile = () => {
   }
 
   try {
-    return JSON.parse(storedProfile) as UserProfile
+    return normalizeProfile(JSON.parse(storedProfile) as Partial<UserProfile>)
   } catch {
     return defaultProfile
   }
 }
 
-const getStoredAccount = () => {
+const getStoredAccount = (): Account | null => {
   if (typeof window === 'undefined') {
     return null
   }
@@ -63,32 +81,123 @@ const getStoredAccount = () => {
   }
 }
 
+const getStoredView = (storedAccount: Account | null): AppView => {
+  if (!storedAccount || typeof window === 'undefined') {
+    return 'assistant'
+  }
+
+  const storedView = window.localStorage.getItem(VIEW_KEY)
+
+  if (storedView === 'account' || storedView === 'wardrobe') {
+    return storedView
+  }
+
+  return 'assistant'
+}
+
+const hasAccountCompletedOnboarding = (storedAccount: Account | null) => {
+  if (!storedAccount) {
+    return false
+  }
+
+  return storedAccount.hasCompletedOnboarding === true || getOnboardingComplete()
+}
+
 export const AppShell = () => {
-  const [view, setView] = useState<'assistant' | 'account'>('assistant')
+  const [view, setView] = useState<AppView>('assistant')
   const [step, setStep] = useState(1)
-  const [profile, setProfile] = useState<UserProfile>(getStoredProfile)
-  const [account, setAccount] = useState<Account | null>(getStoredAccount)
+  const [profile, setProfile] = useState<UserProfile>(defaultProfile)
+  const [account, setAccount] = useState<Account | null>(null)
   const [prompt, setPrompt] = useState('Yazlık, uygun fiyatlı bir akşam yemeği kombini')
   const [recommendation, setRecommendation] = useState<RecommendationResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isAuthOpen, setIsAuthOpen] = useState(false)
+  const [authMode, setAuthMode] = useState<AuthMode>('signin')
+  const [hasHydratedStorage, setHasHydratedStorage] = useState(false)
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false)
 
   useEffect(() => {
+    const storedAccount = getStoredAccount()
+    const storedProfile = storedAccount ? getStoredProfile() : defaultProfile
+    const onboardingComplete = hasAccountCompletedOnboarding(storedAccount)
+
+    setProfile(storedProfile)
+    setAccount(storedAccount)
+    setView(getStoredView(storedAccount))
+    setHasCompletedOnboarding(onboardingComplete)
+    setStep(onboardingComplete ? 3 : 1)
+    setHasHydratedStorage(true)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const previousScrollRestoration = window.history.scrollRestoration
+    window.history.scrollRestoration = 'manual'
+
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration
+    }
+  }, [])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step, view])
+
+  useEffect(() => {
+    if (!hasHydratedStorage) {
+      return
+    }
+
     window.localStorage.setItem('visionist-profile', JSON.stringify(profile))
-  }, [profile])
+  }, [hasHydratedStorage, profile])
 
   useEffect(() => {
+    if (!hasHydratedStorage) {
+      return
+    }
+
     if (!account) {
       window.localStorage.removeItem('visionist-account')
+      window.localStorage.removeItem(VIEW_KEY)
       return
     }
 
     window.localStorage.setItem('visionist-account', JSON.stringify(account))
-  }, [account])
+  }, [account, hasHydratedStorage])
+
+  useEffect(() => {
+    if (!hasHydratedStorage) {
+      return
+    }
+
+    window.localStorage.setItem(VIEW_KEY, view)
+  }, [hasHydratedStorage, view])
+
+  const completeOnboarding = () => {
+    if (!account) {
+      return
+    }
+
+    setOnboardingComplete(true)
+    setHasCompletedOnboarding(true)
+    setAccount((currentAccount) =>
+      currentAccount ? { ...currentAccount, hasCompletedOnboarding: true } : currentAccount,
+    )
+  }
+
+  const handleGenderChange = (gender: Gender) => {
+    setProfile((currentProfile) => ({ ...currentProfile, gender }))
+  }
 
   const handleSegmentChange = (segment: Segment) => {
     setProfile((currentProfile) => ({ ...currentProfile, segment }))
+  }
+
+  const handleStepOneContinue = () => {
     setStep(2)
   }
 
@@ -104,21 +213,36 @@ export const AppShell = () => {
     setProfile((currentProfile) => ({ ...currentProfile, style }))
   }
 
+  const handleProfileContinue = () => {
+    if (account) {
+      completeOnboarding()
+    }
+    setStep(3)
+  }
+
   const handleRecommendation = async (preference: PreferenceMode = 'balanced') => {
+    const trimmedPrompt = prompt.trim()
+
+    if (trimmedPrompt.length < 3) {
+      setErrorMessage('Kombin için en az 3 karakterlik bir istek yazın.')
+      return
+    }
+
     setIsLoading(true)
     setErrorMessage('')
 
     try {
       const response = await requestRecommendation({
         profile,
-        prompt,
+        prompt: trimmedPrompt,
         preference,
       })
 
       setRecommendation(response)
-      setStep(3)
-    } catch {
-      setErrorMessage('Backend servisine ulaşılamadı. Lütfen FastAPI sunucusunun çalıştığından emin olun.')
+      setErrorMessage('')
+    } catch (error) {
+      console.error('Kombin önerisi hatası:', error)
+      setErrorMessage('Kombin oluşturulamadı. Lütfen tekrar deneyin.')
     } finally {
       setIsLoading(false)
     }
@@ -128,25 +252,72 @@ export const AppShell = () => {
     void handleRecommendation('cheaper')
   }
 
-  const handleAuthenticate = (nextAccount: Account) => {
-    setAccount(nextAccount)
+  const handleCloseRecommendation = () => {
+    setRecommendation(null)
+  }
+
+  const handleSaveToWardrobe = (savedRecommendation: RecommendationResponse) => {
+    saveOutfitToWardrobe(prompt, savedRecommendation)
+    setRecommendation(null)
+    setView('wardrobe')
+  }
+
+  const handleAuthenticate = (nextAccount: Account, mode: AuthMode) => {
+    const isSignup = mode === 'signup'
+    const storedAccount = getStoredAccount()
+    const isReturningUser = storedAccount?.email === nextAccount.email
+    const nextOnboardingComplete = isSignup
+      ? false
+      : isReturningUser
+        ? hasAccountCompletedOnboarding(storedAccount)
+        : getOnboardingComplete()
+
+    if (isSignup) {
+      setOnboardingComplete(false)
+    }
+
+    setAccount({
+      ...nextAccount,
+      hasCompletedOnboarding: nextOnboardingComplete,
+    })
     setIsAuthOpen(false)
-    setView('account')
+    setHasCompletedOnboarding(nextOnboardingComplete)
+    setView('assistant')
+    setStep(nextOnboardingComplete ? 3 : 1)
   }
 
   const handleSignOut = () => {
     setAccount(null)
+    setProfile(defaultProfile)
     setView('assistant')
+    setHasCompletedOnboarding(false)
+    setStep(1)
+    window.scrollTo(0, 0)
   }
 
-  const handleAssistantClick = () => {
+  const handleLogoClick = () => {
     setView('assistant')
-    setStep(3)
+
+    if (account && hasCompletedOnboarding) {
+      setStep(3)
+      return
+    }
+
+    setStep(1)
+  }
+
+  const handleAssistantNavClick = () => {
+    handleLogoClick()
+  }
+
+  const handleOpenAuth = (mode: AuthMode) => {
+    setAuthMode(mode)
+    setIsAuthOpen(true)
   }
 
   const handleAccountClick = () => {
     if (!account) {
-      setIsAuthOpen(true)
+      handleOpenAuth('signin')
       return
     }
 
@@ -155,22 +326,26 @@ export const AppShell = () => {
 
   const handleWardrobeClick = () => {
     if (!account) {
-      setIsAuthOpen(true)
+      handleOpenAuth('signin')
       return
     }
 
-    setView('account')
+    setView('wardrobe')
   }
+
+  const isOnboardingFlow = step < 3 && view === 'assistant'
 
   return (
     <div className="min-h-screen text-ink">
       <SiteHeader
         account={account}
-        compact={step < 3 && view === 'assistant'}
+        compact={isOnboardingFlow}
         view={view}
-        onAuthClick={() => setIsAuthOpen(true)}
+        onSignInClick={() => handleOpenAuth('signin')}
+        onSignUpClick={() => handleOpenAuth('signup')}
         onAccountClick={handleAccountClick}
-        onAssistantClick={handleAssistantClick}
+        onLogoClick={handleLogoClick}
+        onAssistantClick={handleAssistantNavClick}
         onWardrobeClick={handleWardrobeClick}
       />
       <main>
@@ -178,17 +353,27 @@ export const AppShell = () => {
           <AccountPage
             account={account}
             profile={profile}
-            onProfileChange={setProfile}
-            onBackToAssistant={handleAssistantClick}
+            onProfileSave={setProfile}
+            onBackToAssistant={handleLogoClick}
             onSignOut={handleSignOut}
           />
+        ) : view === 'wardrobe' && account ? (
+          <WardrobePage />
         ) : (
           <>
             {step === 1 ? (
-              <SegmentStep selectedSegment={profile.segment} onSelectSegment={handleSegmentChange} />
+              <SegmentStep
+                selectedGender={profile.gender}
+                selectedSegment={profile.segment}
+                onSelectGender={handleGenderChange}
+                onSelectSegment={handleSegmentChange}
+                onContinue={handleStepOneContinue}
+              />
             ) : null}
             {step === 2 ? (
               <ProfileStep
+                segment={profile.segment}
+                gender={profile.gender}
                 height={profile.height}
                 weight={profile.weight}
                 style={profile.style}
@@ -196,7 +381,7 @@ export const AppShell = () => {
                 onWeightChange={handleWeightChange}
                 onStyleChange={handleStyleChange}
                 onBack={() => setStep(1)}
-                onContinue={() => setStep(3)}
+                onContinue={handleProfileContinue}
               />
             ) : null}
             {step === 3 ? (
@@ -208,18 +393,12 @@ export const AppShell = () => {
                   onSubmit={() => void handleRecommendation()}
                   onCheaperRequest={handleCheaperRequest}
                   isAuthenticated={Boolean(account)}
-                  onRequireAuth={handleWardrobeClick}
+                  onWardrobeClick={handleWardrobeClick}
                 />
                 {errorMessage ? (
                   <div className="mx-auto mb-8 max-w-3xl rounded-2xl border border-rose/30 bg-rose/10 px-5 py-4 text-rose">
                     {errorMessage}
                   </div>
-                ) : null}
-                {recommendation ? (
-                  <RecommendationResults
-                    recommendation={recommendation}
-                    onCheaperRequest={handleCheaperRequest}
-                  />
                 ) : null}
               </>
             ) : null}
@@ -229,9 +408,22 @@ export const AppShell = () => {
       <SiteFooter />
       <AuthModal
         isOpen={isAuthOpen}
+        initialMode={authMode}
         onClose={() => setIsAuthOpen(false)}
         onAuthenticate={handleAuthenticate}
       />
+      {recommendation ? (
+        <RecommendationModal
+          isOpen
+          recommendation={recommendation}
+          prompt={prompt}
+          profile={profile}
+          isAuthenticated={Boolean(account)}
+          onClose={handleCloseRecommendation}
+          onSaveToWardrobe={handleSaveToWardrobe}
+          onRecommendationChange={setRecommendation}
+        />
+      ) : null}
     </div>
   )
 }

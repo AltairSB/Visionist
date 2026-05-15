@@ -1,9 +1,12 @@
 export type Segment = 'child' | 'young' | 'adult'
-export type StylePreference = 'classic' | 'sport' | 'daily'
+export type Gender = 'female' | 'male'
+export type StylePreference = 'classic' | 'sport' | 'daily' | 'chic' | 'vintage' | 'minimal'
+export type CatalogGender = 'Men' | 'Women' | 'Boys' | 'Girls'
 export type PreferenceMode = 'balanced' | 'cheaper' | 'sportier' | 'elegant'
 
 export type UserProfile = {
   segment: Segment
+  gender: Gender
   height: number
   weight: number
   style: StylePreference
@@ -13,6 +16,7 @@ export type Account = {
   name: string
   email: string
   createdAt: string
+  hasCompletedOnboarding?: boolean
 }
 
 export type Product = {

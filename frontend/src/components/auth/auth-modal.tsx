@@ -2,24 +2,31 @@
 
 import { LogIn, Sparkles, UserPlus, X } from 'lucide-react'
 import type { FormEvent } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import type { Account } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
-type AuthMode = 'signin' | 'signup'
+export type AuthMode = 'signin' | 'signup'
 
 type AuthModalProps = {
   isOpen: boolean
+  initialMode: AuthMode
   onClose: () => void
-  onAuthenticate: (account: Account) => void
+  onAuthenticate: (account: Account, mode: AuthMode) => void
 }
 
-export const AuthModal = ({ isOpen, onClose, onAuthenticate }: AuthModalProps) => {
-  const [mode, setMode] = useState<AuthMode>('signin')
+export const AuthModal = ({ isOpen, initialMode, onClose, onAuthenticate }: AuthModalProps) => {
+  const [mode, setMode] = useState<AuthMode>(initialMode)
   const [name, setName] = useState('Beyza')
   const [email, setEmail] = useState('beyza@example.com')
+
+  useEffect(() => {
+    if (isOpen) {
+      setMode(initialMode)
+    }
+  }, [initialMode, isOpen])
 
   if (!isOpen) {
     return null
@@ -30,11 +37,14 @@ export const AuthModal = ({ isOpen, onClose, onAuthenticate }: AuthModalProps) =
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    onAuthenticate({
-      name: isSignup ? name : email.split('@')[0] || 'Stil Üyesi',
-      email,
-      createdAt: new Date().toISOString(),
-    })
+    onAuthenticate(
+      {
+        name: isSignup ? name : email.split('@')[0] || 'Stil Üyesi',
+        email,
+        createdAt: new Date().toISOString(),
+      },
+      mode,
+    )
   }
 
   return (

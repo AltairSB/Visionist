@@ -3,29 +3,23 @@
 import { ArrowRight, CheckCircle2, Dumbbell, Ruler, Shirt } from 'lucide-react'
 import Image from 'next/image'
 
-import type { StylePreference } from '@/lib/types'
+import { getStyleImage } from '@/lib/style-images'
+import type { Gender, Segment, StylePreference } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
-const styles = [
-  {
-    id: 'classic',
-    label: 'Klasik',
-    image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=80',
-  },
-  {
-    id: 'sport',
-    label: 'Spor',
-    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=80',
-  },
-  {
-    id: 'daily',
-    label: 'Günlük',
-    image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=80',
-  },
-] as const
+const styleOptions: { id: StylePreference; label: string }[] = [
+  { id: 'classic', label: 'Klasik' },
+  { id: 'sport', label: 'Spor' },
+  { id: 'daily', label: 'Günlük' },
+  { id: 'chic', label: 'Şık' },
+  { id: 'vintage', label: 'Vintage' },
+  { id: 'minimal', label: 'Minimal' },
+]
 
 type ProfileStepProps = {
+  segment: Segment
+  gender: Gender
   height: number
   weight: number
   style: StylePreference
@@ -37,6 +31,8 @@ type ProfileStepProps = {
 }
 
 export const ProfileStep = ({
+  segment,
+  gender,
   height,
   weight,
   style,
@@ -52,9 +48,9 @@ export const ProfileStep = ({
     <section className="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
       <div className="flex items-center justify-between gap-4">
         <div className="h-1.5 flex-1 rounded-full bg-lilac">
-          <div className="h-full w-2/3 rounded-full bg-violet" />
+          <div className="h-full w-full rounded-full bg-violet" />
         </div>
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink/70">Adım 2 / 3</p>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink/70">Adım 2 / 2</p>
       </div>
       <div className="mt-10 rounded-[2rem] border border-white/80 bg-white/82 p-6 shadow-atelier backdrop-blur md:p-10">
         <h1 className="text-4xl font-bold tracking-[-0.04em] text-ink">
@@ -93,13 +89,14 @@ export const ProfileStep = ({
         </div>
         <div className="mt-9">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Stil Tercihi</p>
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {styles.map((item) => {
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {styleOptions.map((item) => {
               const isSelected = style === item.id
+              const imageSrc = getStyleImage(segment, gender, item.id)
 
               return (
                 <button
-                  key={item.id}
+                  key={`${segment}-${gender}-${item.id}`}
                   type="button"
                   onClick={() => onStyleChange(item.id)}
                   className={cn(
@@ -109,8 +106,9 @@ export const ProfileStep = ({
                   aria-pressed={isSelected}
                 >
                   <Image
-                    src={item.image}
-                    alt=""
+                    key={imageSrc}
+                    src={imageSrc}
+                    alt={`${item.label} stil örneği`}
                     fill
                     sizes="(max-width: 640px) 100vw, 33vw"
                     className="object-cover"

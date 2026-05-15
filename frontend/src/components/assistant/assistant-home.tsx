@@ -2,15 +2,10 @@
 
 import { ArrowRight, BadgePercent, Camera, Lock, PiggyBank, Sparkles, UsersRound } from 'lucide-react'
 import type { FormEvent } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-
-const promptChips = [
-  'Hafta sonu brunch şıklığı',
-  'Ofis için profesyonel & rahat',
-  'Sürdürülebilir markalarla yaz kombini',
-  'Konser için dinamik stil',
-]
+import { pickRandomPromptSuggestions } from '@/lib/prompt-suggestions'
 
 type AssistantHomeProps = {
   prompt: string
@@ -19,7 +14,7 @@ type AssistantHomeProps = {
   onSubmit: () => void
   onCheaperRequest: () => void
   isAuthenticated: boolean
-  onRequireAuth: () => void
+  onWardrobeClick: () => void
 }
 
 export const AssistantHome = ({
@@ -29,8 +24,14 @@ export const AssistantHome = ({
   onSubmit,
   onCheaperRequest,
   isAuthenticated,
-  onRequireAuth,
+  onWardrobeClick,
 }: AssistantHomeProps) => {
+  const [promptChips, setPromptChips] = useState<string[]>([])
+
+  useEffect(() => {
+    setPromptChips(pickRandomPromptSuggestions(4))
+  }, [])
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     onSubmit()
@@ -42,8 +43,7 @@ export const AssistantHome = ({
         <span className="inline-flex size-16 animate-orbit-pulse items-center justify-center rounded-full bg-plum text-lilac shadow-atelier">
           <Sparkles size={30} />
         </span>
-        <p className="mt-6 text-sm font-bold uppercase tracking-[0.28em] text-violet">Adım 3 / 3</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-[-0.04em] text-ink sm:text-5xl">
+        <h1 className="mt-6 text-4xl font-bold tracking-[-0.04em] text-ink sm:text-5xl">
           Bugün ne için kombin arıyorsun?
         </h1>
         <p className="mt-4 text-lg text-ink/65">
@@ -82,7 +82,7 @@ export const AssistantHome = ({
               key={chip}
               type="button"
               onClick={() => onPromptChange(chip)}
-            className="rounded-full border border-plum/15 bg-white px-4 py-2 text-sm font-semibold text-plum shadow-card transition hover:-translate-y-0.5 hover:bg-plum hover:text-white"
+              className="rounded-full border border-plum/15 bg-white px-4 py-2 text-sm font-semibold text-plum shadow-card transition hover:-translate-y-0.5 hover:bg-plum hover:text-white"
             >
               {chip}
             </button>
@@ -159,7 +159,7 @@ export const AssistantHome = ({
           type="button"
           variant={isAuthenticated ? 'primary' : 'ghost'}
           className="mt-5 md:mt-0"
-          onClick={onRequireAuth}
+          onClick={onWardrobeClick}
         >
           {isAuthenticated ? 'Dolabıma Git' : 'Giriş Yap ve Aç'}
           <ArrowRight size={18} />
