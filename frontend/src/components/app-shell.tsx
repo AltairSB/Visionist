@@ -242,7 +242,9 @@ export const AppShell = () => {
       setErrorMessage('')
     } catch (error) {
       console.error('Kombin önerisi hatası:', error)
-      setErrorMessage('Kombin oluşturulamadı. Lütfen tekrar deneyin.')
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Kombin oluşturulamadı. Lütfen tekrar deneyin.',
+      )
     } finally {
       setIsLoading(false)
     }

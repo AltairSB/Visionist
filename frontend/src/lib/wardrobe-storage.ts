@@ -38,3 +38,12 @@ export const saveOutfitToWardrobe = (prompt: string, recommendation: Recommendat
 
   window.localStorage.setItem(WARDROBE_KEY, JSON.stringify([nextOutfit, ...outfits]))
 }
+
+export const deleteOutfitFromWardrobe = (outfitId: string): void => {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  const outfits = getSavedOutfits().filter((outfit) => outfit.id !== outfitId)
+  window.localStorage.setItem(WARDROBE_KEY, JSON.stringify(outfits))
+}

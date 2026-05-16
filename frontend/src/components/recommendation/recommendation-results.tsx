@@ -15,7 +15,7 @@ export const RecommendationResults = ({
     <section className="mx-auto max-w-7xl px-5 pb-16 pt-5 sm:px-8">
       <div className="mb-8">
         <p className="text-sm font-bold uppercase tracking-[0.24em] text-violet">
-          {recommendation.source === 'gemini' ? 'Gemini seçimi' : 'Demo öneri motoru'}
+          {recommendation.source === 'gemini' ? 'Gemini seçimi' : 'Kural tabanlı öneri'}
         </p>
         <h2 className="mt-2 text-4xl font-bold tracking-[-0.04em] text-ink sm:text-5xl">
           Senin İçin Seçtiğimiz Ekonomik Kombin

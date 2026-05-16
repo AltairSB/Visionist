@@ -100,20 +100,21 @@ export const ProfileStep = ({
                   type="button"
                   onClick={() => onStyleChange(item.id)}
                   className={cn(
-                    'relative min-h-40 overflow-hidden rounded-2xl border text-left text-white shadow-card transition focus:outline-none focus:ring-4 focus:ring-violet/20',
+                    'group relative aspect-square w-full overflow-hidden rounded-2xl border text-left text-white shadow-card transition focus:outline-none focus:ring-4 focus:ring-violet/20',
                     isSelected ? 'border-white ring-4 ring-violet/25' : 'border-plum/15 hover:-translate-y-1',
                   )}
                   aria-pressed={isSelected}
+                  aria-label={`${item.label} stilini seç`}
                 >
                   <Image
                     key={imageSrc}
                     src={imageSrc}
-                    alt={`${item.label} stil örneği`}
+                    alt={`${item.label} stil örneği — ${segment}, ${gender}`}
                     fill
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                    className="object-cover"
+                    sizes="(max-width: 640px) 50vw, 240px"
+                    className="size-full object-cover object-center transition duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute inset-0 bg-gradient-to-t from-plum via-plum/45 to-transparent" />
+                  <span className="absolute inset-0 bg-gradient-to-t from-plum/95 via-plum/35 to-plum/5" />
                   <span className="absolute bottom-4 left-4 flex items-center gap-2 font-bold">
                     <Shirt size={18} />
                     {item.label}

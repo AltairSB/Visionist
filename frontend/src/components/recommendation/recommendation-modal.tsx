@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { requestRecommendation } from '@/lib/api'
 import type { RecommendationResponse, RecommendedItem, UserProfile } from '@/lib/types'
 import { formatCurrency } from '@/lib/utils'
-import { cn } from '@/lib/utils'
 
 type RecommendationModalProps = {
   isOpen: boolean
@@ -72,7 +71,7 @@ export const RecommendationModal = ({
       const response = await requestRecommendation(
         {
           profile,
-          prompt: `${prompt}. "${item.product.name}" parçası için güncelleme: ${note}`,
+          prompt,
           preference: 'balanced',
         },
         {
@@ -111,7 +110,7 @@ export const RecommendationModal = ({
         <header className="flex shrink-0 items-start justify-between gap-4 border-b border-plum/10 bg-white/80 px-5 py-4 sm:px-7">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-violet">
-              {recommendation.source === 'gemini' ? 'Gemini seçimi' : 'Demo öneri'}
+              {recommendation.source === 'gemini' ? 'Gemini seçimi' : 'Kural tabanlı öneri'}
             </p>
             <h2 className="mt-1 text-2xl font-bold tracking-[-0.04em] text-ink sm:text-3xl">
               Senin için seçilen kombin
@@ -129,29 +128,28 @@ export const RecommendationModal = ({
         </header>
 
         <div className="flex-1 overflow-y-auto px-5 py-6 sm:px-7">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {recommendation.items.map((item, index) => (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {recommendation.items.map((item) => (
               <article
                 key={`${item.id}-${item.product.id}`}
-                className={cn(
-                  'relative min-h-48 overflow-hidden rounded-2xl bg-plum shadow-card',
-                  index === 0 && 'sm:min-h-56',
-                )}
+                className="relative h-64 overflow-hidden rounded-2xl bg-plum shadow-card sm:h-84"
               >
                 <Image
                   src={item.product.image_url}
                   alt={item.product.name}
                   fill
-                  sizes="(max-width: 640px) 50vw, 25vw"
-                  className="object-cover"
+                  sizes="(max-width: 1024px) 50vw, 22vw"
+                  className="object-cover object-center"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-plum via-plum/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-lilac">
+                <div className="absolute inset-0 bg-gradient-to-t from-plum/95 via-plum/25 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-lilac">
                     {item.product.article_type}
                   </p>
-                  <p className="mt-1 font-bold leading-tight">{item.product.name}</p>
-                  <p className="mt-1 text-lg font-bold">{formatCurrency(item.product.sale_price)}</p>
+                  <p className="mt-0.5 line-clamp-2 text-sm font-bold leading-tight">
+                    {item.product.name}
+                  </p>
+                  <p className="mt-1 text-base font-bold">{formatCurrency(item.product.sale_price)}</p>
                 </div>
               </article>
             ))}
