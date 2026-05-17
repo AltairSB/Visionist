@@ -1,0 +1,361 @@
+id,gender,masterCategory,subCategory,baseColour,usage,productDisplayName,price,sale_price,discount_rate,S_stock,M_stock,L_stock,XL_stock,season
+e1.jpg,Adult Male,Apparel,Bottomwear,Indigo Blue,Casual,Classic Dark Wash Denim Jeans,1.200TL,960TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e2.jpg,Adult Male,Apparel,Bottomwear,Olive Green,Casual,Slim Fit Chino Pants,950TL,950TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e3.jpg,Adult Male,Apparel,Bottomwear,Light Grey,Casual,Corduroy Regular Fit Trousers,1.100TL,880TL,20%,Low Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e4.jpg,Adult Male,Apparel,Bottomwear,Navy Blue,Casual,Smart Casual Jogger Pants,850TL,680TL,20%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e5.jpg,Adult Male,Apparel,Topwear,Blue-White,Casual,Gingham Checkered Button-Down Shirt,750TL,600TL,20%,In Stock,Low Stock,In Stock,Out of Stock,Spring/Summer
+e6.jpg,Adult Male,Apparel,Topwear,Black-Grey,Casual,Flannel Plaid Long Sleeve Shirt,800TL,800TL,0%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+e7.jpg,Adult Male,Apparel,Topwear,Heather Grey,Casual,Basic Crew Neck Cotton T-Shirt,400TL,320TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e8.jpg,Adult Male,Apparel,Outerwear,Tan Brown,Casual,Field Jacket with Utility Pockets,1.800TL,1.440TL,20%,Low Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e9.jpg,Adult Male,Apparel,Outerwear,Navy Blue,Casual,Quilted Bomber Zip-Up Jacket,1.650TL,1.320TL,20%,In Stock,Out of Stock,In Stock,Low Stock,Autumn/Winter
+e10.jpg,Adult Male,Apparel,Topwear,Multi-Color,Casual,"Men's Color-Block Crew Neck T-Shirt (Navy, Green, Rust)",450TL,360TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+e11.jpg,Adult Male,Apparel,Topwear,White,Formal/Casual,Classic White Fine Oxford Dress Shirt,1.100TL,880TL,20%,In Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e12.jpg,Adult Male,Apparel,Bottomwear,Navy Blue,Formal/Casual,Slim-Fit Textured Navy Wool Trousers,1.900TL,1.520TL,20%,Low Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e13.jpg,Adult Male,Apparel,Outerwear,Charcoal Grey,Formal/Casual,Single-Breasted Textured Charcoal Blazer,3.500TL,2.800TL,20%,In Stock,Low Stock,In Stock,Out of Stock,Autumn/Winter
+e14.jpg,Adult Male,Apparel,Topwear,Heather Grey,Casual,Heather Grey Cotton-Piqué Polo Shirt,750TL,600TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e15.jpg,Adult Male,Apparel,Bottomwear,Tan Brown,Casual,Straight-Leg Tan Brown Chino Pants,1.250TL,1.000TL,20%,In Stock,Low Stock,In Stock,Low Stock,4 Seasons
+e16.jpg,Adult Male,Apparel,Topwear,Navy Blue,Casual,Navy Blue Fine-Knit Long-Sleeve Shirt,900TL,720TL,20%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+e17.jpg,Adult Male,Apparel,Bottomwear,Olive Green,Casual,Dark Olive Green Tapered Corduroy Trousers,1.600TL,1.280TL,20%,Low Stock,In Stock,In Stock,Out of Stock,Autumn/Winter
+e18.jpg,Adult Male,Apparel,Topwear,Light Blue Multi,Casual,Light Blue Gingham Checkered Casual Shirt,1.200TL,960TL,20%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e19.jpg,Adult Male,Apparel,Outerwear,Camel Brown,Formal/Casual,Classic Camel Brown Stand-Collar Overcoat,4.500TL,3.600TL,20%,In Stock,Low Stock,Low Stock,Out of Stock,Autumn/Winter
+e20.jpg,Adult Male,Apparel,Bottomwear,Light Grey,Casual,Light Grey Textured Wool Tweed Trousers,2.100TL,1.680TL,20%,Low Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e21.jpg,Adult Male,Apparel,Topwear,Ecru/Off-White,Casual,Men's Long Sleeve Button-Down Shirt,1.100TL,880TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+e22.jpg,Adult Male,Apparel,Bottomwear,Olive Green,Casual,Men's Belted Tech Chino Pants,1.950TL,1.950TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e23.jpg,Adult Male,Apparel,Outerwear,Black,Casual,Men's Lightweight Field Jacket with Pockets,3.200TL,2.560TL,20%,In Stock,Low Stock,Low Stock,Out of Stock,Autumn/Winter
+e24.jpg,Adult Male,Apparel,Topwear,Charcoal Grey,Casual,Men's Basic Crew Neck Cotton T-Shirt,650TL,520TL,20%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+e25.jpg,Adult Male,Apparel,Bottomwear,Dark Green,Casual/Formal,Men's Premium Flat Front Trousers,2.300TL,1.840TL,20%,Out of Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+e26.jpg,Adult Male,Apparel,Topwear,Dark Charcoal Multi,Casual,Men's Patterned Cotton Flannel Shirt,1.250TL,1.000TL,20%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+e27.jpg,Adult Male,Apparel,Bottomwear,Indigo Blue,Casual,Men's Garment Dyed Stretch Chino Pants,1.700TL,1.700TL,0%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+e28.jpg,Adult Male,Apparel,Bottomwear,Tan/Beige,Casual,Men's Flat Front Cotton Canvas Pants,1.650TL,1.320TL,20%,Low Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e29.jpg,Adult Male,Apparel,Outerwear,Maroon/Burgundy,Casual,Men's Full Zip Minimalist Bomber Jacket,2.900TL,2.320TL,20%,Low Stock,Low Stock,Low Stock,Out of Stock,Autumn/Winter
+e30.jpg,Adult Male,Apparel,Topwear,Navy Blue,Casual,Men's Basic V-Neck Cotton T-Shirt,650TL,520TL,20%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e31.jpg,Adult Male,Apparel,Topwear,Light Grey,Sportive,Men's Crew Neck Fleece Sweatshirt,1.150TL,920TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Autumn/Winter
+e32.jpg,Adult Male,Apparel,Bottomwear,Black,Sportive,Men's Slim Fit Cotton Jogger Sweatpants,950TL,950TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e33.jpg,Adult Male,Apparel,Outerwear,Black,Sportive,Men's Full-Zip Lightweight Track Jacket,2.100TL,1.680TL,20%,In Stock,Low Stock,Low Stock,Out of Stock,4 Seasons
+e34.jpg,Adult Male,Apparel,Topwear,Indigo Blue,Sportive,Men's Performance Graphic Training T-Shirt,700TL,560TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e35.jpg,Adult Male,Apparel,Bottomwear,Navy Blue,Sportive,Men's Athletic Track Pants with Side Stripe,1.200TL,960TL,20%,Out of Stock,Low Stock,In Stock,In Stock,4 Seasons
+e36.jpg,Adult Male,Apparel,Topwear,White,Sportive,Men's Breathable Mesh Training Tank Top,550TL,440TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+e37.jpg,Adult Male,Apparel,Bottomwear,Burgundy,Sportive,Men's Cuffed Fleece Jogger Pants,950TL,760TL,20%,In Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e38.jpg,Adult Male,Apparel,Topwear,Teal Blue,Sportive,Men's Full-Zip Hooded Sweatshirt,1.450TL,1.160TL,20%,Low Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e39.jpg,Adult Male,Apparel,Outerwear,Maroon,Sportive,Men's Windbreaker Zip-Up Sports Jacket,2.400TL,1.920TL,20%,Low Stock,Low Stock,Low Stock,Out of Stock,4 Seasons
+e40.jpg,Adult Male,Apparel,Bottomwear,Heather Grey,Sportive,Men's Loose Fit Jersey Sports Shorts,650TL,520TL,20%,In Stock,In Stock,In Stock,Low Stock,Spring/Summer
+e41.jpg,Adult Male,Apparel,Outerwear,Brown,Chic,Premium Brown Suede Leather Jacket,4.800TL,3.840TL,20%,Low Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e42.jpg,Adult Male,Apparel,Topwear,Burgundy,Chic,Fine-Gauge Merino Knit Polo Shirt,1.500TL,1.200TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Autumn/Winter
+e43.jpg,Adult Male,Apparel,Topwear,Charcoal Grey,Chic,Premium Pima Cotton V-Neck T-Shirt,650TL,520TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e44.jpg,Adult Male,Apparel,Bottomwear,Navy Blue,Chic,Tailored Wool Blend Dress Trousers,1.850TL,1.480TL,20%,In Stock,Low Stock,Low Stock,Out of Stock,Autumn/Winter
+e45.jpg,Adult Male,Apparel,Bottomwear,Grey,Chic,Prince of Wales Check Patterned Trousers,1.950TL,1.950TL,0%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e46.jpg,Adult Male,Apparel,Topwear,Light Blue-White,Chic,Non-Iron Gingham Check Dress Shirt,1.350TL,1.080TL,20%,In Stock,In Stock,Low Stock,In Stock,4 Seasons
+e47.jpg,Adult Male,Apparel,Topwear,White,Chic,High-Quality Pima Cotton Crew-Neck T-Shirt,650TL,520TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e48.jpg,Adult Male,Apparel,Bottomwear,Tan Brown,Chic,Premium Cotton Satin Chino Trousers,1.450TL,1.160TL,20%,Low Stock,In Stock,In Stock,Low Stock,4 Seasons
+e49.jpg,Adult Male,Apparel,Bottomwear,Dark Charcoal,Chic,Textured Wool-Tweed Regular Fit Trousers,1.700TL,1.360TL,20%,In Stock,Low Stock,In Stock,Low Stock,Autumn/Winter
+e50.jpg,Adult Male,Apparel,Outerwear,Navy Blue,Chic,Classic Italian Navy Blue Hopsack Blazer,3.500TL,2.800TL,20%,In Stock,Low Stock,In Stock,Low Stock,Autumn/Winter
+e51.jpg,Adult Male,Apparel,Topwear,Brown Multi,Vintage,Men's Plaid Flannel Button-Down Shirt,1.250TL,1.000TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Autumn/Winter
+e52.jpg,Adult Male,Apparel,Bottomwear,Dark Blue,Vintage,Men's Vintage Wash Denim Jeans,2.100TL,2.100TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e53.jpg,Adult Male,Apparel,Outerwear,Olive Green,Vintage,Men's Army Style M-65 Field Jacket,3.500TL,2.800TL,20%,In Stock,Low Stock,Low Stock,Out of Stock,Autumn/Winter
+e54.jpg,Adult Male,Apparel,Topwear,Charcoal Grey,Vintage,Men's 'Vintage Dept.' Graphic T-Shirt,750TL,600TL,20%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+e55.jpg,Adult Male,Apparel,Bottomwear,Ecru/Tan,Vintage,Men's Pleated Linen Trousers,1.800TL,1.440TL,20%,Out of Stock,Low Stock,In Stock,In Stock,Spring/Summer
+e56.jpg,Adult Male,Apparel,Topwear,Off-White Multi,Vintage,Men's Floral/Patterned Button-Up Shirt,1.300TL,1.040TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+e57.jpg,Adult Male,Apparel,Bottomwear,Mustard Yellow,Vintage,Men's Classic Fit Chino Pants,1.600TL,1.600TL,0%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+e58.jpg,Adult Male,Apparel,Bottomwear,Mid Grey,Vintage,Men's Textured Flat-Front Trousers,1.750TL,1.400TL,20%,Low Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e59.jpg,Adult Male,Apparel,Outerwear,Brown,Vintage,Men's Classic Suede Bomber Jacket,4.800TL,3.840TL,20%,Low Stock,Low Stock,Low Stock,Out of Stock,Autumn/Winter
+e60.jpg,Adult Male,Apparel,Topwear,Red/Blue Multi,Vintage,Men's Striped Heritage T-Shirt,750TL,600TL,20%,In Stock,In Stock,In Stock,Low Stock,Spring/Summer
+e61.jpg,Young Male,Apparel,Topwear,Light Blue,Casual,Men's Light Wash Denim Button-Up Shirt,850TL,680TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e62.jpg,Young Male,Apparel,Topwear,Olive Green,Casual,Men's Corduroy Long Sleeve Shirt,950TL,950TL,0%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e63.jpg,Young Male,Apparel,Topwear,Black,Casual,Men's Black Graphic Crew Neck T-Shirt,450TL,360TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e64.jpg,Young Male,Apparel,Outerwear,Rust Orange,Casual,Men's Full-Zip Hoodie with Pockets,1.200TL,900TL,25%,Low Stock,In Stock,In Stock,Out of Stock,Autumn/Winter
+e65.jpg,Young Male,Apparel,Outerwear,Indigo Blue,Casual,Men's Classic Dark Wash Denim Jacket,1.600TL,1.280TL,20%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+e66.jpg,Young Male,Apparel,Bottomwear,Beige,Casual,Men's Slim Fit Beige Chino Trousers,890TL,890TL,0%,In Stock,In Stock,Low Stock,Low Stock,4 Seasons
+e67.jpg,Young Male,Apparel,Bottomwear,Blue,Casual,Men's Distressed Regular Fit Jeans,1.100TL,825TL,25%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e68.jpg,Young Male,Apparel,Bottomwear,Dark Grey,Casual,Men's Relaxed Cargo Pants with Pockets,990TL,792TL,20%,In Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e69.jpg,Young Male,Apparel,Bottomwear,Emerald Green,Casual,Men's Straight Fit Green Casual Trousers,890TL,712TL,20%,Low Stock,In Stock,In Stock,Low Stock,Spring/Summer
+e70.jpg,Young Male,Apparel,Topwear,Black,Casual,Men's Essential Solid Black T-Shirt,400TL,400TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e71.jpg,Young Male,Apparel,Bottomwear,Charcoal Grey,Formal/Casual,Men's Tailored Smart Casual Charcoal Trousers,1.450TL,1.160TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e72.jpg,Young Male,Apparel,Topwear,Navy Blue,Formal/Casual,Men's Fine Knit Open Collar Polo Shirt,950TL,950TL,0%,In Stock,In Stock,In Stock,Low Stock,Spring/Summer
+e73.jpg,Young Male,Apparel,Topwear,White,Formal/Casual,Men's Premium Oxford Cotton Button-Down Shirt,1.200TL,960TL,20%,Low Stock,In Stock,In Stock,In Stock,4 Seasons
+e74.jpg,Young Male,Apparel,Bottomwear,Beige,Formal/Casual,Men's Slim Fit Classic Beige Chino Trousers,1.100TL,825TL,25%,In Stock,In Stock,Low Stock,Low Stock,4 Seasons
+e75.jpg,Young Male,Apparel,Topwear,Navy Blue,Formal/Casual,Men's Crew Neck Fine Knit Cotton Sweater,1.350TL,1.080TL,20%,Out of Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e76.jpg,Young Male,Apparel,Outerwear,Dark Brown,Formal/Casual,Men's Classic Corduroy Blazer Jacket,2.850TL,2.280TL,20%,In Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e77.jpg,Young Male,Apparel,Bottomwear,Indigo Blue,Formal/Casual,Men's Dark Wash Regular Fit Tailored Jeans,1.500TL,1.500TL,0%,In Stock,Low Stock,In Stock,Out of Stock,4 Seasons
+e78.jpg,Young Male,Apparel,Bottomwear,Olive Green,Formal/Casual,Men's Smart Casual Pressed Crease Khaki Trousers,1.250TL,937TL,25%,Low Stock,In Stock,In Stock,Low Stock,4 Seasons
+e79.jpg,Young Male,Apparel,Topwear,Ecru,Formal/Casual,Men's Essential Minimalist Plain White T-Shirt,450TL,360TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+e80.jpg,Young Male,Apparel,Outerwear,Black,Formal/Casual,Men's Premium Sleek Black Leather Bomber Jacket,3.500TL,3.500TL,0%,In Stock,In Stock,In Stock,In Stock,Autumn/Winter
+e81.jpg,Young Male,Apparel,Topwear,Ecru,Minimal,Men's Linen Blend Grandad Collar Shirt,950TL,760TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+e82.jpg,Young Male,Apparel,Outerwear,Navy Blue,Minimal,Men's Minimalist Cotton Overshirt Jacket,1.650TL,1.650TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e83.jpg,Young Male,Apparel,Topwear,White,Minimal,Men's Premium Crew Neck Solid White T-Shirt,420TL,420TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e84.jpg,Young Male,Apparel,Bottomwear,Beige,Minimal,Men's Slim Fit Minimalist Beige Chino Trousers,1.150TL,920TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e85.jpg,Young Male,Apparel,Outerwear,Black,Minimal,Men's Clean-Cut Matte Black Bomber Jacket,2.100TL,1.680TL,20%,Low Stock,In Stock,In Stock,Low Stock,4 Seasons
+e86.jpg,Young Male,Apparel,Bottomwear,Blue,Minimal,Men's Straight-Leg Light Wash Denim Jeans,1.400TL,1.050TL,25%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e87.jpg,Young Male,Apparel,Topwear,Charcoal Grey,Minimal,Men's Knit Polo Shirt with Open Collar,890TL,712TL,20%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+e88.jpg,Young Male,Apparel,Bottomwear,Olive Green,Minimal,Men's Tailored Smart Casual Olive Trousers,1.200TL,1.200TL,0%,Low Stock,In Stock,In Stock,Low Stock,4 Seasons
+e89.jpg,Young Male,Apparel,Topwear,Beige,Minimal,Men's Heavyweight Boxy Fit Sand T-Shirt,480TL,360TL,25%,In Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e90.jpg,Young Male,Apparel,Bottomwear,Black,Minimal,Men's Slim Straight Minimalist Black Trousers,1.350TL,1.080TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e91.jpg,Young Male,Apparel,Outerwear,Multi-Color,Sportive,Men's Red and Navy Colorblock Windbreaker Jacket,1.850TL,1.480TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e92.jpg,Young Male,Apparel,Topwear,Grey,Sportive,Men's Athletic NYC Printed Grey Sweatshirt,850TL,850TL,0%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e93.jpg,Young Male,Apparel,Outerwear,Green,Sportive,Men's Black and Green Full-Zip Track Jacket,1.600TL,1.200TL,25%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e94.jpg,Young Male,Apparel,Bottomwear,Black,Sportive,Men's Essential Slim Fit Black Jogger Pants,950TL,760TL,20%,In Stock,In Stock,Low Stock,Low Stock,4 Seasons
+e95.jpg,Young Male,Apparel,Bottomwear,Navy Blue,Sportive,Men's 2-in-1 Running Shorts with Inner Liner,650TL,520TL,20%,Out of Stock,In Stock,In Stock,Low Stock,Spring/Summer
+e96.jpg,Young Male,Apparel,Topwear,Light Grey,Sportive,Men's V-Neck Breathable Performance T-Shirt,450TL,360TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e97.jpg,Young Male,Apparel,Bottomwear,Blue,Sportive,Men's Classic 3-Stripe Athletic Track Pants,1.100TL,1.100TL,0%,In Stock,Low Stock,In Stock,Out of Stock,4 Seasons
+e98.jpg,Young Male,Apparel,Bottomwear,Dark Grey,Sportive,Men's Mesh Detailed Athletic Training Tights,890TL,712TL,20%,Low Stock,In Stock,In Stock,Low Stock,4 Seasons
+e99.jpg,Young Male,Apparel,Bottomwear,Burgundy,Sportive,Men's Fleece Drawstring Burgundy Sweatpants,950TL,712TL,25%,In Stock,In Stock,In Stock,Out of Stock,Autumn/Winter
+e100.jpg,Young Male,Apparel,Topwear,Mustard Yellow,Sportive,Men's University Athletics Graphic T-Shirt,480TL,480TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e101.jpg,Young Male,Apparel,Outerwear,Navy Blue,Formal/Casual,Men's Slim Fit Navy Blue Blazer Jacket,2.450TL,1.960TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e102.jpg,Young Male,Apparel,Topwear,White,Formal/Casual,Men's Premium White Oxford Cotton Shirt,950TL,950TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e103.jpg,Young Male,Apparel,Topwear,Charcoal Grey,Formal/Casual,Men's Knit Polo Shirt with Open Collar,850TL,680TL,20%,Low Stock,In Stock,In Stock,In Stock,Spring/Summer
+e104.jpg,Young Male,Apparel,Bottomwear,Beige,Formal/Casual,Men's Classic Fit Beige Chino Trousers,1.100TL,825TL,25%,In Stock,In Stock,Low Stock,Low Stock,4 Seasons
+e105.jpg,Young Male,Apparel,Outerwear,Sage Green,Formal/Casual,Men's Lightweight Utility Shirt Jacket,1.850TL,1.480TL,20%,Out of Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e106.jpg,Young Male,Apparel,Topwear,Dark Grey,Formal/Casual,Men's Fine Ribbed Crew Neck T-Shirt,550TL,440TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e107.jpg,Young Male,Apparel,Bottomwear,Indigo Blue,Formal/Casual,Men's Slim Straight Dark Indigo Jeans,1.350TL,1.350TL,0%,In Stock,Low Stock,In Stock,Out of Stock,4 Seasons
+e108.jpg,Young Male,Apparel,Topwear,Light Blue,Formal/Casual,Men's Breathable Light Blue Linen Shirt,1.200TL,900TL,25%,Low Stock,In Stock,In Stock,Low Stock,Spring/Summer
+e109.jpg,Young Male,Apparel,Bottomwear,Black,Formal/Casual,Men's Tailored Smart Casual Black Trousers,1.150TL,920TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e110.jpg,Young Male,Apparel,Topwear,Multi-Color,Formal/Casual,Men's Striped Cotton Crew Neck T-Shirt,480TL,480TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e111.jpg,Young Male,Apparel,Outerwear,Brown,Vintage,Men's Distressed Brown Leather Jacket,3.200TL,2.560TL,20%,Low Stock,In Stock,In Stock,Out of Stock,Autumn/Winter
+e112.jpg,Young Male,Apparel,Outerwear,Mustard Yellow,Vintage,Men's Retro Corduroy Bomber Jacket,1.850TL,1.480TL,20%,In Stock,In Stock,Low Stock,Low Stock,Autumn/Winter
+e113.jpg,Young Male,Apparel,Topwear,Burgundy,Vintage,Men's Plaid Flannel Button-Up Shirt,850TL,850TL,0%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e114.jpg,Young Male,Apparel,Topwear,Ecru,Vintage,Men's Retro Striped Knit Shirt,950TL,760TL,20%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+e115.jpg,Young Male,Apparel,Topwear,Faded Black,Vintage,Men's 90s Rock Graphic Crew Neck T-Shirt,550TL,412TL,25%,Low Stock,In Stock,In Stock,In Stock,4 Seasons
+e116.jpg,Young Male,Apparel,Bottomwear,Olive Green,Vintage,Men's Relaxed Fit Corduroy Trousers,1.250TL,1.000TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Autumn/Winter
+e117.jpg,Young Male,Apparel,Bottomwear,Faded Blue,Vintage,Men's 80s High-Waisted Straight Leg Jeans,1.400TL,1.050TL,25%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e118.jpg,Young Male,Apparel,Bottomwear,Tan Brown,Vintage,Men's Classic Wide-Leg Pleated Chinos,1.100TL,1.100TL,0%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+e119.jpg,Young Male,Apparel,Bottomwear,Dark Khaki,Vintage,Men's Multi-Pocket Vintage Cargo Pants,1.300TL,1.040TL,20%,Low Stock,In Stock,In Stock,Low Stock,4 Seasons
+e120.jpg,Young Male,Apparel,Topwear,Multi-Color,Vintage,Men's Horizontal Striped Retro T-Shirt,480TL,384TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+e121.jpg,Boys,Apparel,Topwear,Indigo Blue,Casual,Boys Denim Long Sleeve Button Shirt,650TL,520TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e122.jpg,Boys,Apparel,Bottomwear,Blue Denim,Casual,Boys Classic Comfort Fit Jeans,550TL,550TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+e123.jpg,Boys,Apparel,Topwear,Grey Melange,Casual,Boys Rocket Embroidered Cotton T-Shirt,350TL,280TL,20%,In Stock,Low Stock,Out of Stock,In Stock,Spring/Summer
+e124.jpg,Boys,Apparel,Bottomwear,Beige,Casual,Boys Classic Chino Trousers,580TL,464TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e125.jpg,Boys,Apparel,Topwear,Multi-Color,Casual,Boys Red and Navy Checked Flannel Shirt,620TL,620TL,0%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+e126.jpg,Boys,Apparel,Outerwear,Mustard,Casual,Boys Hooded Zip-Up Sweatshirt,750TL,600TL,20%,In Stock,In Stock,Low Stock,Low Stock,Autumn/Winter
+e127.jpg,Boys,Apparel,Bottomwear,Khaki Green,Casual,Boys Multi-Pocket Cargo Trousers,600TL,480TL,20%,Out of Stock,In Stock,In Stock,In Stock,4 Seasons
+e128.jpg,Boys,Apparel,Topwear,Navy Blue,Casual,Boys Cycling Bear Printed T-Shirt,350TL,350TL,0%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Summer
+e129.jpg,Boys,Apparel,Bottomwear,Dark Grey,Casual,Boys Drawstring Elastic Waist Jogger,480TL,384TL,20%,Low Stock,Low Stock,In Stock,In Stock,4 Seasons
+e130.jpg,Boys,Apparel,Outerwear,Navy Blue,Casual,Boys Lightweight Windbreaker Zipper Jacket,850TL,850TL,0%,In Stock,Out of Stock,Low Stock,In Stock,Spring/Autumn
+e131.jpg,Boys,Apparel,Topwear,White,Formal,Boys Classic Cotton Oxford Button-Down Shirt,680TL,544TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e132.jpg,Boys,Apparel,Bottomwear,Navy Blue,Formal,Boys Tailored Pleated Dress Trousers,750TL,750TL,0%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+e133.jpg,Boys,Apparel,Topwear,Light Blue,Formal,Boys Fine Striped Classic Dress Shirt,650TL,520TL,20%,In Stock,In Stock,Out of Stock,Low Stock,4 Seasons
+e134.jpg,Boys,Apparel,Bottomwear,Beige,Formal/Casual,Boys Premium Comfort Chino Trousers,620TL,496TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e135.jpg,Boys,Apparel,Outerwear,Navy Blue,Formal,Boys Classic Two-Button Blazer Jacket,1.100TL,1.100TL,0%,In Stock,Out of Stock,In Stock,In Stock,4 Seasons
+e136.jpg,Boys,Apparel,Topwear,Light Grey,Formal/Casual,Boys Fine Knit V-Neck Sweater,580TL,464TL,20%,In Stock,Low Stock,Low Stock,In Stock,Autumn/Winter
+e137.jpg,Boys,Apparel,Bottomwear,Grey,Formal,Boys Formal Herringbone Suit Trousers,720TL,576TL,20%,Out of Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+e138.jpg,Boys,Apparel,Topwear,Multi-Color,Formal/Casual,Boys Nautical Striped Polo Neck T-Shirt,420TL,420TL,0%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+e139.jpg,Boys,Apparel,Bottomwear,Dark Blue,Formal/Casual,Boys Straight Cut Classic Dark Wash Jeans,590TL,472TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e140.jpg,Boys,Apparel,Outerwear,Khaki Beige,Formal/Casual,Boys Smart Harrington Style Cotton Jacket,890TL,890TL,0%,In Stock,Low Stock,In Stock,Low Stock,Spring/Autumn
+e141.jpg,Boys,Apparel,Topwear,Ecru,Minimalist,Boys Minimalist Linen Grandad Collar Shirt,690TL,552TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+e142.jpg,Boys,Apparel,Bottomwear,Dark Grey,Minimalist,Boys Slim Fit Solid Chino Trousers,640TL,640TL,0%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+e143.jpg,Boys,Apparel,Topwear,Slate Grey,Minimalist,Boys Essential Pure Cotton Crew Neck T-Shirt,340TL,272TL,20%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Summer
+e144.jpg,Boys,Apparel,Bottomwear,Cream,Minimalist,Boys Classic Tailored Cotton Trousers,650TL,520TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e145.jpg,Boys,Apparel,Topwear,Sage Green,Minimalist,Boys Premium Fine Knit Crew Neck Sweater,720TL,720TL,0%,In Stock,Out of Stock,In Stock,In Stock,Autumn/Winter
+e146.jpg,Boys,Apparel,Outerwear,Light Grey,Smart Casual,Boys Unstructured Soft Knit Blazer Jacket,950TL,760TL,20%,In Stock,Low Stock,Low Stock,In Stock,4 Seasons
+e147.jpg,Boys,Apparel,Bottomwear,Black,Minimalist,Boys Sleek Tailored No-Pocket Trousers,620TL,496TL,20%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e148.jpg,Boys,Apparel,Topwear,Navy Blue,Smart Casual,Boys Minimalist Solid Cotton Polo Shirt,420TL,420TL,0%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+e149.jpg,Boys,Apparel,Bottomwear,Light Melange,Minimalist,Boys Clean Cut Soft Fleece Jogger Pants,520TL,416TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e150.jpg,Boys,Apparel,Outerwear,Taupe,Minimalist,Boys Lightweight Matte Finish Bomber Jacket,890TL,890TL,0%,In Stock,Low Stock,In Stock,Low Stock,Spring/Autumn
+e151.jpg,Boys,Apparel,Topwear,White,Sportswear,Boys Graphic Print Cotton Hooded Sweatshirt,550TL,440TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Autumn/Winter
+e152.jpg,Boys,Apparel,Bottomwear,Black,Sportswear,Boys Athletic Track Pants with Blue Side Stripes,480TL,480TL,0%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+e153.jpg,Boys,Apparel,Topwear,Blue,Sportswear,Boys Quick-Dry Breathable Mesh Sport T-Shirt,320TL,256TL,20%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Summer
+e154.jpg,Boys,Apparel,Bottomwear,Lime Green,Sportswear,Boys Lightweight Active Training Shorts,350TL,280TL,20%,Low Stock,In Stock,In Stock,Out of Stock,Spring/Summer
+e155.jpg,Boys,Apparel,Outerwear,Navy Blue,Sportswear,Boys Classic Zip-Up Track Jacket with White Stripes,690TL,690TL,0%,In Stock,Out of Stock,In Stock,In Stock,4 Seasons
+e156.jpg,Boys,Apparel,Topwear,Orange,Sportswear,Boys 'RUN' Graphic Crew Neck Fleece Sweatshirt,520TL,416TL,20%,In Stock,Low Stock,Low Stock,In Stock,Autumn/Winter
+e157.jpg,Boys,Apparel,Bottomwear,Dark Grey,Sportswear,Boys Performance Tracksuit Bottoms with Zip Pocket,490TL,392TL,20%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e158.jpg,Boys,Apparel,Topwear,Red,Sportswear,Boys Cotton Sport Polo Shirt with Collar Detail,380TL,380TL,0%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+e159.jpg,Boys,Apparel,Bottomwear,Light Grey,Sportswear,Boys Ergonomic Seam Detail Melange Jogger Pants,460TL,368TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e160.jpg,Boys,Apparel,Outerwear,Steel Blue,Sportswear,Boys Multi-Pocket Technical Windbreaker Jacket,790TL,790TL,0%,In Stock,Low Stock,In Stock,Low Stock,Spring/Autumn
+e161.jpg,Boys,Apparel,Topwear,Indigo Blue,Smart Casual,Boys Premium Oxford Cotton Long Sleeve Shirt,720TL,576TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e162.jpg,Boys,Apparel,Bottomwear,Dark Blue,Smart Casual,Boys Slim Fit Dark Wash Tailored Jeans,680TL,680TL,0%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+e163.jpg,Boys,Apparel,Topwear,Anthracite,Smart Casual,Boys Premium Solid Crew Neck T-Shirt,390TL,312TL,20%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Summer
+e164.jpg,Boys,Apparel,Bottomwear,Caramel,Formal/Casual,Boys Tailored Chino Trousers with Pockets,690TL,552TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e165.jpg,Boys,Apparel,Topwear,Multi-Color,Smart Casual,Boys Blue Plaid Button-Down Dress Shirt,750TL,750TL,0%,In Stock,Out of Stock,In Stock,In Stock,Autumn/Winter
+e166.jpg,Boys,Apparel,Outerwear,Camel,Sports,Boys Fine Knit Hooded Cardigan Jacket,890TL,712TL,20%,In Stock,Low Stock,Low Stock,In Stock,Autumn/Winter
+e167.jpg,Boys,Apparel,Bottomwear,Olive Green,Smart Casual,Boys Modern Soft Cargo Trousers,650TL,520TL,20%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e168.jpg,Boys,Apparel,Topwear,Dark Green,Formal/Casual,Boys Classic Cotton Polo Neck T-Shirt,450TL,450TL,0%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+e169.jpg,Boys,Apparel,Bottomwear,Charcoal,Sports,Boys Slim Fit Elastic Knit Jogger Trousers,590TL,472TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e170.jpg,Boys,Apparel,Outerwear,Stone Grey,Formal/Casual,Boys Sleek Lightweight Bomber Jacket,950TL,950TL,0%,In Stock,Low Stock,In Stock,Low Stock,Spring/Autumn
+e171.jpg,Boys,Apparel,Topwear,Light Indigo,Vintage,Boys Vintage Washed Denim Long Sleeve Shirt,680TL,544TL,20%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+e172.jpg,Boys,Apparel,Bottomwear,Light Blue,Vintage,Boys Retro Distressed Relaxed Fit Jeans,720TL,720TL,0%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+e173.jpg,Boys,Apparel,Topwear,Grey Melange,Vintage,Boys Wilderness Explorer Retro Graphic T-Shirt,380TL,304TL,20%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Summer
+e174.jpg,Boys,Apparel,Bottomwear,Mustard,Vintage,Boys Classic Corduroy Pleated Trousers,650TL,520TL,20%,Low Stock,In Stock,In Stock,Out of Stock,Autumn/Winter
+e175.jpg,Boys,Apparel,Topwear,Multi-Color,Vintage,Boys Red and Navy Heritage Plaid Flannel Shirt,640TL,640TL,0%,In Stock,Out of Stock,In Stock,In Stock,Autumn/Winter
+e176.jpg,Boys,Apparel,Outerwear,Olive Green,Vintage,Boys Shavl Collar Waffle Knit Cardigan Jacket,890TL,712TL,20%,In Stock,Low Stock,Low Stock,In Stock,Autumn/Winter
+e177.jpg,Boys,Apparel,Bottomwear,Khaki Green,Vintage,Boys Retro Multi-Pocket Heavy Cotton Cargo Pants,620TL,496TL,20%,Out of Stock,In Stock,In Stock,Low Stock,4 Seasons
+e178.jpg,Boys,Apparel,Topwear,Faded Blue,Vintage,Boys Vintage Tint Cotton Polo Neck T-Shirt,420TL,420TL,0%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+e179.jpg,Boys,Apparel,Bottomwear,Faded Navy,Vintage,Boys Acid Wash Soft Knit Jogger Trousers,540TL,432TL,20%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+e180.jpg,Boys,Apparel,Outerwear,Olive Green,Vintage,Boys Military Style Multi-Pocket Utility Jacket,980TL,980TL,0%,In Stock,Low Stock,In Stock,Low Stock,Spring/Autumn
+k1.jpg,Girls,Apparel,Bottomwear,Multi-Color,Casual,Floral Printed Cotton Flared Skirt,450TL,360TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+k2.jpg,Girls,Apparel,Bottomwear,Indigo Blue,Casual,Tiered Denim Jean Skirt,550TL,550TL,0%,In Stock,Out of Stock,In Stock,Low Stock,4 Seasons
+k3.jpg,Girls,Apparel,One-Piece,Navy Blue,Casual,Striped Short Sleeve Jersey Dress,600TL,420TL,30%,In Stock,In Stock,In Stock,Out of Stock,Spring/Summer
+k4.jpg,Girls,Apparel,Bottomwear,Light Blue,Casual,Classic Fit Relaxed Jean Pants,750TL,600TL,20%,Low Stock,In Stock,Out of Stock,In Stock,4 Seasons
+k5.jpg,Girls,Apparel,Topwear,Powder Pink,Casual,Short Sleeve Basic Poplin Shirt,400TL,320TL,20%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k6.jpg,Girls,Apparel,Topwear,Dark Blue,Casual,Polka Dot Short Sleeve Denim Shirt,500TL,450TL,10%,In Stock,In Stock,Out of Stock,Low Stock,4 Seasons
+k7.jpg,Girls,Apparel,Bottomwear,Khaki Green,Casual,Multi-Pocket Canvas Cargo Pants,650TL,650TL,0%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+k8.jpg,Girls,Apparel,Topwear,White,Casual,Rainbow Embroidered Cotton T-Shirt,250TL,200TL,20%,In Stock,In Stock,In Stock,Low Stock,Spring/Summer
+k9.jpg,Girls,Apparel,Topwear,Yellow,Casual,Minimal Heart Printed Jersey T-Shirt,250TL,175TL,30%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Summer
+k10.jpg,Girls,Apparel,Outerwear,Dusty Rose,Casual,Hooded Zippered Cotton Jacket,850TL,680TL,20%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+k11.jpg,Girls,Apparel,Bottomwear,Navy/Plaid,Classic,Pleated Tartan Check School Skirt,650TL,520TL,20%,In Stock,In Stock,Low Stock,Out of Stock,Autumn/Winter
+k12.jpg,Girls,Apparel,Bottomwear,Burgundy,Classic,Velvet Textured Elegant Pleated Skirt,700TL,700TL,0%,Low Stock,In Stock,Out of Stock,Low Stock,Autumn/Winter
+k13.jpg,Girls,Apparel,One-Piece,Ecru/Pearl,Classic,Tweed Textured Pearled Pinafore Dress,1.100TL,880TL,20%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+k14.jpg,Girls,Apparel,Bottomwear,Taba/Brown,Classic,Ribbed Corduroy Classic Fit Pants,750TL,600TL,20%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+k15.jpg,Girls,Apparel,Bottomwear,Anthracite,Classic,Wool Blend Straight Leg Trousers,800TL,560TL,30%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+k16.jpg,Girls,Apparel,Topwear,White,Classic,Bow Detailed Peter Pan Collar Shirt,550TL,495TL,10%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+k17.jpg,Girls,Apparel,Topwear,Dusty Rose,Classic,Mandarin Collar Pleat Detailed Satin Shirt,600TL,600TL,0%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+k18.jpg,Girls,Apparel,Topwear,Emerald Green,Classic/Chic,Cable Knit Fine Mercerized T-Shirt,450TL,315TL,30%,Low Stock,In Stock,Out of Stock,Low Stock,Autumn/Winter
+k19.jpg,Girls,Apparel,Topwear,Navy/White,Classic/Casual,Striped Classic Jersey T-Shirt,350TL,350TL,0%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Summer
+k20.jpg,Girls,Apparel,Outerwear,Midnight Blue,Classic,Metal Buttoned Wool Double-Breasted Jacket,1.400TL,1.120TL,20%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+k21.jpg,Girls,Apparel,Bottomwear,Dusty Pink,Minimal/Casual,Straight Cut Cotton Pleated Skirt,400TL,320TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k22.jpg,Girls,Apparel,Bottomwear,Beige,Minimal/Casual,Linen Blend Simple Flared Skirt,450TL,450TL,0%,In Stock,Low Stock,In Stock,Out of Stock,Spring/Summer
+k23.jpg,Girls,Apparel,One-Piece,Navy Blue,Minimal/Casual,Muslin Fabric Relaxed Fit Dress,700TL,490TL,30%,Low Stock,In Stock,In Stock,In Stock,Spring/Summer
+k24.jpg,Girls,Apparel,Bottomwear,Sage Green,Minimal/Sport,Basic Cotton Jogger Pants,500TL,400TL,20%,In Stock,In Stock,Out of Stock,Low Stock,4 Seasons
+k25.jpg,Girls,Apparel,Bottomwear,Light Grey,Minimal/Casual,Ribbed Stretchy Elastic Pants,350TL,280TL,20%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+k26.jpg,Girls,Apparel,Topwear,White,Minimal/Formal,Short Sleeve Classic Poplin Shirt,450TL,405TL,10%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+k27.jpg,Girls,Apparel,Topwear,Misty Blue,Minimal/Casual,Oversized Linen Long Sleeve Shirt,550TL,550TL,0%,Low Stock,In Stock,Out of Stock,In Stock,Spring/Summer
+k28.jpg,Girls,Apparel,Topwear,Ecru,Minimal/Casual,Organic Cotton Plain Basic T-Shirt,250TL,175TL,30%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k29.jpg,Girls,Apparel,Topwear,Anthracite,Minimal/Casual,Ribbed Half Sleeve Modern T-Shirt,250TL,250TL,0%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Summer
+k30.jpg,Girls,Apparel,Outerwear,Light Indigo,Minimal/Casual,Minimal Cut Buttoned Denim Jacket,800TL,640TL,20%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+k31.jpg,Girls,Apparel,Bottomwear,Purple/Fuchsia,Sport,Performance Tennis Skort,650TL,520TL,20%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Summer
+k32.jpg,Girls,Apparel,Bottomwear,Navy Blue,Sport,Mesh Detailed Pleated Sporty Skirt,600TL,600TL,0%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k33.jpg,Girls,Apparel,One-Piece,Coral,Sport,Athletic Fit Numbered Jersey Dress,750TL,525TL,30%,Low Stock,In Stock,In Stock,Out of Stock,Spring/Summer
+k34.jpg,Girls,Apparel,Bottomwear,Dark Grey,Sport,Side Striped Relaxed Fit Sweatpants,550TL,440TL,20%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+k35.jpg,Girls,Apparel,Bottomwear,Black,Sport,High-Waisted Shaping Sports Leggings,450TL,360TL,20%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+k36.jpg,Girls,Apparel,Topwear,White,Sport/Casual,Short Sleeve Tech Fabric Polo Shirt,500TL,450TL,10%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Summer
+k37.jpg,Girls,Apparel,Topwear,Mint Green,Sport/Casual,Plaid Patterned Lightweight Sport Shirt,600TL,540TL,10%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+k38.jpg,Girls,Apparel,Topwear,Neon Yellow,Sport,"""RUN"" Graphic Printed Running T-Shirt",400TL,280TL,30%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k39.jpg,Girls,Apparel,Topwear,Royal Blue,Sport,"""SPORTS"" Typographic Printed T-Shirt",350TL,350TL,0%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Summer
+k40.jpg,Girls,Apparel,Outerwear,Multi-Color,Sport,Zippered Functional Training Jacket,950TL,760TL,20%,In Stock,In Stock,Low Stock,In Stock,4 Seasons
+k41.jpg,Girls,Apparel,Bottomwear,Silver Grey,Formal/Chic,Sequin Embroidered Tulle Princess Skirt,750TL,600TL,20%,In Stock,Low Stock,In Stock,Out of Stock,4 Seasons
+k42.jpg,Girls,Apparel,Bottomwear,Emerald Green,Formal/Chic,Buckled Luxury Velvet Skirt,800TL,800TL,0%,Low Stock,In Stock,Out of Stock,Low Stock,Autumn/Winter
+k43.jpg,Girls,Apparel,One-Piece,Midnight Blue,Formal/Chic,Lace Detailed Pearl Belted Evening Dress,1.250TL,1.000TL,20%,In Stock,In Stock,Low Stock,In Stock,4 Seasons
+k44.jpg,Girls,Apparel,Bottomwear,Ecru/White,Formal/Chic,Classic Fit Tailored Trousers,700TL,630TL,10%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+k45.jpg,Girls,Apparel,Bottomwear,Dusty Rose,Formal/Chic,Shiny Satin Wide-Leg Pants,850TL,595TL,30%,In Stock,Out of Stock,In Stock,In Stock,4 Seasons
+k46.jpg,Girls,Apparel,Topwear,Pure White,Formal/Chic,Bow Tie Neck Chiffon Shirt,600TL,540TL,10%,In Stock,Low Stock,In Stock,Out of Stock,4 Seasons
+k47.jpg,Girls,Apparel,Topwear,Cream/Ivory,Formal/Chic,Lace Embroidered Vintage Cotton Shirt,650TL,650TL,0%,In Stock,In Stock,Low Stock,In Stock,4 Seasons
+k48.jpg,Girls,Apparel,Topwear,Metallic Blue,Chic/Casual,Crown Embroidered Knit T-Shirt,450TL,360TL,20%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Summer
+k49.jpg,Girls,Apparel,Topwear,Powder Pink,Chic/Casual,Embroidered Collar Elegant T-Shirt,450TL,315TL,30%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k50.jpg,Girls,Apparel,Outerwear,Beige/Gold,Formal/Chic,Chanel Style Tweed Jacket,1.500TL,1.200TL,20%,Low Stock,Out of Stock,In Stock,Low Stock,Autumn/Winter
+k51.jpg,Girls,Apparel,Bottomwear,Cream/Floral,Vintage,Tiny Floral Patterned Cotton Flared Skirt,550TL,440TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k52.jpg,Girls,Apparel,Bottomwear,Khaki Green,Vintage,Front Buttoned Corduroy Skirt,600TL,600TL,0%,In Stock,In Stock,Out of Stock,Low Stock,Autumn/Winter
+k53.jpg,Girls,Apparel,One-Piece,Faded Blue,Vintage,Peter Pan Collar Polka Dot Nostalgic Dress,850TL,595TL,30%,Low Stock,In Stock,In Stock,Out of Stock,4 Seasons
+k54.jpg,Girls,Apparel,Bottomwear,Light Blue,Vintage,High-Waisted Retro Wide-Leg Jeans,750TL,675TL,10%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+k55.jpg,Girls,Apparel,Bottomwear,Brick Red,Vintage,Elastic Cuff Vintage Harem Pants,650TL,455TL,30%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+k56.jpg,Girls,Apparel,Topwear,Ecru,Vintage,Embroidered Lace Collar Linen Shirt,500TL,400TL,20%,In Stock,Low Stock,In Stock,Out of Stock,Spring/Summer
+k57.jpg,Girls,Apparel,Topwear,Brown/Beige,Vintage,Plaid Classic Flannel Shirt,550TL,550TL,0%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+k58.jpg,Girls,Apparel,Topwear,Mustard Yellow,Vintage,Daisy Printed Distressed Effect T-Shirt,350TL,280TL,20%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Summer
+k59.jpg,Girls,Apparel,Topwear,Grey/Black,Vintage,Fine Striped Retro T-Shirt,300TL,210TL,30%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k60.jpg,Girls,Apparel,Outerwear,Classic Blue,Vintage,Washed Look Retro Denim Jacket,950TL,760TL,20%,Low Stock,In Stock,Out of Stock,In Stock,4 Seasons
+k61.jpg,Adult Female,Apparel,Bottomwear,Light Blue,Casual,Classic Fit Jeans,1.200TL,900TL,25%,In Stock,In Stock,Low Stock,Out of Stock,4 Seasons
+k62.jpg,Adult Female,Apparel,Bottomwear,Brick Red,Casual,Buttoned Corduroy Skirt with Belt,850TL,680TL,20%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+k63.jpg,Adult Female,Apparel,Topwear,Charcoal Grey,Casual,Single Pocket Linen Blend Long Sleeve Shirt,950TL,950TL,0%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k64.jpg,Adult Female,Apparel,Topwear,Ecru,Casual,"""City Parks"" Graphic Printed Crew Neck T-Shirt",450TL,360TL,20%,Low Stock,Out of Stock,Low Stock,In Stock,Spring/Summer
+k65.jpg,Adult Female,Apparel,Bottomwear,Black,Formal/Casual,Classic Fit High Waisted Trousers,1.100TL,880TL,20%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+k66.jpg,Adult Female,Apparel,Bottomwear,Khaki,Sporty/Casual,Elastic Cuff Cargo Pants with Side Pockets,900TL,720TL,20%,In Stock,Low Stock,In Stock,Out of Stock,Autumn/Spring
+k67.jpg,Adult Female,Apparel,Topwear,Navy Blue/Green,Casual,Double Pocket Plaid Flannel Shirt,1.000TL,700TL,30%,In Stock,In Stock,Low Stock,In Stock,Autumn/Winter
+k68.jpg,Adult Female,Apparel,Bottomwear,Burgundy,Smart/Casual,Elastic Waist Pleated Midi Skirt,950TL,950TL,0%,In Stock,In Stock,In Stock,Low Stock,Spring/Winter
+k69.jpg,Adult Female,Apparel,Topwear,White/Navy Blue,Casual,Horizontally Striped Anchor Embroidered Marine T-Shirt,400TL,320TL,20%,Low Stock,In Stock,In Stock,In Stock,Spring/Summer
+k70.jpg,Adult Female,Apparel,Topwear,Mustard Yellow,Casual,Basic Short Sleeve V-Neck Cotton T-Shirt,350TL,280TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k71.jpg,Adult Female,Apparel,Bottomwear,Lilac,Sporty,Tennis Style Pleated Sports Skirt,850TL,680TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k72.jpg,Adult Female,Apparel,Bottomwear,Black,Sporty,Track Pants with Side White Stripes,950TL,950TL,0%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+k73.jpg,Adult Female,Apparel,Topwear,Blue,Sporty,Polo Neck Short Sleeve Technical T-Shirt,700TL,560TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k74.jpg,Adult Female,Apparel,Topwear,Dark Green,Sporty,Half-Zip Long Sleeve Training Top,1.100TL,880TL,20%,Low Stock,Low Stock,Low Stock,Out of Stock,Autumn/Winter
+k75.jpg,Adult Female,Apparel,Bottomwear,Teal,Sporty,High Waisted Sports Leggings with Pockets,800TL,800TL,0%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+k76.jpg,Adult Female,Apparel,Topwear,Heather Grey,Sporty,Crew Neck Relaxed Fit Sports T-Shirt,450TL,360TL,20%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k77.jpg,Adult Female,Apparel,Topwear,Mustard Yellow,Sporty,Hooded Lightweight Sports Sweatshirt,900TL,720TL,20%,In Stock,In Stock,In Stock,In Stock,Autumn/Spring
+k78.jpg,Adult Female,Apparel,Topwear,Coral,Sporty,V-Neck Performance Sports T-Shirt,500TL,400TL,20%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k79.jpg,Adult Female,Apparel,Bottomwear,Dark Charcoal,Sporty,Slim Fit Cotton Sweatpants,850TL,635TL,25%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Autumn/Winter
+k80.jpg,Adult Female,Apparel,Bottomwear,Navy/Neon Green,Sporty,Plaid Technical Fabric Sports Skirt,950TL,950TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+k81.jpg,Adult Female,Apparel,Bottomwear,Dark Brown,Casual/Minimal,Midi Length Pencil Skirt,850TL,720TL,15%,In Stock,In Stock,In Stock,In Stock,Autumn/Spring
+k82.jpg,Adult Female,Apparel,Bottomwear,Charcoal Grey,Casual/Minimal,Pleated Classic Trousers,1.100TL,1.100TL,0%,In Stock,In Stock,Low Stock,In Stock,4 Seasons
+k83.jpg,Adult Female,Apparel,Topwear,Cream (Ecru),Casual/Minimal,Mandarin Collar Long Sleeve Shirt,900TL,720TL,20%,Low Stock,Low Stock,Out of Stock,Low Stock,4 Seasons
+k84.jpg,Adult Female,Apparel,Topwear,Dark Green,Casual/Minimal,Basic Short Sleeve T-Shirt,450TL,360TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k85.jpg,Adult Female,Apparel,Bottomwear,Navy Blue,Casual/Minimal,Classic Fit Jeans,1.250TL,1.250TL,0%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+k86.jpg,Adult Female,Apparel,Bottomwear,Taupe,Casual/Minimal,Midi Length A-Line Pleated Skirt,950TL,950TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Autumn
+k87.jpg,Adult Female,Apparel,Bottomwear,Beige,Casual/Minimal,Wide Leg Corduroy Pants,1.000TL,900TL,10%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+k88.jpg,Adult Female,Apparel,Topwear,Lavender,Casual/Minimal,Classic Collar Long Sleeve Shirt,980TL,980TL,0%,Low Stock,Out of Stock,Low Stock,Low Stock,Spring
+k89.jpg,Adult Female,Apparel,Topwear,White,Casual/Minimal,Basic Short Sleeve White T-Shirt,400TL,320TL,20%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Summer
+k90.jpg,Adult Female,Apparel,Topwear,Reddish Brown,Casual/Minimal,Mock Neck Short Sleeve T-Shirt,750TL,750TL,0%,In Stock,In Stock,In Stock,Low Stock,Spring/Summer
+k91.jpg,Adult Female,Apparel,Bottomwear,Caramel,Formal,Classic Cut Pencil Skirt,1.200TL,1.200TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Winter
+k92.jpg,Adult Female,Apparel,Bottomwear,Black,Formal,Slim Fit Dress Trousers,1.400TL,1.120TL,20%,In Stock,In Stock,Low Stock,In Stock,4 Seasons
+k93.jpg,Adult Female,Apparel,Bottomwear,Dark Green,Formal,Wide Leg Dress Trousers,1.500TL,1.500TL,0%,Low Stock,Low Stock,Out of Stock,Out of Stock,Autumn/Winter
+k94.jpg,Adult Female,Apparel,Topwear,Ecru,Formal,Classic Collar Long Sleeve Shirt,1.100TL,880TL,20%,In Stock,In Stock,In Stock,Low Stock,4 Seasons
+k95.jpg,Adult Female,Apparel,Topwear,Burgundy,Formal,Single Button Wool Blend Blazer,2.200TL,1.760TL,20%,In Stock,In Stock,In Stock,In Stock,Autumn/Winter
+k96.jpg,Adult Female,Apparel,Bottomwear,Heather Grey,Formal,High Waisted Straight Leg Trousers,1.350TL,1.080TL,20%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+k97.jpg,Adult Female,Apparel,Topwear,Navy Blue,Formal,Modern Cut Classic Blazer Jacket,2.400TL,2.400TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Winter
+k98.jpg,Adult Female,Apparel,Bottomwear,Multi-Color,Formal/Casual,Plaid Patterned Classic Skirt,1.150TL,920TL,20%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Autumn/Winter
+k99.jpg,Adult Female,Apparel,Topwear,Deep Blue,Formal/Casual,Oxford Type Long Sleeve Shirt,1.250TL,1.000TL,20%,In Stock,Low Stock,In Stock,In Stock,4 Seasons
+k100.jpg,Adult Female,Apparel,Topwear,White,Casual/Formal,Crew Neck Basic Cotton T-Shirt,450TL,360TL,20%,In Stock,In Stock,In Stock,Low Stock,Spring/Summer
+k101.jpg,Adult Female,Apparel,Bottomwear,Lilac,Smart/Evening,Pleated Midi Skirt with Bow Detail,1.450TL,1.450TL,0%,In Stock,In Stock,Low Stock,Low Stock,Spring/Summer
+k102.jpg,Adult Female,Apparel,Bottomwear,Green,Smart/Formal,Wide Leg Trousers,1.600TL,1.280TL,20%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+k103.jpg,Adult Female,Apparel,Topwear,Gold,Smart/Evening,V-Neck Satin Ruffled Blouse,1.300TL,910TL,30%,Out of Stock,Low Stock,Low Stock,Out of Stock,4 Seasons
+k104.jpg,Adult Female,Apparel,Topwear,Black,Smart/Casual,Classic Collar Satin Long Sleeve Shirt,1.350TL,1.080TL,20%,In Stock,In Stock,Low Stock,In Stock,4 Seasons
+k105.jpg,Adult Female,Apparel,Topwear,Ecru,Smart/Casual,Crepe Blouse with Tie-Bow Collar,1.500TL,1.500TL,0%,In Stock,Low Stock,In Stock,In Stock,Spring/Summer
+k106.jpg,Adult Female,Apparel,Bottomwear,Multi-Color,Smart/Casual,Pleated Plaid Midi Skirt,1.100TL,880TL,20%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+k107.jpg,Adult Female,Apparel,Bottomwear,Black,Smart/Formal,High Waisted Tapered Pants,1.550TL,1.240TL,20%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+k108.jpg,Adult Female,Apparel,Topwear,White,Smart/Casual,Short Sleeve Lace Detail Blouse,980TL,980TL,0%,In Stock,Low Stock,In Stock,Low Stock,Spring/Summer
+k109.jpg,Adult Female,Apparel,Topwear,Navy Blue,Smart/Casual,Mock Neck Basic Ribbed T-Shirt,650TL,455TL,30%,In Stock,In Stock,In Stock,In Stock,Spring/Winter
+k110.jpg,Adult Female,Apparel,Bottomwear,Brown,Smart/Formal,High Waisted Straight Leg Trousers,1.650TL,1.320TL,20%,Low Stock,Low Stock,Out of Stock,In Stock,Autumn/Winter
+k111.jpg,Adult Female,Apparel,Bottomwear,Powder Blue,Casual/Vintage,High Waisted Pleated Midi Skirt,1.100TL,880TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Summer
+k112.jpg,Adult Female,Apparel,Bottomwear,Rustic Orange,Casual/Vintage,Wide Leg Corduroy Pants,1.350TL,1.350TL,0%,Low Stock,Out of Stock,Low Stock,Out of Stock,Autumn/Winter
+k113.jpg,Adult Female,Apparel,Topwear,Distressed Black,Casual/Vintage,Single Pocket Silk Blend Shirt,1.500TL,1.050TL,30%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,4 Seasons
+k114.jpg,Adult Female,Apparel,Topwear,Cream/Multi-Color,Casual/Vintage,Floral Printed Peter Pan Collar Blouse,1.200TL,960TL,20%,In Stock,In Stock,Low Stock,In Stock,Spring/Autumn
+k115.jpg,Adult Female,Apparel,Bottomwear,Camel,Casual/Vintage,Pleated and Belted Tapered Trousers,1.300TL,1.300TL,0%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+k116.jpg,Adult Female,Apparel,Bottomwear,Dark Green/Red,Casual/Vintage,Plaid Faux-Wrap Mini Skirt,950TL,760TL,20%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+k117.jpg,Adult Female,Apparel,Bottomwear,Medium Blue,Casual/Vintage,Patched and Distressed Flared Jeans,1.600TL,1.280TL,20%,In Stock,In Stock,In Stock,In Stock,4 Seasons
+k118.jpg,Adult Female,Apparel,Topwear,White/Green,Casual/Vintage,Striped T-Shirt with Contrast Collar,650TL,520TL,20%,Low Stock,In Stock,In Stock,Low Stock,Spring/Summer
+k119.jpg,Adult Female,Apparel,Topwear,Mustard Yellow,Casual/Vintage,Floral Embroidered Short Sleeve Knit Cardigan,1.400TL,1.400TL,0%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Autumn/Spring
+k120.jpg,Adult Female,Apparel,Topwear,Distressed Grey,Casual/Vintage,"""Moto-Tour '78"" Printed Retro T-Shirt",700TL,490TL,30%,Low Stock,Low Stock,Out of Stock,Out of Stock,Spring/Summer
+k121.jpg,Young Female,Apparel,Topwear,Powder Pink,Casual,Short Sleeve Powder Pink Casual Shirt,650TL,520TL,20%,Out of Stock,Low Stock,In Stock,Out of Stock,Summer
+k122.jpg,Young Female,Apparel,Topwear,Cream,Casual,Crew Neck Cream Basic T-Shirt,350TL,350TL,0%,Low Stock,Out of Stock,Low Stock,In Stock,Summer
+k123.jpg,Young Female,Apparel,Bottomwear,Blue,Casual,Button-Detail Mini Denim Skirt,750TL,600TL,20%,Low Stock,In Stock,Out of Stock,Low Stock,Spring/Autumn
+k124.jpg,Young Female,Apparel,Topwear,Mustard,Casual,Striped Mustard Yellow Casual Shirt,680TL,680TL,0%,Out of Stock,In Stock,In Stock,Low Stock,Spring/Autumn
+k125.jpg,Young Female,Apparel,Bottomwear,Khaki,Casual,Khaki Casual Canvas Trousers,850TL,680TL,20%,Low Stock,In Stock,Low Stock,Out of Stock,Spring/Autumn
+k126.jpg,Young Female,Apparel,Topwear,Terracotta,Casual,Sun Printed Terracotta T-Shirt,380TL,304TL,20%,In Stock,Out of Stock,Low Stock,Low Stock,Summer
+k127.jpg,Young Female,Apparel,Bottomwear,Dark Blue,Casual,High-Waisted Casual Denim Jeans,920TL,920TL,0%,Out of Stock,Out of Stock,Low Stock,Low Stock,Spring/Autumn
+k128.jpg,Young Female,Apparel,Dress,Blue/Yellow,Casual,Floral Pattern Strappy Casual Dress,980TL,784TL,20%,Out of Stock,Out of Stock,Out of Stock,In Stock,Summer
+k129.jpg,Young Female,Apparel,Bottomwear,Black,Casual,Black Pleated Casual Midi Skirt,720TL,720TL,0%,In Stock,Low Stock,In Stock,Out of Stock,Spring/Autumn
+k130.jpg,Young Female,Apparel,Outerwear,Light Blue,Casual,Light Blue Casual Denim Jacket,1.450TL,1.160TL,20%,Out of Stock,In Stock,Low Stock,In Stock,Winter
+k131.jpg,Young Female,Apparel,Topwear,White,Formal/Classic,Classic White Poplin Shirt,750TL,750TL,0%,In Stock,In Stock,Low Stock,Out of Stock,All Season
+k132.jpg,Young Female,Apparel,Bottomwear,Navy Blue,Formal/Classic,Navy Blue Pencil Skirt with Slit,900TL,720TL,20%,In Stock,Low Stock,Out of Stock,In Stock,All Season
+k133.jpg,Young Female,Apparel,Outerwear,Grey,Classic,Classic Fit Grey Tweed Blazer Jacket,1.800TL,1.800TL,0%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+k134.jpg,Young Female,Apparel,Topwear,Green,Formal/Classic,Emerald Green Satin Blouse with Tie Detail,850TL,595TL,30%,Low Stock,In Stock,In Stock,Out of Stock,All Season
+k135.jpg,Young Female,Apparel,One-Piece,Burgundy,Formal/Classic,Burgundy Classic Dress with Belt and 3/4 Sleeves,1.400TL,1.400TL,0%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+k136.jpg,Young Female,Apparel,Bottomwear,Tan,Classic,High-Waisted Tan Tailored Trousers,1.100TL,880TL,20%,In Stock,In Stock,Low Stock,In Stock,All Season
+k137.jpg,Young Female,Apparel,Topwear,Navy-White,Classic,Crew Neck Striped Classic T-Shirt,450TL,450TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+k138.jpg,Young Female,Apparel,Bottomwear,Black,Minimal/Classic,Elastic Waist Black Pleated Midi Skirt,950TL,855TL,10%,Low Stock,Out of Stock,In Stock,Low Stock,All Season
+k139.jpg,Young Female,Apparel,Bottomwear,Dark Blue,Classic,Straight Fit Dark Wash Jeans,1.200TL,1.200TL,0%,In Stock,In Stock,In Stock,Out of Stock,All Season
+k140.jpg,Young Female,Apparel,Outerwear,Beige,Classic,Double-Breasted Classic Beige Trench Coat,2.500TL,2.000TL,20%,In Stock,Low Stock,In Stock,In Stock,Spring/Autumn
+k141.jpg,Young Female,Apparel,Topwear,White,Minimalist,White Mandarin Collar Minimalist Shirt,820TL,656TL,20%,Low Stock,Low Stock,Out of Stock,Low Stock,Spring/Autumn
+k142.jpg,Young Female,Apparel,Bottomwear,Beige,Minimalist,Tie-Detail Beige Minimalist Skirt,850TL,850TL,0%,In Stock,In Stock,Out of Stock,Low Stock,Spring/Autumn
+k143.jpg,Young Female,Apparel,Outerwear,Grey,Minimalist,Melange Grey Minimalist Blazer,1.650TL,1.320TL,20%,In Stock,In Stock,In Stock,Out of Stock,Winter
+k144.jpg,Young Female,Apparel,Topwear,Mink,Minimalist,Mink Minimalist Silk Blouse,880TL,880TL,0%,Out of Stock,In Stock,In Stock,In Stock,Spring/Autumn
+k145.jpg,Young Female,Apparel,Dress,Damson,Minimalist,Double-Breasted Damson Minimalist Dress,1.200TL,960TL,20%,Out of Stock,In Stock,Low Stock,Out of Stock,Summer
+k146.jpg,Young Female,Apparel,Bottomwear,Navy Blue,Minimalist,High-Waisted Navy Blue Minimalist Trousers,1.050TL,735TL,30%,Low Stock,In Stock,In Stock,In Stock,Spring/Autumn
+k147.jpg,Young Female,Apparel,Topwear,Ecru,Minimalist,Crew Neck Ecru Minimalist Sweatshirt,750TL,600TL,20%,Low Stock,In Stock,Low Stock,Out of Stock,Spring/Autumn
+k148.jpg,Young Female,Apparel,Bottomwear,Black,Minimalist,Pleated Black Minimalist Midi Skirt,720TL,576TL,20%,Out of Stock,Low Stock,In Stock,Out of Stock,Spring/Autumn
+k149.jpg,Young Female,Apparel,Bottomwear,Dark Blue,Minimalist,Straight Cut Minimalist Denim Jeans,950TL,950TL,0%,Low Stock,In Stock,In Stock,Low Stock,Spring/Autumn
+k150.jpg,Young Female,Apparel,Outerwear,Black,Minimalist,Black Minimalist Denim Jacket,1.400TL,1.120TL,20%,In Stock,In Stock,Out of Stock,Low Stock,Winter
+k151.jpg,Young Female,Apparel,Outerwear,White,Sporty,Classic Fit White Denim Jacket,1.450TL,1.450TL,0%,In Stock,In Stock,Low Stock,Out of Stock,Spring/Summer
+k152.jpg,Young Female,Apparel,Bottomwear,Black,Formal/Elegant,Black Pencil Skirt with Asymmetric Slit,950TL,760TL,20%,In Stock,Low Stock,Out of Stock,In Stock,All Season
+k153.jpg,Young Female,Apparel,Outerwear,Grey,Sporty,Zippered Grey Melange Hooded Sweatshirt,850TL,850TL,0%,In Stock,In Stock,In Stock,Low Stock,Autumn/Winter
+k154.jpg,Young Female,Apparel,Topwear,Blue,Sporty,Blue Poplin Shirt with Roll-Up Sleeves,800TL,640TL,20%,Low Stock,In Stock,In Stock,Out of Stock,All Season
+k155.jpg,Young Female,Apparel,One-Piece,Navy Blue,Sporty,Navy Blue High-Neck Dress with Red Side Stripes,1.250TL,875TL,30%,Out of Stock,Out of Stock,Out of Stock,Out of Stock,Spring/Autumn
+k156.jpg,Young Female,Apparel,Bottomwear,Tan,Sporty,Elastic Cuff Tan Cargo Trousers,1.150TL,1.150TL,0%,In Stock,In Stock,Low Stock,In Stock,All Season
+k157.jpg,Young Female,Apparel,Topwear,Navy-White,Sporty,Crew Neck Striped Classic T-Shirt,450TL,450TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Summer
+k158.jpg,Young Female,Apparel,Bottomwear,Burgundy,Sporty,Elastic Waist Burgundy Pleated Midi Skirt,950TL,855TL,10%,Low Stock,Out of Stock,In Stock,Low Stock,All Season
+k159.jpg,Young Female,Apparel,Bottomwear,Green,Sporty,Front Pintuck Smart Kaki/Green Trousers,1.100TL,1.100TL,0%,In Stock,In Stock,In Stock,Out of Stock,All Season
+k160.jpg,Young Female,Apparel,Outerwear,Khaki,Sporty,Khaki Bomber Jacket with Zippered Sleeve Pocket,1.750TL,1.400TL,20%,In Stock,Low Stock,In Stock,In Stock,Autumn/Winter
+k161.jpg,Young Female,Apparel,Topwear,White,Elegant/Formal,Classic Cut White Elegant Poplin Shirt,950TL,760TL,20%,In Stock,In Stock,Low Stock,Low Stock,Spring/Autumn
+k162.jpg,Young Female,Apparel,Bottomwear,Black,Elegant/Special,Black Pleated Elegant Chiffon Skirt,1.200TL,1.200TL,0%,In Stock,Low Stock,Out of Stock,Low Stock,Spring/Autumn
+k163.jpg,Young Female,Apparel,Dress,Green,Elegant/Party,Emerald Green Double-Breasted Elegant Dress,1.850TL,1.480TL,20%,Out of Stock,Low Stock,In Stock,In Stock,Summer
+k164.jpg,Young Female,Apparel,Bottomwear,Navy Blue,Elegant/Office,High-Waisted Navy Blue Elegant Flare Pants,1.350TL,1.350TL,0%,Out of Stock,Low Stock,Out of Stock,Out of Stock,Spring/Autumn
+k165.jpg,Young Female,Apparel,Outerwear,Grey,Elegant/Formal,Melange Grey Elegant Blazer Jacket,2.200TL,1.760TL,20%,In Stock,In Stock,Out of Stock,Low Stock,Winter
+k166.jpg,Young Female,Apparel,Topwear,Powder Pink,Elegant/Special,Tie-Neck Powder Pink Chiffon Shirt,1.100TL,880TL,20%,In Stock,In Stock,In Stock,Low Stock,Spring/Autumn
+k167.jpg,Young Female,Apparel,Bottomwear,Yellow,Elegant/Casual,Button-Detail Mustard Yellow Elegant Skirt,980TL,980TL,0%,Low Stock,In Stock,In Stock,Low Stock,Spring/Autumn
+k168.jpg,Young Female,Apparel,Dress,Black,Elegant/Night,Slip-On Black Satin Elegant Dress,1.600TL,1.280TL,20%,Low Stock,Out of Stock,Out of Stock,Low Stock,Summer
+k169.jpg,Young Female,Apparel,Bottomwear,Beige,Elegant/Office,Straight Cut Beige Elegant Trousers,1.250TL,1.000TL,20%,In Stock,In Stock,Out of Stock,Out of Stock,Spring/Autumn
+k170.jpg,Young Female,Apparel,Outerwear,Burgundy,Elegant/Formal,Cropped Burgundy Elegant Tweed Jacket,2.400TL,1.920TL,20%,Low Stock,Out of Stock,Low Stock,Low Stock,Winter
+k171.jpg,Young Female,Apparel,Topwear,Orange/Brown,Vintage,70s Floral Pattern Vintage Shirt,950TL,760TL,20%,Out of Stock,Out of Stock,In Stock,In Stock,Spring/Autumn
+k172.jpg,Young Female,Apparel,Bottomwear,Dark Green,Vintage,High-Waisted Flared Vintage Skirt,1.100TL,1.100TL,0%,In Stock,In Stock,In Stock,In Stock,Spring/Autumn
+k173.jpg,Young Female,Apparel,Dress,Burgundy,Vintage,Sweetheart Neck Retro Princess Cut Dress,1.450TL,1.160TL,20%,Out of Stock,In Stock,Low Stock,Out of Stock,Summer
+k174.jpg,Young Female,Apparel,Bottomwear,Tan,Vintage,Corduroy Flare Vintage Trousers,1.250TL,1.250TL,0%,Low Stock,Out of Stock,Low Stock,In Stock,Spring/Autumn
+k175.jpg,Young Female,Apparel,Outerwear,Blue Plaid,Vintage,Wool Blend Plaid Vintage Jacket,1.850TL,1.480TL,20%,Out of Stock,Low Stock,Out of Stock,Low Stock,Winter
+k176.jpg,Young Female,Apparel,Topwear,Green/Yellow,Vintage,Geometric Pattern Retro Shirt,920TL,736TL,20%,Low Stock,Out of Stock,In Stock,Low Stock,Spring/Autumn
+k177.jpg,Young Female,Apparel,Bottomwear,Blue,Vintage,Button-Front Vintage Denim Skirt,880TL,880TL,0%,In Stock,In Stock,Out of Stock,In Stock,Spring/Autumn
+k178.jpg,Young Female,Apparel,Topwear,Ecru/Red,Vintage,Retro Sunshine Printed Ringer T-Shirt,480TL,384TL,20%,Out of Stock,In Stock,Out of Stock,Out of Stock,Summer
+k179.jpg,Young Female,Apparel,Bottomwear,Light Blue,Vintage,High-Waisted Mom Fit Retro Jeans,1.050TL,840TL,20%,In Stock,In Stock,In Stock,In Stock,Spring/Autumn
+k180.jpg,Young Female,Apparel,Outerwear,Distressed Brown,Vintage,Oversized Distressed Leather Bomber Jacket,2.450TL,1.960TL,20%,Out of Stock,In Stock,Out of Stock,In Stock,Winter

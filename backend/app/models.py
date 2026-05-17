@@ -6,6 +6,7 @@ Segment = Literal["child", "young", "adult"]
 Gender = Literal["female", "male"]
 StylePreference = Literal["classic", "sport", "daily", "chic", "vintage", "minimal"]
 PreferenceMode = Literal["balanced", "cheaper", "sportier", "elegant"]
+RecommendationMode = Literal["text", "fit"]
 Source = Literal["gemini", "fallback"]
 
 
@@ -60,7 +61,10 @@ class RecommendedItem(BaseModel):
 
 class RecommendationRequest(BaseModel):
     profile: UserProfile
-    prompt: str
+    prompt: str = ""
+    mode: RecommendationMode = "text"
+    image_base64: str | None = None
+    image_mime_type: str | None = None
     image_hint: str | None = None
     preference: PreferenceMode = "balanced"
     replace_item_id: int | None = None
@@ -76,6 +80,28 @@ class RecommendationResponse(BaseModel):
     savings: float
     market_note: str
     source: Source
+    recommendation_id: str | None = None
+    guest_session_id: str | None = None
+
+
+class SaveOutfitRequest(BaseModel):
+    recommendation_id: str
+    prompt: str
+    title: str | None = None
+
+
+class ProfileUpdateRequest(BaseModel):
+    profile: UserProfile
+    default_preference: PreferenceMode = "balanced"
+    complete_onboarding: bool = False
+
+
+class ProfileBundleResponse(BaseModel):
+    display_name: str
+    email: str | None = None
+    onboarding_completed: bool
+    profile: UserProfile
+    default_preference: PreferenceMode
 
 
 class GeminiPickItem(BaseModel):

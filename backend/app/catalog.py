@@ -20,7 +20,11 @@ def resolve_catalog_gender(profile: UserProfile) -> str | None:
     if profile.segment == "child":
         return "Girls" if profile.gender == "female" else "Boys"
     if profile.gender == "male":
-        return "Men"
+        if profile.segment == "young":
+            return "Young Male"
+        if profile.segment == "adult":
+            return "Adult Male"
+        return None
     if profile.segment == "young":
         return "Young Female"
     if profile.segment == "adult":
@@ -31,6 +35,8 @@ def resolve_catalog_gender(profile: UserProfile) -> str | None:
 def to_frontend_gender(catalog_gender: str) -> str:
     if catalog_gender in ("Adult Female", "Young Female"):
         return "Women"
+    if catalog_gender in ("Adult Male", "Young Male"):
+        return "Men"
     if catalog_gender == "Girls":
         return "Girls"
     if catalog_gender == "Boys":

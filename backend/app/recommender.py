@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 import logging
 import os
@@ -33,7 +35,36 @@ from app.models import (
 
 logger = logging.getLogger(__name__)
 
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip() or "gemini-2.5-flash"
+FIT_DEFAULT_PROMPT = (
+    "Yüklenen parçanın fotoğrafını analiz et. Parçanın slot tipine göre katalogdan "
+    "yalnızca TAMAMLAYICI parçalar seç (yüklenen parçayla aynı slotu tekrarlama). "
+    "Üst giyim yüklendiyse alt giyim ve mümkünse dış giyim; alt giyim yüklendiyse üst ve dış giyim; "
+    "dış giyim yüklendiyse üst ve alt giyim; elbise/tek parça yüklendiyse uyumlu tamamlayıcılar. "
+    "Ekonomik ve renk uyumlu bir kombin oluştur."
+)
+ALLOWED_IMAGE_MIME_TYPES = frozenset({"image/jpeg", "image/png", "image/webp"})
+MAX_IMAGE_BYTES = 4 * 1024 * 1024
+
+GEMINI_FIT_ADDON = """
+## Fit modu (yüklenen parça fotoğrafı — tamamlayıcı kombin)
+Önce fotoğraftaki parçanın slot/kategori tipini belirle, sonra katalogdan YALNIZCA eksik slotları doldur.
+
+### Slot eşleme kuralları (yüklenen parça → önerilecek slotlar)
+| Fotoğraftaki parça | Katalogdan seç | Asla seçme |
+|---|---|---|
+| Üst giyim (gömlek, tişört, bluz, kazak, sweatshirt, topwear, article_type Shirt) | Alt giyim (Trousers) + tercihen dış giyim (Blazer/Outerwear) | Üst giyim |
+| Alt giyim (pantolon, jean, etek, şort, bottomwear, article_type Trousers) | Üst giyim (Shirt) + tercihen dış giyim (Blazer) | Alt giyim |
+| Dış giyim (ceket, blazer, mont, hırka, outerwear, article_type Blazer) | Üst giyim (Shirt) + alt giyim (Trousers) | Dış giyim |
+| Tek parça (elbise, dress, one-piece, article_type Dress) | Uyumlu üst veya dış katman; gerekirse alt tamamlayıcı — elbise slotunu tekrarlama | Dress/aynı elbise |
+| Ayakkabı veya aksesuar ağırlıklı görsel | Üst + alt giyim kombinasyonu | Ayakkabı slotu yoksa zorlama |
+
+### Genel kurallar
+- Yüklenen parçanın aynısını veya çok benzerini `products` listesinden seçme.
+- Renk, usage (Casual/Formal/Sport) ve mevsimi fotoğraftaki parça ile hizala.
+- ZORUNLU: `items` içinde EN AZ 3, en fazla 4 ürün. Her `reason` içinde hangi yüklenen parçayla uyumlu olduğunu kısaca belirt.
+- `summary` içinde fotoğraftaki parça tipini ve tamamlayıcı mantığı özetle.
+"""
 
 GEMINI_SYSTEM_PROMPT = """Sen Visionist adlı bir moda ve alışveriş asistanısın. Görevin, kullanıcıya yalnızca sana verilen ürün listesinden gerçek bir kombin önermektir.
 
@@ -80,6 +111,42 @@ def _configure_gemini() -> bool:
         return False
     genai.configure(api_key=api_key)
     return True
+
+
+def _decode_image_base64(raw: str) -> bytes:
+    cleaned = raw.strip()
+    if "," in cleaned and cleaned.lower().startswith("data:"):
+        cleaned = cleaned.split(",", 1)[1]
+    try:
+        return base64.b64decode(cleaned, validate=True)
+    except (binascii.Error, ValueError) as error:
+        raise ValueError("Geçersiz görsel verisi.") from error
+
+
+def _parse_fit_image(request: RecommendationRequest) -> tuple[bytes, str]:
+    if not request.image_base64:
+        raise ValueError("Fit modu için fotoğraf gerekli.")
+
+    mime = (request.image_mime_type or "").strip().lower()
+    if mime not in ALLOWED_IMAGE_MIME_TYPES:
+        raise ValueError("Desteklenen formatlar: JPEG, PNG, WebP.")
+
+    image_bytes = _decode_image_base64(request.image_base64)
+    if len(image_bytes) > MAX_IMAGE_BYTES:
+        raise ValueError("Görsel en fazla 4 MB olabilir.")
+    if len(image_bytes) < 100:
+        raise ValueError("Görsel dosyası okunamadı.")
+
+    return image_bytes, mime
+
+
+def _validate_request(request: RecommendationRequest) -> None:
+    if request.mode == "fit":
+        _parse_fit_image(request)
+        return
+
+    if len(request.prompt.strip()) < 3:
+        raise ValueError("Kombin için en az 3 karakterlik bir istek yazın.")
 
 
 def _totals(items: list[RecommendedItem]) -> tuple[float, float, float]:
@@ -187,7 +254,11 @@ def _gemini_pick(
     prompt: str,
     preference: PreferenceMode,
     shortlist: list[Product],
-    image_hint: str | None,
+    image_hint: str | None = None,
+    *,
+    image_bytes: bytes | None = None,
+    image_mime_type: str | None = None,
+    is_fit: bool = False,
 ) -> GeminiPickResponse | None:
     if not _configure_gemini():
         return None
@@ -214,10 +285,9 @@ def _gemini_pick(
         "elegant": "Formal ve şık parçalar öncelikli.",
     }[preference]
 
-    user_prompt = {
+    user_prompt: dict = {
         "user_profile": profile.model_dump(),
         "request": prompt,
-        "image_hint": image_hint,
         "preference": preference_note,
         "products": catalog_lines,
         "exclude_ids": [],
@@ -227,13 +297,42 @@ def _gemini_pick(
         },
     }
 
+    if is_fit and image_bytes and image_mime_type:
+        user_prompt["task"] = "fit_outfit"
+        user_prompt["uploaded_garment_note"] = (
+            "Kullanıcı kendi kıyafetinin fotoğrafını yükledi. Önce parça tipini (üst/alt/dış/tek parça) "
+            "belirle; yalnızca eksik slotlardan seç. Üst yüklendiyse alt+ceket; alt yüklendiyse üst+ceket; "
+            "ceket yüklendiyse üst+alt. Yüklenen parçanın slotunu tekrarlama."
+        )
+        user_prompt["slot_completion_rules"] = {
+            "topwear_loaded": ["Trousers", "Blazer"],
+            "bottomwear_loaded": ["Shirt", "Blazer"],
+            "outerwear_loaded": ["Shirt", "Trousers"],
+            "dress_loaded": ["Shirt", "Blazer", "Trousers"],
+        }
+    elif image_hint:
+        user_prompt["image_hint"] = image_hint
+
+    system_instruction = GEMINI_SYSTEM_PROMPT
+    if is_fit:
+        system_instruction = f"{GEMINI_SYSTEM_PROMPT}\n{GEMINI_FIT_ADDON}"
+
     try:
         model = genai.GenerativeModel(
             GEMINI_MODEL,
-            system_instruction=GEMINI_SYSTEM_PROMPT,
+            system_instruction=system_instruction,
         )
+        text_part = json.dumps(user_prompt, ensure_ascii=False)
+        if is_fit and image_bytes and image_mime_type:
+            content: list = [
+                {"mime_type": image_mime_type, "data": image_bytes},
+                text_part,
+            ]
+        else:
+            content = [text_part]
+
         response = model.generate_content(
-            json.dumps(user_prompt, ensure_ascii=False),
+            content,
             generation_config={"response_mime_type": "application/json"},
         )
         payload = _extract_json(response.text or "")
@@ -241,8 +340,64 @@ def _gemini_pick(
             return None
         return GeminiPickResponse.model_validate(payload)
     except Exception as error:
-        logger.warning("Gemini recommendation failed: %s", error)
+        logger.warning("Gemini recommendation failed (model=%s): %s", GEMINI_MODEL, error)
         return None
+
+
+def _complete_gemini_items(
+    items: list[RecommendedItem],
+    pool: list[Product],
+    preference: PreferenceMode,
+    prompt: str,
+    target_count: int = 3,
+) -> list[RecommendedItem]:
+    if len(items) >= target_count:
+        return items
+
+    used_ids = {item.product.id for item in items}
+    used_slots = {_slot_for_product(item.product) for item in items}
+    next_slot_id = max((item.id for item in items), default=0) + 1
+    completed = list(items)
+
+    for slot in OUTFIT_SLOTS:
+        if len(completed) >= target_count:
+            break
+        if slot in used_slots:
+            continue
+        product = _pick_for_slot(pool, slot, used_ids, preference)
+        if not product:
+            continue
+        used_ids.add(product.id)
+        used_slots.add(slot)
+        completed.append(
+            RecommendedItem(
+                id=next_slot_id,
+                reason=(
+                    f'Yüklediğin parçaya uyumlu {product.article_type.lower()} '
+                    f'("{prompt}" isteğiyle hizalı).'
+                ),
+                product=to_frontend_product(product),
+            ),
+        )
+        next_slot_id += 1
+
+    if len(completed) < target_count:
+        for product in sort_by_preference(pool, preference):
+            if len(completed) >= target_count:
+                break
+            if product.id in used_ids:
+                continue
+            used_ids.add(product.id)
+            completed.append(
+                RecommendedItem(
+                    id=next_slot_id,
+                    reason=f'Kombini tamamlayan {product.article_type.lower()} seçimi.',
+                    product=to_frontend_product(product),
+                ),
+            )
+            next_slot_id += 1
+
+    return completed
 
 
 def _items_from_gemini(
@@ -408,12 +563,78 @@ def _slot_for_product(product: FrontendProduct | Product) -> str:
     return "Shirt"
 
 
+def _build_fit_recommendation(
+    request: RecommendationRequest,
+    all_products: list[Product],
+) -> RecommendationResponse:
+    if not _configure_gemini():
+        raise ValueError(
+            "Görsel analiz için GEMINI_API_KEY gerekli. backend/.env dosyasını kontrol edin.",
+        )
+
+    image_bytes, image_mime = _parse_fit_image(request)
+    effective_prompt = request.prompt.strip() or FIT_DEFAULT_PROMPT
+    shortlist = build_shortlist(all_products, request.profile, request.preference)
+
+    gemini_result = _gemini_pick(
+        request.profile,
+        effective_prompt,
+        request.preference,
+        shortlist,
+        image_bytes=image_bytes,
+        image_mime_type=image_mime,
+        is_fit=True,
+    )
+
+    if not gemini_result or not gemini_result.items:
+        raise ValueError(
+            "Gemini görseli işleyemedi. API anahtarınızı veya ağ bağlantınızı kontrol edip tekrar deneyin.",
+        )
+
+    pool = filter_for_profile(all_products, request.profile)
+    items = _items_from_gemini(gemini_result, all_products)
+    supplemented = len(items) < 3
+    items = _complete_gemini_items(items, pool, request.preference, effective_prompt)
+
+    if len(items) < 3:
+        logger.warning(
+            "Fit outfit incomplete: gemini_picks=%s valid=%s",
+            [pick.id for pick in gemini_result.items],
+            len(items),
+        )
+        raise ValueError(
+            "Yeterli uyumlu ürün seçilemedi. Farklı bir fotoğraf veya profil segmenti deneyin.",
+        )
+
+    list_total, sale_total, savings = _totals(items)
+    market_note = "Yüklediğin parçaya göre Gemini Vision ile kombin önerildi."
+    if supplemented:
+        market_note = (
+            "Yüklediğin parçaya göre Gemini Vision kullanıldı; eksik slotlar katalogdan tamamlandı."
+        )
+
+    return RecommendationResponse(
+        items=items,
+        summary=gemini_result.summary or "Yüklediğin parçaya uyumlu kombin önerildi.",
+        list_total=list_total,
+        sale_total=sale_total,
+        savings=savings,
+        market_note=market_note,
+        source="gemini",
+    )
+
+
 def build_recommendation(request: RecommendationRequest) -> RecommendationResponse:
+    _validate_request(request)
+
     all_products = load_products()
     pool = filter_for_profile(all_products, request.profile)
 
     if not pool:
         raise ValueError("Bu profil için katalogda ürün bulunamadı.")
+
+    if request.mode == "fit":
+        return _build_fit_recommendation(request, all_products)
 
     if request.replace_item_id is not None and request.current_items:
         note = request.item_update_note or "istek"

@@ -15,8 +15,9 @@ SUB_CATEGORY_TO_ARTICLE = {
     "One-Piece": "Dress",
 }
 
-DEFAULT_CSV = Path(r"d:\DOWNLOADS\dataset\dataset\styles.csv")
-OUTPUT_PATH = Path(__file__).resolve().parent.parent / "data" / "products.json"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+DEFAULT_CSV = DATA_DIR / "styles.csv"
+OUTPUT_PATH = DATA_DIR / "products.json"
 
 
 def parse_price(value: str) -> float:
