@@ -3,6 +3,7 @@ export type Gender = 'female' | 'male'
 export type StylePreference = 'classic' | 'sport' | 'daily' | 'chic' | 'vintage' | 'minimal'
 export type CatalogGender = 'Men' | 'Women' | 'Boys' | 'Girls'
 export type PreferenceMode = 'balanced' | 'cheaper' | 'sportier' | 'elegant'
+export type RecommendationMode = 'text' | 'fit'
 
 export type UserProfile = {
   segment: Segment
@@ -13,6 +14,7 @@ export type UserProfile = {
 }
 
 export type Account = {
+  id: string
   name: string
   email: string
   createdAt: string
@@ -20,7 +22,7 @@ export type Account = {
 }
 
 export type Product = {
-  id: number
+  id: string
   name: string
   gender: 'Men' | 'Women' | 'Boys' | 'Girls'
   master_category: string
@@ -48,11 +50,16 @@ export type RecommendationResponse = {
   savings: number
   market_note: string
   source: 'gemini' | 'fallback'
+  recommendation_id?: string | null
+  guest_session_id?: string | null
 }
 
 export type RecommendationRequest = {
   profile: UserProfile
   prompt: string
+  mode?: RecommendationMode
+  image_base64?: string
+  image_mime_type?: string
   image_hint?: string
   preference: PreferenceMode
 }

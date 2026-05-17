@@ -1,3 +1,5 @@
+import { getAccessToken } from '@/lib/supabase/auth'
+import { getGuestSessionId, setGuestSessionId } from '@/lib/guest-session'
 import { getMockRecommendation } from '@/lib/mock-recommendation'
 import type { RecommendationRequest, RecommendationResponse } from '@/lib/types'
 
@@ -5,11 +7,32 @@ import type { RecommendationRequest, RecommendationResponse } from '@/lib/types'
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api/backend'
 const USE_LIVE_API = process.env.NEXT_PUBLIC_USE_LIVE_API !== 'false'
 const RECOMMENDATION_TIMEOUT_MS = 30000
+const FIT_RECOMMENDATION_TIMEOUT_MS = 60000
 
 type RecommendationOptions = {
   replaceItemId?: number
   replaceRequest?: string
   currentItems?: RecommendationResponse['items']
+}
+
+const buildAuthHeaders = async (): Promise<Record<string, string>> => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+
+  const token = await getAccessToken()
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  const guestSessionId = getGuestSessionId()
+
+  if (guestSessionId && !token) {
+    headers['X-Guest-Session-Id'] = guestSessionId
+  }
+
+  return headers
 }
 
 export const requestRecommendation = async (
@@ -21,6 +44,7 @@ export const requestRecommendation = async (
       setTimeout(resolve, 500)
     })
     return getMockRecommendation(payload.profile, payload.prompt, payload.preference, {
+      mode: payload.mode,
       replaceItemId: options?.replaceItemId,
       replaceRequest: options?.replaceRequest,
       currentItems: options?.currentItems,
@@ -34,17 +58,18 @@ export const requestRecommendation = async (
     current_items: options?.currentItems,
   }
 
+  const isFitMode = payload.mode === 'fit'
+  const timeoutMs = isFitMode ? FIT_RECOMMENDATION_TIMEOUT_MS : RECOMMENDATION_TIMEOUT_MS
+
   const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), RECOMMENDATION_TIMEOUT_MS)
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
 
   let response: Response
 
   try {
     response = await fetch(`${API_URL}/recommend`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: await buildAuthHeaders(),
       body: JSON.stringify(body),
       signal: controller.signal,
     })
@@ -72,5 +97,11 @@ export const requestRecommendation = async (
     throw new Error(detail)
   }
 
-  return response.json() as Promise<RecommendationResponse>
+  const data = (await response.json()) as RecommendationResponse
+
+  if (data.guest_session_id) {
+    setGuestSessionId(data.guest_session_id)
+  }
+
+  return data
 }

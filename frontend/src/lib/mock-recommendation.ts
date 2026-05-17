@@ -1,6 +1,7 @@
 import type {
   PreferenceMode,
   Product,
+  RecommendationMode,
   RecommendationResponse,
   RecommendedItem,
   UserProfile,
@@ -9,7 +10,7 @@ import { getCatalogGender } from '@/lib/style-images'
 
 const catalog: Product[] = [
   {
-    id: 101,
+    id: '101',
     name: 'Pamuklu Gömlek',
     gender: 'Women',
     master_category: 'Apparel',
@@ -23,7 +24,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 102,
+    id: '102',
     name: 'İpek Bluz',
     gender: 'Women',
     master_category: 'Apparel',
@@ -37,7 +38,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 201,
+    id: '201',
     name: 'Slim Fit Pantolon',
     gender: 'Women',
     master_category: 'Apparel',
@@ -51,7 +52,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 202,
+    id: '202',
     name: 'Yüksek Bel Pantolon',
     gender: 'Women',
     master_category: 'Apparel',
@@ -65,7 +66,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 301,
+    id: '301',
     name: 'Deri Sneaker',
     gender: 'Women',
     master_category: 'Footwear',
@@ -79,7 +80,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 302,
+    id: '302',
     name: 'Topuklu Ayakkabı',
     gender: 'Women',
     master_category: 'Footwear',
@@ -93,7 +94,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 401,
+    id: '401',
     name: 'Oversize Blazer',
     gender: 'Women',
     master_category: 'Apparel',
@@ -107,7 +108,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 402,
+    id: '402',
     name: 'Hafif Trençkot',
     gender: 'Women',
     master_category: 'Apparel',
@@ -121,7 +122,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 501,
+    id: '501',
     name: 'Oxford Gömlek',
     gender: 'Men',
     master_category: 'Apparel',
@@ -135,7 +136,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 502,
+    id: '502',
     name: 'Keten Gömlek',
     gender: 'Men',
     master_category: 'Apparel',
@@ -149,7 +150,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 601,
+    id: '601',
     name: 'Chino Pantolon',
     gender: 'Men',
     master_category: 'Apparel',
@@ -163,7 +164,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 701,
+    id: '701',
     name: 'Beyaz Sneaker',
     gender: 'Men',
     master_category: 'Footwear',
@@ -177,7 +178,7 @@ const catalog: Product[] = [
     product_url: '#',
   },
   {
-    id: 801,
+    id: '801',
     name: 'Yün Blazer',
     gender: 'Men',
     master_category: 'Apparel',
@@ -209,7 +210,7 @@ const filterByProfile = (profile: UserProfile) => {
 const pickProductForSlot = (
   pool: Product[],
   articleType: string,
-  excludeIds: number[],
+  excludeIds: string[],
   preference: PreferenceMode,
 ) => {
   const candidates = pool
@@ -233,7 +234,7 @@ const buildItems = (
   currentItems?: RecommendedItem[],
 ): RecommendedItem[] => {
   const pool = filterByProfile(profile)
-  const usedIds: number[] = []
+  const usedIds: string[] = []
 
   if (currentItems && replaceItemId) {
     return currentItems.map((item) => {
@@ -304,14 +305,20 @@ export const getMockRecommendation = (
   prompt: string,
   preference: PreferenceMode = 'balanced',
   options?: {
+    mode?: RecommendationMode
     replaceItemId?: number
     replaceRequest?: string
     currentItems?: RecommendedItem[]
   },
 ): RecommendationResponse => {
+  const effectivePrompt =
+    options?.mode === 'fit' && !prompt.trim()
+      ? 'Yüklenen parçaya uyumlu kombin'
+      : prompt
+
   const items = buildItems(
     profile,
-    prompt,
+    effectivePrompt,
     preference,
     options?.replaceItemId,
     options?.replaceRequest,
@@ -319,11 +326,17 @@ export const getMockRecommendation = (
   )
   const totals = totalsFromItems(items)
 
+  const isFit = options?.mode === 'fit'
+
   return {
     items,
-    summary: `"${prompt}" isteğine göre ${profile.style} stilinde, bütçe dostu bir kombin oluşturuldu.`,
+    summary: isFit
+      ? 'Yüklediğin parçaya uyumlu demo kombin (canlı modda Gemini Vision kullanılır).'
+      : `"${effectivePrompt}" isteğine göre ${profile.style} stilinde, bütçe dostu bir kombin oluşturuldu.`,
     ...totals,
-    market_note: 'Demo modunda çalışıyorsunuz. Backend bağlandığında gerçek katalog ve Gemini önerileri kullanılacak.',
+    market_note: isFit
+      ? 'Demo modu: görsel analiz simüle edildi. Canlı API için backend ve GEMINI_API_KEY gerekir.'
+      : 'Demo modunda çalışıyorsunuz. Backend bağlandığında gerçek katalog ve Gemini önerileri kullanılacak.',
     source: 'fallback',
   }
 }

@@ -16,7 +16,7 @@ type RecommendationModalProps = {
   profile: UserProfile
   isAuthenticated: boolean
   onClose: () => void
-  onSaveToWardrobe: (recommendation: RecommendationResponse) => void
+  onSaveToWardrobe: (recommendation: RecommendationResponse) => void | Promise<void>
   onRecommendationChange: (recommendation: RecommendationResponse) => void
 }
 
@@ -88,10 +88,13 @@ export const RecommendationModal = ({
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true)
-    onSaveToWardrobe(recommendation)
-    setIsSaving(false)
+    try {
+      await onSaveToWardrobe(recommendation)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const savingsPercent =
@@ -238,7 +241,7 @@ export const RecommendationModal = ({
                 : 'Kapatınca bu kombin oturumu sona erer. Yeni arama için tekrar istek yazabilirsin.'}
             </p>
             {isAuthenticated ? (
-              <Button type="button" onClick={handleSave} disabled={isSaving} className="mt-3 shrink-0 sm:mt-0">
+              <Button type="button" onClick={() => void handleSave()} disabled={isSaving} className="mt-3 shrink-0 sm:mt-0">
                 <Shirt size={18} />
                 Dolabıma Kaydet
               </Button>

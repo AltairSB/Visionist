@@ -5,14 +5,19 @@ import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import type { CompressedImage } from '@/lib/compress-image'
 import { pickRandomPromptSuggestions } from '@/lib/prompt-suggestions'
 
 type AssistantHomeProps = {
   prompt: string
   isLoading: boolean
+  fitMode: boolean
+  fitImage: CompressedImage | null
   onPromptChange: (prompt: string) => void
   onSubmit: () => void
   onCheaperRequest: () => void
+  onOpenFitModal: () => void
+  onFitImageClear: () => void
   isAuthenticated: boolean
   onWardrobeClick: () => void
 }
@@ -20,9 +25,13 @@ type AssistantHomeProps = {
 export const AssistantHome = ({
   prompt,
   isLoading,
+  fitMode,
+  fitImage,
   onPromptChange,
   onSubmit,
   onCheaperRequest,
+  onOpenFitModal,
+  onFitImageClear,
   isAuthenticated,
   onWardrobeClick,
 }: AssistantHomeProps) => {
@@ -37,6 +46,9 @@ export const AssistantHome = ({
     onSubmit()
   }
 
+  const canSubmit = fitMode ? Boolean(fitImage) : prompt.trim().length >= 3
+  const hasFitPhoto = Boolean(fitImage)
+
   return (
     <section id="assistant" className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-3xl text-center">
@@ -44,30 +56,86 @@ export const AssistantHome = ({
           <Sparkles size={30} />
         </span>
         <h1 className="mt-6 text-4xl font-bold tracking-[-0.04em] text-ink sm:text-5xl">
-          Bugün ne için kombin arıyorsun?
+          {hasFitPhoto ? 'Parçana ne uyar?' : 'Bugün ne için kombin arıyorsun?'}
         </h1>
         <p className="mt-4 text-lg text-ink/65">
-          Stil asistanın hem bütçeni hem dolabını senin için düşünsün.
+          {hasFitPhoto
+            ? 'İsteğe bağlı notunu yaz; eksik parçaları katalogdan önerelim.'
+            : 'Stil asistanın hem bütçeni hem dolabını senin için düşünsün.'}
         </p>
       </div>
       <form
         onSubmit={handleSubmit}
         className="mx-auto mt-9 max-w-4xl rounded-[2rem] border border-white/80 bg-white/82 p-4 shadow-atelier backdrop-blur"
       >
-        <div className="rounded-3xl border border-plum/10 bg-gradient-to-br from-white to-lilac/45 p-4">
-          <textarea
-            value={prompt}
-            onChange={(event) => onPromptChange(event.target.value)}
-            placeholder="Yazlık, uygun fiyatlı bir akşam yemeği kombini..."
-            rows={4}
-            className="min-h-28 w-full resize-none bg-transparent text-lg text-ink outline-none placeholder:text-ink/35"
-          />
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-            <Button type="button" variant="secondary" aria-label="Görsel yükleme ipucu">
+        <div
+          className={`rounded-3xl border p-4 ${
+            hasFitPhoto
+              ? 'border-violet/30 bg-gradient-to-br from-white via-lilac/30 to-violet/10'
+              : 'border-plum/10 bg-gradient-to-br from-white to-lilac/45'
+          }`}
+        >
+          {hasFitPhoto ? (
+            <>
+              <div className="flex items-center gap-3 rounded-2xl border border-plum/10 bg-white/90 p-3">
+                <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-xl border border-plum/10">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={fitImage?.previewUrl}
+                    alt="Yüklenen parça"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-bold text-plum">Yüklenen parça</p>
+                  <p className="text-xs text-ink/55">Üst, alt veya ceket — tamamlayıcı öneriler buna göre</p>
+                </div>
+                <div className="flex shrink-0 flex-col gap-1 sm:flex-row">
+                  <Button type="button" variant="secondary" className="text-xs" onClick={onOpenFitModal}>
+                    Değiştir
+                  </Button>
+                  <Button type="button" variant="ghost" className="text-xs" onClick={onFitImageClear}>
+                    Kaldır
+                  </Button>
+                </div>
+              </div>
+              <label
+                htmlFor="fit-prompt"
+                className="mt-4 block text-xs font-bold uppercase tracking-[0.2em] text-violet"
+              >
+                İsteğe bağlı not
+              </label>
+              <textarea
+                id="fit-prompt"
+                value={prompt}
+                onChange={(event) => onPromptChange(event.target.value)}
+                placeholder="Örn: akşam yemeği için şık ama rahat, indirimli parçalar..."
+                rows={3}
+                className="mt-2 min-h-24 w-full resize-none bg-transparent text-lg text-ink outline-none placeholder:text-ink/35"
+              />
+            </>
+          ) : (
+            <textarea
+              value={prompt}
+              onChange={(event) => onPromptChange(event.target.value)}
+              placeholder="Yazlık, uygun fiyatlı bir akşam yemeği kombini..."
+              rows={4}
+              className="min-h-28 w-full resize-none bg-transparent text-lg text-ink outline-none placeholder:text-ink/35"
+            />
+          )}
+
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+            <Button
+              type="button"
+              variant={hasFitPhoto ? 'primary' : 'secondary'}
+              aria-label="Buna ne uyar — fotoğraf yükle"
+              aria-pressed={hasFitPhoto}
+              onClick={onOpenFitModal}
+            >
               <Camera size={17} />
               Buna ne uyar?
             </Button>
-            <Button type="submit" disabled={isLoading || prompt.trim().length < 3}>
+            <Button type="submit" disabled={isLoading || !canSubmit}>
               {isLoading ? 'Düşünüyor...' : 'Kombin Bul'}
               <ArrowRight size={18} />
             </Button>

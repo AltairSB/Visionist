@@ -5,7 +5,8 @@ import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import type { Account } from '@/lib/types'
+import { signIn, signUp } from '@/lib/supabase/auth'
+import { isSupabaseConfigured } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 
 export type AuthMode = 'signin' | 'signup'
@@ -14,17 +15,21 @@ type AuthModalProps = {
   isOpen: boolean
   initialMode: AuthMode
   onClose: () => void
-  onAuthenticate: (account: Account, mode: AuthMode) => void
+  onAuthSuccess: () => void
 }
 
-export const AuthModal = ({ isOpen, initialMode, onClose, onAuthenticate }: AuthModalProps) => {
+export const AuthModal = ({ isOpen, initialMode, onClose, onAuthSuccess }: AuthModalProps) => {
   const [mode, setMode] = useState<AuthMode>(initialMode)
-  const [name, setName] = useState('Beyza')
-  const [email, setEmail] = useState('beyza@example.com')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       setMode(initialMode)
+      setErrorMessage('')
     }
   }, [initialMode, isOpen])
 
@@ -34,17 +39,38 @@ export const AuthModal = ({ isOpen, initialMode, onClose, onAuthenticate }: Auth
 
   const isSignup = mode === 'signup'
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setErrorMessage('')
 
-    onAuthenticate(
-      {
-        name: isSignup ? name : email.split('@')[0] || 'Stil Üyesi',
-        email,
-        createdAt: new Date().toISOString(),
-      },
-      mode,
-    )
+    if (!isSupabaseConfigured) {
+      setErrorMessage('Supabase yapılandırılmamış. frontend/.env.local dosyasını kontrol edin.')
+      return
+    }
+
+    if (password.length < 6) {
+      setErrorMessage('Şifre en az 6 karakter olmalıdır.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      if (isSignup) {
+        await signUp(email, password, name || email.split('@')[0] || 'Stil Üyesi')
+      } else {
+        await signIn(email, password)
+      }
+
+      onAuthSuccess()
+      onClose()
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Giriş işlemi başarısız. Bilgilerinizi kontrol edin.',
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -101,8 +127,11 @@ export const AuthModal = ({ isOpen, initialMode, onClose, onAuthenticate }: Auth
               {isSignup ? 'Yeni stil hesabı oluştur' : 'Hesabına giriş yap'}
             </h2>
             <p className="mt-3 leading-7 text-ink/65">
-              İstersen hesap oluşturmadan da kombin önerisi alabilirsin. Hesap yalnızca kayıtlı profil ve Dolabım deneyimi için gerekir.
+              İstersen hesap oluşturmadan da kombin önerisi alabilirsin. Hesap yalnızca kayıtlı profil ve Dolabım için gerekir.
             </p>
+            {errorMessage ? (
+              <p className="mt-4 rounded-2xl border border-rose/30 bg-rose/10 px-4 py-3 text-sm text-rose">{errorMessage}</p>
+            ) : null}
             <form onSubmit={handleSubmit} className="mt-7 space-y-4">
               {isSignup ? (
                 <label className="block">
@@ -131,14 +160,17 @@ export const AuthModal = ({ isOpen, initialMode, onClose, onAuthenticate }: Auth
                 <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Şifre</span>
                 <input
                   type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                   className="mt-2 w-full rounded-2xl border border-plum/15 bg-white px-4 py-3 text-ink outline-none transition focus:border-violet focus:ring-4 focus:ring-violet/10"
-                  placeholder="Demo için herhangi bir şifre"
+                  placeholder="En az 6 karakter"
                   required
+                  minLength={6}
                 />
               </label>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSignup ? <UserPlus size={18} /> : <LogIn size={18} />}
-                {isSignup ? 'Hesap Oluştur' : 'Giriş Yap'}
+                {isSubmitting ? 'İşleniyor...' : isSignup ? 'Hesap Oluştur' : 'Giriş Yap'}
               </Button>
             </form>
             <button

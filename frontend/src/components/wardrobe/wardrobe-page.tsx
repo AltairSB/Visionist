@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Shirt, Sparkles, Trash2 } from 'lucide-react'
 import Image from 'next/image'
@@ -16,12 +16,17 @@ export const WardrobePage = () => {
   const [outfits, setOutfits] = useState<SavedOutfit[]>([])
   const [deleteTarget, setDeleteTarget] = useState<SavedOutfit | null>(null)
 
-  const loadOutfits = useCallback(() => {
-    setOutfits(getSavedOutfits())
+  const [isLoading, setIsLoading] = useState(true)
+
+  const loadOutfits = useCallback(async () => {
+    setIsLoading(true)
+    const saved = await getSavedOutfits()
+    setOutfits(saved)
+    setIsLoading(false)
   }, [])
 
   useEffect(() => {
-    loadOutfits()
+    void loadOutfits()
   }, [loadOutfits])
 
   useEffect(() => {
@@ -44,14 +49,14 @@ export const WardrobePage = () => {
     }
   }, [deleteTarget])
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!deleteTarget) {
       return
     }
 
-    deleteOutfitFromWardrobe(deleteTarget.id)
+    await deleteOutfitFromWardrobe(deleteTarget.id)
     setDeleteTarget(null)
-    loadOutfits()
+    await loadOutfits()
   }
 
   return (
@@ -65,12 +70,14 @@ export const WardrobePage = () => {
           </p>
         </div>
 
-        {outfits.length === 0 ? (
+        {isLoading ? (
+          <p className="text-center text-ink/60">Dolap yükleniyor...</p>
+        ) : outfits.length === 0 ? (
           <div className="rounded-[2rem] border border-plum/10 bg-white/80 p-10 text-center shadow-card">
             <span className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-lilac text-plum">
               <Shirt size={28} />
             </span>
-            <p className="mt-5 text-lg font-bold text-ink">Henüz kayıtlı kombin yok</p>
+            <p className="mt-5 text-lg font-bold text-ink">Henüz kay─▒tl─▒ kombin yok</p>
             <p className="mt-2 text-ink/60">
               Asistan ekranında kombin bulup &quot;Dolabıma Kaydet&quot; ile buraya ekleyebilirsin.
             </p>
@@ -160,7 +167,7 @@ export const WardrobePage = () => {
                 <Button type="button" variant="ghost" onClick={() => setDeleteTarget(null)}>
                   İptal
                 </Button>
-                <Button type="button" onClick={handleConfirmDelete}>
+                <Button type="button" onClick={() => void handleConfirmDelete()}>
                   <Trash2 size={16} />
                   Evet, sil
                 </Button>
