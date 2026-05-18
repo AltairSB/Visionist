@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from app.models import FrontendProduct, PreferenceMode, Product, UserProfile
+from app.models import ClothingSize, FrontendProduct, PreferenceMode, Product, UserProfile
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "products.json"
 
@@ -74,11 +74,20 @@ def discount_score(product: Product) -> float:
     return (product.price - product.sale_price) / product.price
 
 
+def is_in_stock(product: Product, size: ClothingSize) -> bool:
+    status = (product.stock or {}).get(size, "Out of Stock").strip()
+    return status != "Out of Stock"
+
+
 def filter_for_profile(products: list[Product], profile: UserProfile) -> list[Product]:
     catalog_gender = resolve_catalog_gender(profile)
     if not catalog_gender:
         return []
-    return [product for product in products if product.catalog_gender == catalog_gender]
+    return [
+        product
+        for product in products
+        if product.catalog_gender == catalog_gender and is_in_stock(product, profile.preferred_size)
+    ]
 
 
 def sort_by_preference(products: list[Product], preference: PreferenceMode) -> list[Product]:

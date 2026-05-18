@@ -22,8 +22,7 @@ def update_user_style_profile(user_id: str, profile: UserProfile, default_prefer
     row = {
         "segment": profile.segment,
         "gender": profile.gender,
-        "height_cm": profile.height,
-        "weight_kg": profile.weight,
+        "preferred_size": profile.preferred_size,
         "style": profile.style,
         "default_preference": default_preference,
     }

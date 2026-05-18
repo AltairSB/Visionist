@@ -15,6 +15,14 @@ SUB_CATEGORY_TO_ARTICLE = {
     "One-Piece": "Dress",
 }
 
+SIZE_COLUMNS = ("S", "M", "L", "XL")
+CSV_STOCK_COLUMNS = {
+    "S": "S_stock",
+    "M": "M_stock",
+    "L": "L_stock",
+    "XL": "XL_stock",
+}
+
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DEFAULT_CSV = DATA_DIR / "styles.csv"
 OUTPUT_PATH = DATA_DIR / "products.json"
@@ -27,6 +35,14 @@ def parse_price(value: str) -> float:
     if not cleaned:
         return 0.0
     return float(cleaned)
+
+
+def parse_stock_row(row: dict[str, str]) -> dict[str, str]:
+    stock: dict[str, str] = {}
+    for size, column in CSV_STOCK_COLUMNS.items():
+        raw = row.get(column, "").strip()
+        stock[size] = raw if raw else "Out of Stock"
+    return stock
 
 
 def row_to_product(row: dict[str, str]) -> dict:
@@ -48,6 +64,7 @@ def row_to_product(row: dict[str, str]) -> dict:
         "discount_rate": row.get("discount_rate", "").strip(),
         "image_url": f"/images/{product_id}",
         "product_url": "#",
+        "stock": parse_stock_row(row),
     }
 
 

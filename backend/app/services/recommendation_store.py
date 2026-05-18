@@ -6,8 +6,19 @@ from typing import Any
 
 from app.db.supabase_client import get_supabase, is_supabase_configured
 from app.models import RecommendationRequest, RecommendationResponse, RecommendedItem
+from app.services.fit_image_store import upload_fit_image
 
 logger = logging.getLogger(__name__)
+
+
+def _guest_session_exists(client, session_id: str) -> bool:
+    try:
+        result = client.table("guest_sessions").select("id").eq("id", session_id).limit(1).execute()
+    except Exception:
+        logger.exception("Failed to verify guest session")
+        return False
+
+    return bool(result.data)
 
 
 def ensure_guest_session(existing_id: str | None) -> str | None:
@@ -21,8 +32,10 @@ def ensure_guest_session(existing_id: str | None) -> str | None:
 
     if existing_id:
         try:
-            uuid.UUID(existing_id)
-            return existing_id
+            parsed = uuid.UUID(existing_id)
+            session_id = str(parsed)
+            if _guest_session_exists(client, session_id):
+                return session_id
         except ValueError:
             pass
 
@@ -72,6 +85,9 @@ def persist_recommendation(
     if request.mode == "fit" and request.image_mime_type:
         meta["image_mime_type"] = request.image_mime_type
 
+    if request.mode == "fit" and response.uploaded_slot:
+        meta["uploaded_slot"] = response.uploaded_slot
+
     row = {
         **owner,
         "mode": request.mode,
@@ -89,9 +105,28 @@ def persist_recommendation(
 
     try:
         insert_result = client.table("recommendations").insert(row).execute()
-    except Exception:
-        logger.exception("Failed to insert recommendation")
-        return None, guest_session_id
+    except Exception as error:
+        error_message = str(error)
+        is_fk_violation = "23503" in error_message or "guest_session_id_fkey" in error_message
+
+        if not user_id and is_fk_violation:
+            logger.warning("Stale guest session; creating new session and retrying")
+            guest_session_id = ensure_guest_session(None)
+
+            if not guest_session_id:
+                return None, None
+
+            row["guest_session_id"] = guest_session_id
+            row.pop("user_id", None)
+
+            try:
+                insert_result = client.table("recommendations").insert(row).execute()
+            except Exception:
+                logger.exception("Failed to insert recommendation after guest session retry")
+                return None, guest_session_id
+        else:
+            logger.exception("Failed to insert recommendation")
+            return None, guest_session_id
 
     if not insert_result.data:
         return None, guest_session_id
@@ -104,6 +139,27 @@ def persist_recommendation(
             client.table("recommendation_items").insert(item_rows).execute()
         except Exception:
             logger.exception("Failed to insert recommendation items")
+
+    if (
+        request.mode == "fit"
+        and user_id
+        and request.image_base64
+        and request.image_mime_type
+    ):
+        storage_path = upload_fit_image(
+            user_id=user_id,
+            recommendation_id=recommendation_id,
+            image_base64=request.image_base64,
+            mime_type=request.image_mime_type,
+        )
+        if storage_path:
+            meta["uploaded_garment_path"] = storage_path
+            try:
+                client.table("recommendations").update(
+                    {"request_meta": meta},
+                ).eq("id", recommendation_id).execute()
+            except Exception:
+                logger.exception("Failed to update recommendation with fit image path")
 
     return recommendation_id, guest_session_id
 

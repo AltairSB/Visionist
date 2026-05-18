@@ -4,17 +4,19 @@ from pydantic import BaseModel, Field
 
 Segment = Literal["child", "young", "adult"]
 Gender = Literal["female", "male"]
+ClothingSize = Literal["S", "M", "L", "XL"]
+StockStatus = Literal["In Stock", "Low Stock", "Out of Stock"]
 StylePreference = Literal["classic", "sport", "daily", "chic", "vintage", "minimal"]
 PreferenceMode = Literal["balanced", "cheaper", "sportier", "elegant"]
 RecommendationMode = Literal["text", "fit"]
 Source = Literal["gemini", "fallback"]
+UploadedSlot = Literal["topwear", "bottomwear", "outerwear", "dress"]
 
 
 class UserProfile(BaseModel):
     segment: Segment
     gender: Gender
-    height: float
-    weight: float
+    preferred_size: ClothingSize
     style: StylePreference
 
 
@@ -34,6 +36,7 @@ class Product(BaseModel):
     discount_rate: str = ""
     image_url: str
     product_url: str = "#"
+    stock: dict[str, str] = Field(default_factory=dict)
 
 
 class FrontendProduct(BaseModel):
@@ -82,6 +85,7 @@ class RecommendationResponse(BaseModel):
     source: Source
     recommendation_id: str | None = None
     guest_session_id: str | None = None
+    uploaded_slot: UploadedSlot | None = None
 
 
 class SaveOutfitRequest(BaseModel):
@@ -94,6 +98,14 @@ class ProfileUpdateRequest(BaseModel):
     profile: UserProfile
     default_preference: PreferenceMode = "balanced"
     complete_onboarding: bool = False
+
+
+class GuestProfileUpdateRequest(BaseModel):
+    profile: UserProfile
+
+
+class GuestProfileResponse(BaseModel):
+    guest_session_id: str
 
 
 class ProfileBundleResponse(BaseModel):
@@ -112,6 +124,7 @@ class GeminiPickItem(BaseModel):
 class GeminiPickResponse(BaseModel):
     items: list[GeminiPickItem] = Field(default_factory=list)
     summary: str = ""
+    uploaded_slot: UploadedSlot | None = None
 
 
 class GeminiReplaceResponse(BaseModel):

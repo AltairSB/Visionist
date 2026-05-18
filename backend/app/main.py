@@ -11,6 +11,8 @@ from app.auth.jwt import extract_bearer_token, get_user_id_from_token
 from app.catalog import load_products
 from app.db.supabase_client import is_supabase_configured
 from app.models import (
+    GuestProfileResponse,
+    GuestProfileUpdateRequest,
     ProfileBundleResponse,
     ProfileUpdateRequest,
     RecommendationRequest,
@@ -24,6 +26,7 @@ from app.services.profile_store import (
     get_user_profile_bundle,
     update_user_style_profile,
 )
+from app.services.guest_profile_store import upsert_guest_profile
 from app.services.recommendation_store import persist_recommendation
 from app.services.wardrobe_store import save_outfit
 
@@ -87,8 +90,7 @@ def _bundle_to_response(bundle: dict) -> ProfileBundleResponse:
         profile=UserProfile(
             segment=style_row["segment"],
             gender=style_row["gender"],
-            height=float(style_row["height_cm"]),
-            weight=float(style_row["weight_kg"]),
+            preferred_size=style_row.get("preferred_size") or "M",
             style=style_row["style"],
         ),
         default_preference=style_row.get("default_preference") or "balanced",
@@ -135,6 +137,19 @@ def patch_profile(
         raise HTTPException(status_code=404, detail="Profil bulunamadı.")
 
     return _bundle_to_response(bundle)
+
+
+@app.patch("/guest/profile", response_model=GuestProfileResponse)
+def patch_guest_profile(
+    body: GuestProfileUpdateRequest,
+    x_guest_session_id: str | None = Header(default=None),
+) -> GuestProfileResponse:
+    session_id = upsert_guest_profile(x_guest_session_id, body.profile)
+
+    if not session_id:
+        raise HTTPException(status_code=503, detail="Misafir profili kaydedilemedi.")
+
+    return GuestProfileResponse(guest_session_id=session_id)
 
 
 @app.post("/recommend", response_model=RecommendationResponse)
