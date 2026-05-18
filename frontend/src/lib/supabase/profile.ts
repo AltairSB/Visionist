@@ -1,12 +1,11 @@
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
 import { defaultProfile, normalizeProfile } from '@/lib/profile'
-import type { PreferenceMode, UserProfile } from '@/lib/types'
+import type { ClothingSize, PreferenceMode, UserProfile } from '@/lib/types'
 
 type StyleRow = {
   segment: string
   gender: string
-  height_cm: number
-  weight_kg: number
+  preferred_size: string
   style: string
   default_preference: string
 }
@@ -27,8 +26,7 @@ const mapStyleRow = (row: StyleRow): { profile: UserProfile; defaultPreference: 
   profile: normalizeProfile({
     segment: row.segment as UserProfile['segment'],
     gender: row.gender as UserProfile['gender'],
-    height: Number(row.height_cm),
-    weight: Number(row.weight_kg),
+    preferred_size: row.preferred_size as ClothingSize,
     style: row.style as UserProfile['style'],
   }),
   defaultPreference: (row.default_preference as PreferenceMode) || 'balanced',
@@ -57,7 +55,7 @@ export const fetchUserData = async (userId: string): Promise<LoadedUserData | nu
 
   const { data: styleRow, error: styleError } = await supabase
     .from('user_style_profiles')
-    .select('segment, gender, height_cm, weight_kg, style, default_preference')
+    .select('segment, gender, preferred_size, style, default_preference')
     .eq('user_id', userId)
     .maybeSingle()
 
@@ -96,8 +94,7 @@ export const saveUserProfile = async (
     .update({
       segment: profile.segment,
       gender: profile.gender,
-      height_cm: profile.height,
-      weight_kg: profile.weight,
+      preferred_size: profile.preferred_size,
       style: profile.style,
       default_preference: defaultPreference,
     })

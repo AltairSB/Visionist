@@ -119,25 +119,25 @@ export const AccountPage = ({
                 ))}
               </div>
             </div>
-            <div className="mt-7 grid gap-5 sm:grid-cols-2">
-              <label className="block">
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Boy (cm)</span>
-                <input
-                  type="number"
-                  value={draftProfile.height}
-                  onChange={(event) => handleDraftChange({ height: Number(event.target.value) })}
-                  className="mt-2 w-full rounded-2xl border border-plum/15 bg-mist px-4 py-3 outline-none transition focus:border-violet focus:ring-4 focus:ring-violet/10"
-                />
-              </label>
-              <label className="block">
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Kilo (kg)</span>
-                <input
-                  type="number"
-                  value={draftProfile.weight}
-                  onChange={(event) => handleDraftChange({ weight: Number(event.target.value) })}
-                  className="mt-2 w-full rounded-2xl border border-plum/15 bg-mist px-4 py-3 outline-none transition focus:border-violet focus:ring-4 focus:ring-violet/10"
-                />
-              </label>
+            <div className="mt-7">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-ink">Beden tercihi</p>
+              <div className="mt-3 grid grid-cols-4 gap-2">
+                {(['S', 'M', 'L', 'XL'] as const).map((size) => (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => handleDraftChange({ preferred_size: size })}
+                    className={cn(
+                      'rounded-xl border py-2.5 text-sm font-bold transition',
+                      draftProfile.preferred_size === size
+                        ? 'border-violet bg-violet text-white'
+                        : 'border-plum/15 bg-mist text-plum hover:bg-lilac/60',
+                    )}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="mt-7 grid gap-5 sm:grid-cols-2">
               <div>

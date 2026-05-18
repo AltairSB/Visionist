@@ -1,10 +1,34 @@
 const MAX_EDGE_PX = 1024
 const JPEG_QUALITY = 0.85
 
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
+
+const MIME_BY_EXTENSION: Record<string, (typeof ALLOWED_MIME_TYPES)[number]> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
+}
+
 export type CompressedImage = {
   base64: string
   mimeType: 'image/jpeg'
   previewUrl: string
+}
+
+const resolveInputMime = (file: File): string | null => {
+  const normalized = file.type.trim().toLowerCase()
+
+  if (normalized === 'image/jpg') {
+    return 'image/jpeg'
+  }
+
+  if (ALLOWED_MIME_TYPES.includes(normalized as (typeof ALLOWED_MIME_TYPES)[number])) {
+    return normalized
+  }
+
+  const extension = file.name.split('.').pop()?.toLowerCase() ?? ''
+  return MIME_BY_EXTENSION[extension] ?? null
 }
 
 const loadImage = (file: File): Promise<HTMLImageElement> =>
@@ -19,15 +43,25 @@ const loadImage = (file: File): Promise<HTMLImageElement> =>
 
     image.onerror = () => {
       URL.revokeObjectURL(url)
-      reject(new Error('Görsel yüklenemedi.'))
+      const extension = file.name.split('.').pop()?.toLowerCase() ?? ''
+      if (extension === 'heic' || extension === 'heif' || file.type.includes('heic')) {
+        reject(
+          new Error(
+            'HEIC formatı desteklenmiyor. iPhone’da Ayarlar → Kamera → En Uyumlu (JPEG) seçin veya fotoğrafı JPEG olarak yükleyin.',
+          ),
+        )
+        return
+      }
+      reject(new Error('Görsel okunamadı. JPEG, PNG veya WebP deneyin.'))
     }
 
     image.src = url
   })
 
 export const compressImageFile = async (file: File): Promise<CompressedImage> => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
-  if (!allowedTypes.includes(file.type)) {
+  const inputMime = resolveInputMime(file)
+
+  if (!inputMime) {
     throw new Error('Desteklenen formatlar: JPEG, PNG, WebP.')
   }
 

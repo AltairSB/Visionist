@@ -3,12 +3,21 @@ import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
 import type { Product, RecommendationResponse, RecommendedItem } from '@/lib/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api/backend'
+const FIT_UPLOADS_BUCKET = 'fit-uploads'
+const SIGNED_URL_EXPIRES_SECONDS = 3600
 
 export type SavedOutfit = {
   id: string
   savedAt: string
   prompt: string
   recommendation: RecommendationResponse
+  uploadedGarmentPreviewUrl?: string
+}
+
+type RequestMeta = {
+  uploaded_garment_path?: string
+  uploaded_slot?: string
+  image_mime_type?: string
 }
 
 type ItemRow = {
@@ -25,6 +34,7 @@ type RecommendationRow = {
   savings: number
   market_note: string
   source: string
+  request_meta?: RequestMeta | null
   recommendation_items: ItemRow[]
 }
 
@@ -54,7 +64,32 @@ const mapRecommendation = (row: RecommendationRow): RecommendationResponse => ({
   savings: Number(row.savings),
   market_note: row.market_note,
   source: row.source === 'gemini' ? 'gemini' : 'fallback',
+  uploaded_slot: row.request_meta?.uploaded_slot as RecommendationResponse['uploaded_slot'],
 })
+
+const resolveUploadedPreviewUrl = async (
+  storagePath: string | undefined,
+): Promise<string | undefined> => {
+  if (!storagePath) {
+    return undefined
+  }
+
+  const supabase = getSupabase()
+  if (!supabase) {
+    return undefined
+  }
+
+  const { data, error } = await supabase.storage
+    .from(FIT_UPLOADS_BUCKET)
+    .createSignedUrl(storagePath, SIGNED_URL_EXPIRES_SECONDS)
+
+  if (error || !data?.signedUrl) {
+    console.error('createSignedUrl', error)
+    return undefined
+  }
+
+  return data.signedUrl
+}
 
 export const fetchSavedOutfits = async (): Promise<SavedOutfit[]> => {
   if (!isSupabaseConfigured) {
@@ -81,6 +116,7 @@ export const fetchSavedOutfits = async (): Promise<SavedOutfit[]> => {
         savings,
         market_note,
         source,
+        request_meta,
         recommendation_items (
           slot_index,
           product_id,
@@ -97,49 +133,101 @@ export const fetchSavedOutfits = async (): Promise<SavedOutfit[]> => {
     return []
   }
 
-  return (data as SavedOutfitRow[])
-    .map((row) => {
-      const recommendationRow = Array.isArray(row.recommendations)
-        ? row.recommendations[0]
-        : row.recommendations
+  const rows = (data as SavedOutfitRow[]).filter((row) => {
+    const recommendationRow = Array.isArray(row.recommendations)
+      ? row.recommendations[0]
+      : row.recommendations
+    return Boolean(recommendationRow)
+  })
 
-      if (!recommendationRow) {
-        return null
-      }
+  return Promise.all(
+    rows.map(async (row) => {
+      const recommendationRow = Array.isArray(row.recommendations)
+        ? row.recommendations[0]!
+        : row.recommendations!
+
+      const uploadedGarmentPreviewUrl = await resolveUploadedPreviewUrl(
+        recommendationRow.request_meta?.uploaded_garment_path,
+      )
 
       return {
         id: row.id,
         savedAt: row.saved_at,
         prompt: row.prompt,
         recommendation: mapRecommendation(recommendationRow),
+        uploadedGarmentPreviewUrl,
       }
-    })
-    .filter((outfit): outfit is SavedOutfit => outfit !== null)
+    }),
+  )
+}
+
+export type SaveOutfitResult = {
+  ok: boolean
+  error?: string
 }
 
 export const saveOutfitToDatabase = async (
   recommendationId: string,
   prompt: string,
-): Promise<boolean> => {
-  const token = await getAccessToken()
+  accessToken?: string | null,
+): Promise<SaveOutfitResult> => {
+  const token = accessToken ?? (await getAccessToken())
 
   if (!token) {
-    return false
+    return {
+      ok: false,
+      error: 'Oturum doğrulanamadı. Çıkış yapıp tekrar giriş yapın.',
+    }
   }
 
-  const response = await fetch(`${API_URL}/wardrobe`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      recommendation_id: recommendationId,
-      prompt,
-    }),
-  })
+  let response: Response
 
-  return response.ok
+  try {
+    response = await fetch(`${API_URL}/wardrobe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        recommendation_id: recommendationId,
+        prompt,
+      }),
+    })
+  } catch {
+    return { ok: false, error: 'Backend’e bağlanılamadı.' }
+  }
+
+  if (response.ok) {
+    return { ok: true }
+  }
+
+  if (response.status === 401) {
+    return {
+      ok: false,
+      error: 'Oturum süresi dolmuş veya geçersiz. Çıkış yapıp tekrar giriş yapın.',
+    }
+  }
+
+  if (response.status === 503) {
+    return {
+      ok: false,
+      error: 'Dolap servisi yapılandırılmamış. Backend Supabase ayarlarını kontrol edin.',
+    }
+  }
+
+  let error = 'Dolaba kaydedilemedi.'
+
+  try {
+    const body = (await response.json()) as { detail?: string }
+    if (body.detail) {
+      error = body.detail
+    }
+  } catch {
+    // ignore parse errors
+  }
+
+  return { ok: false, error }
 }
 
 export const deleteOutfitFromDatabase = async (outfitId: string): Promise<boolean> => {

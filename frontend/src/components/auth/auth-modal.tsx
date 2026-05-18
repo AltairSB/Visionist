@@ -30,7 +30,14 @@ export const AuthModal = ({ isOpen, initialMode, onClose, onAuthSuccess }: AuthM
     if (isOpen) {
       setMode(initialMode)
       setErrorMessage('')
+      return
     }
+
+    setName('')
+    setEmail('')
+    setPassword('')
+    setErrorMessage('')
+    setIsSubmitting(false)
   }, [initialMode, isOpen])
 
   if (!isOpen) {

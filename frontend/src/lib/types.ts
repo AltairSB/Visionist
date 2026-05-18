@@ -1,5 +1,6 @@
 export type Segment = 'child' | 'young' | 'adult'
 export type Gender = 'female' | 'male'
+export type ClothingSize = 'S' | 'M' | 'L' | 'XL'
 export type StylePreference = 'classic' | 'sport' | 'daily' | 'chic' | 'vintage' | 'minimal'
 export type CatalogGender = 'Men' | 'Women' | 'Boys' | 'Girls'
 export type PreferenceMode = 'balanced' | 'cheaper' | 'sportier' | 'elegant'
@@ -8,8 +9,7 @@ export type RecommendationMode = 'text' | 'fit'
 export type UserProfile = {
   segment: Segment
   gender: Gender
-  height: number
-  weight: number
+  preferred_size: ClothingSize
   style: StylePreference
 }
 
@@ -52,6 +52,7 @@ export type RecommendationResponse = {
   source: 'gemini' | 'fallback'
   recommendation_id?: string | null
   guest_session_id?: string | null
+  uploaded_slot?: 'topwear' | 'bottomwear' | 'outerwear' | 'dress' | null
 }
 
 export type RecommendationRequest = {
@@ -63,3 +64,5 @@ export type RecommendationRequest = {
   image_hint?: string
   preference: PreferenceMode
 }
+
+export const CLOTHING_SIZES: ClothingSize[] = ['S', 'M', 'L', 'XL']

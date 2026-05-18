@@ -4,6 +4,7 @@ import { Shirt, Sparkles, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 
+import { UploadedGarmentCard } from '@/components/recommendation/uploaded-garment-card'
 import { Button } from '@/components/ui/button'
 import {
   deleteOutfitFromWardrobe,
@@ -60,8 +61,8 @@ export const WardrobePage = () => {
   }
 
   return (
-    <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
-      <div className="mx-auto max-w-5xl">
+    <section className="mx-auto flex min-h-[calc(100vh-12rem)] max-w-7xl flex-col px-5 py-10 sm:px-8 sm:py-14">
+      <div className="mx-auto w-full max-w-5xl flex-1">
         <div className="mb-8">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-violet">Dolabım</p>
           <h1 className="mt-2 text-4xl font-bold tracking-[-0.04em] text-ink">Kayıtlı kombinlerin</h1>
@@ -73,11 +74,11 @@ export const WardrobePage = () => {
         {isLoading ? (
           <p className="text-center text-ink/60">Dolap yükleniyor...</p>
         ) : outfits.length === 0 ? (
-          <div className="rounded-[2rem] border border-plum/10 bg-white/80 p-10 text-center shadow-card">
+          <div className="flex min-h-[40vh] flex-col items-center justify-center rounded-[2rem] border border-plum/10 bg-white/80 p-10 text-center shadow-card">
             <span className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-lilac text-plum">
               <Shirt size={28} />
             </span>
-            <p className="mt-5 text-lg font-bold text-ink">Henüz kay─▒tl─▒ kombin yok</p>
+            <p className="mt-5 text-lg font-bold text-ink">Henüz kayıtlı kombin yok</p>
             <p className="mt-2 text-ink/60">
               Asistan ekranında kombin bulup &quot;Dolabıma Kaydet&quot; ile buraya ekleyebilirsin.
             </p>
@@ -119,6 +120,12 @@ export const WardrobePage = () => {
                   </div>
                 </div>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {outfit.uploadedGarmentPreviewUrl ? (
+                    <UploadedGarmentCard
+                      imageUrl={outfit.uploadedGarmentPreviewUrl}
+                      variant="wardrobe"
+                    />
+                  ) : null}
                   {outfit.recommendation.items.map((item) => (
                     <div
                       key={`${outfit.id}-${item.id}-${item.product.id}`}

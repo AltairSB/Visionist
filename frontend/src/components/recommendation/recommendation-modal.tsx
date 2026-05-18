@@ -7,7 +7,10 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { requestRecommendation } from '@/lib/api'
 import type { RecommendationResponse, RecommendedItem, UserProfile } from '@/lib/types'
+import { UploadedGarmentCard } from '@/components/recommendation/uploaded-garment-card'
 import { formatCurrency } from '@/lib/utils'
+
+type SaveToWardrobeResult = { ok: boolean; error?: string }
 
 type RecommendationModalProps = {
   isOpen: boolean
@@ -15,8 +18,9 @@ type RecommendationModalProps = {
   prompt: string
   profile: UserProfile
   isAuthenticated: boolean
+  uploadedGarmentPreview?: string
   onClose: () => void
-  onSaveToWardrobe: (recommendation: RecommendationResponse) => void | Promise<void>
+  onSaveToWardrobe: (recommendation: RecommendationResponse) => Promise<SaveToWardrobeResult>
   onRecommendationChange: (recommendation: RecommendationResponse) => void
 }
 
@@ -26,6 +30,7 @@ export const RecommendationModal = ({
   prompt,
   profile,
   isAuthenticated,
+  uploadedGarmentPreview,
   onClose,
   onSaveToWardrobe,
   onRecommendationChange,
@@ -33,6 +38,7 @@ export const RecommendationModal = ({
   const [itemNotes, setItemNotes] = useState<Record<number, string>>({})
   const [updatingItemId, setUpdatingItemId] = useState<number | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
 
   useEffect(() => {
     if (!isOpen) {
@@ -89,9 +95,15 @@ export const RecommendationModal = ({
   }
 
   const handleSave = async () => {
+    setSaveError('')
     setIsSaving(true)
+
     try {
-      await onSaveToWardrobe(recommendation)
+      const result = await onSaveToWardrobe(recommendation)
+
+      if (!result.ok) {
+        setSaveError(result.error ?? 'Dolaba kaydedilemedi.')
+      }
     } finally {
       setIsSaving(false)
     }
@@ -132,6 +144,9 @@ export const RecommendationModal = ({
 
         <div className="flex-1 overflow-y-auto px-5 py-6 sm:px-7">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {uploadedGarmentPreview ? (
+              <UploadedGarmentCard imageUrl={uploadedGarmentPreview} variant="modal" />
+            ) : null}
             {recommendation.items.map((item) => (
               <article
                 key={`${item.id}-${item.product.id}`}
@@ -149,9 +164,7 @@ export const RecommendationModal = ({
                   <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-lilac">
                     {item.product.article_type}
                   </p>
-                  <p className="mt-0.5 line-clamp-2 text-sm font-bold leading-tight">
-                    {item.product.name}
-                  </p>
+                  <p className="mt-0.5 line-clamp-2 text-sm font-bold leading-tight">{item.product.name}</p>
                   <p className="mt-1 text-base font-bold">{formatCurrency(item.product.sale_price)}</p>
                 </div>
               </article>
@@ -228,6 +241,16 @@ export const RecommendationModal = ({
         </div>
 
         <footer className="shrink-0 border-t border-plum/10 bg-white/90 px-5 py-4 sm:px-7">
+          {saveError ? (
+            <p className="mb-3 rounded-xl border border-rose/30 bg-rose/10 px-4 py-2 text-sm text-rose">
+              {saveError}
+            </p>
+          ) : null}
+          {!recommendation.recommendation_id && isAuthenticated ? (
+            <p className="mb-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+              Bu kombin veritabanına kaydedilmedi; dolaba kaydetme çalışmayabilir. Yeni bir kombin isteyin.
+            </p>
+          ) : null}
           <div
             className={
               isAuthenticated

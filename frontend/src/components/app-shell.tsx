@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccountPage } from '@/components/account/account-page'
 import { WardrobePage } from '@/components/wardrobe/wardrobe-page'
@@ -14,10 +14,12 @@ import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { requestRecommendation } from '@/lib/api'
 import { compressImageFile, type CompressedImage } from '@/lib/compress-image'
-import { getGuestSessionId } from '@/lib/guest-session'
+import { initGuestSession, saveGuestProfile } from '@/lib/guest-profile'
+import { getGuestSessionId, resetGuestClientState } from '@/lib/guest-session'
 import { migrateLocalStorageToSupabase } from '@/lib/migrate-local-storage'
-import { defaultProfile, normalizeProfile } from '@/lib/profile'
+import { defaultProfile } from '@/lib/profile'
 import {
+  getAccessToken,
   mapSessionToAccount,
   mergeGuestSessionForUser,
   signOut,
@@ -27,6 +29,7 @@ import { fetchUserData, saveUserProfile } from '@/lib/supabase/profile'
 import { saveOutfitToWardrobe } from '@/lib/wardrobe-storage'
 import type {
   Account,
+  ClothingSize,
   Gender,
   PreferenceMode,
   RecommendationResponse,
@@ -36,27 +39,8 @@ import type {
 } from '@/lib/types'
 
 const VIEW_KEY = 'visionist-view'
-const LEGACY_PROFILE_KEY = 'visionist-profile'
 
 type AppView = 'assistant' | 'account' | 'wardrobe'
-
-const getStoredProfile = (): UserProfile => {
-  if (typeof window === 'undefined') {
-    return defaultProfile
-  }
-
-  const storedProfile = window.localStorage.getItem(LEGACY_PROFILE_KEY)
-
-  if (!storedProfile) {
-    return defaultProfile
-  }
-
-  try {
-    return normalizeProfile(JSON.parse(storedProfile) as Partial<UserProfile>)
-  } catch {
-    return defaultProfile
-  }
-}
 
 const getStoredView = (): AppView => {
   if (typeof window === 'undefined') {
@@ -72,12 +56,18 @@ const getStoredView = (): AppView => {
   return 'assistant'
 }
 
+const bootstrapGuestOnPageLoad = () => {
+  resetGuestClientState()
+  return defaultProfile
+}
+
 export const AppShell = () => {
   const [view, setView] = useState<AppView>('assistant')
   const [step, setStep] = useState(1)
   const [profile, setProfile] = useState<UserProfile>(defaultProfile)
   const [defaultPreference, setDefaultPreference] = useState<PreferenceMode>('balanced')
   const [account, setAccount] = useState<Account | null>(null)
+  const [authReady, setAuthReady] = useState(false)
   const [prompt, setPrompt] = useState('Yazlık, uygun fiyatlı bir akşam yemeği kombini')
   const [recommendation, setRecommendation] = useState<RecommendationResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -89,15 +79,21 @@ export const AppShell = () => {
   const [fitMode, setFitMode] = useState(false)
   const [fitImage, setFitImage] = useState<CompressedImage | null>(null)
   const [isFitModalOpen, setIsFitModalOpen] = useState(false)
+  const [lastRecommendationWasFit, setLastRecommendationWasFit] = useState(false)
+  const skipGuestProfileDebounceRef = useRef(true)
+
+  const isAuthenticated = authReady && Boolean(account)
 
   const syncUserSession = useCallback(async () => {
+    setAuthReady(false)
+
     const supabase = getSupabase()
 
     if (!supabase) {
-      setProfile(getStoredProfile())
       setAccount(null)
       setHasCompletedOnboarding(false)
       setStep(1)
+      setAuthReady(true)
       return
     }
 
@@ -106,9 +102,9 @@ export const AppShell = () => {
 
     if (!session?.user) {
       setAccount(null)
-      setProfile(getStoredProfile())
       setHasCompletedOnboarding(false)
       setStep(1)
+      setAuthReady(true)
       return
     }
 
@@ -133,6 +129,7 @@ export const AppShell = () => {
           userData.onboardingCompleted,
         ),
       )
+      setAuthReady(true)
       return
     }
 
@@ -147,14 +144,46 @@ export const AppShell = () => {
         false,
       ),
     )
+    setAuthReady(true)
   }, [])
 
   useEffect(() => {
-    setProfile(getStoredProfile())
+    const freshGuestProfile = bootstrapGuestOnPageLoad()
+    setProfile(freshGuestProfile)
+    setStep(1)
+    setHasCompletedOnboarding(false)
     setView(getStoredView())
     setHasHydratedStorage(true)
-    void syncUserSession()
+    skipGuestProfileDebounceRef.current = true
+
+    void (async () => {
+      await syncUserSession()
+
+      const supabase = getSupabase()
+      const session = supabase ? (await supabase.auth.getSession()).data.session : null
+
+      if (!session?.user) {
+        await initGuestSession(freshGuestProfile)
+      }
+    })()
   }, [syncUserSession])
+
+  useEffect(() => {
+    if (!hasHydratedStorage || !authReady || account) {
+      return
+    }
+
+    if (skipGuestProfileDebounceRef.current) {
+      skipGuestProfileDebounceRef.current = false
+      return
+    }
+
+    const timer = setTimeout(() => {
+      void saveGuestProfile(profile)
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [account, authReady, hasHydratedStorage, profile])
 
   useEffect(() => {
     const supabase = getSupabase()
@@ -190,14 +219,6 @@ export const AppShell = () => {
   }, [step, view])
 
   useEffect(() => {
-    if (!hasHydratedStorage || account) {
-      return
-    }
-
-    window.localStorage.setItem(LEGACY_PROFILE_KEY, JSON.stringify(profile))
-  }, [account, hasHydratedStorage, profile])
-
-  useEffect(() => {
     if (!hasHydratedStorage) {
       return
     }
@@ -220,24 +241,24 @@ export const AppShell = () => {
     }
   }
 
-  const handleGenderChange = (gender: Gender) => {
-    setProfile((currentProfile) => ({ ...currentProfile, gender }))
-  }
-
   const handleSegmentChange = (segment: Segment) => {
     setProfile((currentProfile) => ({ ...currentProfile, segment }))
   }
 
-  const handleStepOneContinue = () => {
+  const handleGenderChange = (gender: Gender) => {
+    setProfile((currentProfile) => ({ ...currentProfile, gender }))
+  }
+
+  const handleStepOneContinue = async () => {
+    if (!account) {
+      await saveGuestProfile(profile)
+    }
+
     setStep(2)
   }
 
-  const handleHeightChange = (height: number) => {
-    setProfile((currentProfile) => ({ ...currentProfile, height }))
-  }
-
-  const handleWeightChange = (weight: number) => {
-    setProfile((currentProfile) => ({ ...currentProfile, weight }))
+  const handlePreferredSizeChange = (preferred_size: ClothingSize) => {
+    setProfile((currentProfile) => ({ ...currentProfile, preferred_size }))
   }
 
   const handleStyleChange = (style: StylePreference) => {
@@ -247,6 +268,8 @@ export const AppShell = () => {
   const handleProfileContinue = async () => {
     if (account && isSupabaseConfigured) {
       await saveUserProfile(account.id, profile, defaultPreference, true)
+    } else {
+      await saveGuestProfile(profile)
     }
 
     if (account) {
@@ -325,7 +348,15 @@ export const AppShell = () => {
       })
 
       setRecommendation(response)
-      setErrorMessage('')
+      setLastRecommendationWasFit(fitMode)
+
+      if (!response.recommendation_id) {
+        setErrorMessage(
+          'Kombin oluşturuldu ancak veritabanına kaydedilemedi. Dolaba kaydetme çalışmayabilir.',
+        )
+      } else {
+        setErrorMessage('')
+      }
     } catch (error) {
       console.error('Kombin önerisi hatası:', error)
       setErrorMessage(
@@ -344,29 +375,43 @@ export const AppShell = () => {
     setRecommendation(null)
   }
 
-  const handleSaveToWardrobe = async (savedRecommendation: RecommendationResponse) => {
+  const handleSaveToWardrobe = async (
+    savedRecommendation: RecommendationResponse,
+  ): Promise<{ ok: boolean; error?: string }> => {
+    const token = await getAccessToken()
+
+    if (!token) {
+      return {
+        ok: false,
+        error: 'Oturum doğrulanamadı. Çıkış yapıp tekrar giriş yapın.',
+      }
+    }
+
     if (!account) {
-      return
+      return { ok: false, error: 'Hesap bilgisi yüklenemedi. Sayfayı yenileyip tekrar deneyin.' }
     }
 
     if (!savedRecommendation.recommendation_id) {
-      setErrorMessage('Kombin kaydedilemedi: öneri kimliği bulunamadı.')
-      return
+      return { ok: false, error: 'Öneri kimliği bulunamadı. Yeni bir kombin isteyin.' }
     }
 
-    const saved = await saveOutfitToWardrobe(savedRecommendation.recommendation_id, prompt)
+    const result = await saveOutfitToWardrobe(
+      savedRecommendation.recommendation_id,
+      prompt,
+      token,
+    )
 
-    if (!saved) {
-      setErrorMessage('Dolaba kaydedilemedi. Oturum ve Supabase ayarlarını kontrol edin.')
-      return
+    if (!result.ok) {
+      return { ok: false, error: result.error ?? 'Dolaba kaydedilemedi.' }
     }
 
     setRecommendation(null)
     setView('wardrobe')
+    return { ok: true }
   }
 
-  const handleAuthSuccess = () => {
-    void syncUserSession()
+  const handleAuthSuccess = async () => {
+    await syncUserSession()
     setIsAuthOpen(false)
     setView('assistant')
   }
@@ -375,9 +420,13 @@ export const AppShell = () => {
     await signOut()
     setAccount(null)
     setProfile(defaultProfile)
+    resetGuestClientState()
+    skipGuestProfileDebounceRef.current = true
+    await initGuestSession(defaultProfile)
     setView('assistant')
     setHasCompletedOnboarding(false)
     setStep(1)
+    setAuthReady(true)
     window.scrollTo(0, 0)
   }
 
@@ -402,7 +451,7 @@ export const AppShell = () => {
   }
 
   const handleAccountClick = () => {
-    if (!account) {
+    if (!isAuthenticated) {
       handleOpenAuth('signin')
       return
     }
@@ -411,7 +460,7 @@ export const AppShell = () => {
   }
 
   const handleWardrobeClick = () => {
-    if (!account) {
+    if (!isAuthenticated) {
       handleOpenAuth('signin')
       return
     }
@@ -422,7 +471,7 @@ export const AppShell = () => {
   const isOnboardingFlow = step < 3 && view === 'assistant'
 
   return (
-    <div className="min-h-screen text-ink">
+    <div className="flex min-h-screen flex-col text-ink">
       <SiteHeader
         account={account}
         compact={isOnboardingFlow}
@@ -434,7 +483,7 @@ export const AppShell = () => {
         onAssistantClick={handleAssistantNavClick}
         onWardrobeClick={handleWardrobeClick}
       />
-      <main>
+      <main className="flex-1">
         {view === 'account' && account ? (
           <AccountPage
             account={account}
@@ -453,18 +502,16 @@ export const AppShell = () => {
                 selectedSegment={profile.segment}
                 onSelectGender={handleGenderChange}
                 onSelectSegment={handleSegmentChange}
-                onContinue={handleStepOneContinue}
+                onContinue={() => void handleStepOneContinue()}
               />
             ) : null}
             {step === 2 ? (
               <ProfileStep
                 segment={profile.segment}
                 gender={profile.gender}
-                height={profile.height}
-                weight={profile.weight}
+                preferredSize={profile.preferred_size}
                 style={profile.style}
-                onHeightChange={handleHeightChange}
-                onWeightChange={handleWeightChange}
+                onPreferredSizeChange={handlePreferredSizeChange}
                 onStyleChange={handleStyleChange}
                 onBack={() => setStep(1)}
                 onContinue={() => void handleProfileContinue()}
@@ -482,7 +529,7 @@ export const AppShell = () => {
                   onCheaperRequest={handleCheaperRequest}
                   onOpenFitModal={handleOpenFitModal}
                   onFitImageClear={handleFitImageClear}
-                  isAuthenticated={Boolean(account)}
+                  isAuthenticated={isAuthenticated}
                   onWardrobeClick={handleWardrobeClick}
                 />
                 <FitUploadModal
@@ -509,7 +556,7 @@ export const AppShell = () => {
         isOpen={isAuthOpen}
         initialMode={authMode}
         onClose={() => setIsAuthOpen(false)}
-        onAuthSuccess={handleAuthSuccess}
+        onAuthSuccess={() => void handleAuthSuccess()}
       />
       {recommendation ? (
         <RecommendationModal
@@ -517,10 +564,18 @@ export const AppShell = () => {
           recommendation={recommendation}
           prompt={prompt}
           profile={profile}
-          isAuthenticated={Boolean(account)}
+          isAuthenticated={isAuthenticated}
+          uploadedGarmentPreview={lastRecommendationWasFit ? fitImage?.previewUrl : undefined}
           onClose={handleCloseRecommendation}
-          onSaveToWardrobe={(saved) => void handleSaveToWardrobe(saved)}
-          onRecommendationChange={setRecommendation}
+          onSaveToWardrobe={handleSaveToWardrobe}
+          onRecommendationChange={(next) => {
+            setRecommendation(next)
+            if (!next.recommendation_id) {
+              setErrorMessage(
+                'Kombin güncellendi ancak veritabanına kaydedilemedi. Dolaba kaydetme çalışmayabilir.',
+              )
+            }
+          }}
         />
       ) : null}
     </div>

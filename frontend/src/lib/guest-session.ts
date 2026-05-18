@@ -1,4 +1,5 @@
 const GUEST_SESSION_KEY = 'visionist-guest-session'
+export const GUEST_PROFILE_STORAGE_KEY = 'visionist-profile'
 
 export const getGuestSessionId = (): string | null => {
   if (typeof window === 'undefined') {
@@ -19,4 +20,16 @@ export const setGuestSessionId = (sessionId: string | null) => {
   }
 
   window.localStorage.setItem(GUEST_SESSION_KEY, sessionId)
+}
+
+export const clearGuestSessionId = () => {
+  setGuestSessionId(null)
+}
+
+export const resetGuestClientState = () => {
+  clearGuestSessionId()
+
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem(GUEST_PROFILE_STORAGE_KEY)
+  }
 }

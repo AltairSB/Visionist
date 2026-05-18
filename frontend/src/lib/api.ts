@@ -7,12 +7,38 @@ import type { RecommendationRequest, RecommendationResponse } from '@/lib/types'
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api/backend'
 const USE_LIVE_API = process.env.NEXT_PUBLIC_USE_LIVE_API !== 'false'
 const RECOMMENDATION_TIMEOUT_MS = 30000
-const FIT_RECOMMENDATION_TIMEOUT_MS = 60000
+const FIT_RECOMMENDATION_TIMEOUT_MS = 120000
 
 type RecommendationOptions = {
   replaceItemId?: number
   replaceRequest?: string
   currentItems?: RecommendationResponse['items']
+}
+
+const parseApiErrorDetail = (body: unknown, fallback: string): string => {
+  if (!body || typeof body !== 'object') {
+    return fallback
+  }
+
+  const detail = (body as { detail?: unknown }).detail
+
+  if (typeof detail === 'string') {
+    return detail
+  }
+
+  if (Array.isArray(detail)) {
+    return detail
+      .map((item) => {
+        if (item && typeof item === 'object' && 'msg' in item) {
+          return String((item as { msg: string }).msg)
+        }
+
+        return String(item)
+      })
+      .join(' ')
+  }
+
+  return fallback
 }
 
 const buildAuthHeaders = async (): Promise<Record<string, string>> => {
@@ -75,7 +101,10 @@ export const requestRecommendation = async (
     })
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('Kombin isteği zaman aşımına uğradı. Backend çalışıyor mu kontrol edin.')
+      const timeoutHint = isFitMode
+        ? 'Görsel analizi uzun sürebilir; tekrar deneyin veya daha küçük bir fotoğraf yükleyin.'
+        : 'Backend çalışıyor mu kontrol edin.'
+      throw new Error(`Kombin isteği zaman aşımına uğradı. ${timeoutHint}`)
     }
     throw new Error(
       'Backend’e bağlanılamadı. Terminalde: cd backend && uvicorn app.main:app --reload --port 8000 — ardından frontend’i yeniden başlatın (npm run dev).',
@@ -86,14 +115,24 @@ export const requestRecommendation = async (
 
   if (!response.ok) {
     let detail = 'Kombin önerisi alınamadı'
+
     try {
-      const errorBody = (await response.json()) as { detail?: string }
-      if (errorBody.detail) {
-        detail = errorBody.detail
-      }
+      const errorBody = await response.json()
+      detail = parseApiErrorDetail(errorBody, detail)
     } catch {
-      // ignore parse errors
+      if (response.status === 422) {
+        detail = 'İstek doğrulanamadı. Profil ve görsel formatını kontrol edin.'
+      } else if (response.status === 504) {
+        detail =
+          'Görsel analizi zaman aşımına uğradı. Daha küçük bir fotoğraf deneyin veya biraz sonra tekrarlayın.'
+      } else if (response.status === 502) {
+        detail =
+          'Backend’e bağlanılamadı. Terminalde: cd backend && uvicorn app.main:app --reload --port 8000'
+      } else if (response.status >= 500) {
+        detail = 'Sunucu hatası. Backend terminalindeki logları kontrol edin.'
+      }
     }
+
     throw new Error(detail)
   }
 

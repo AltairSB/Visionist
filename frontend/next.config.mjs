@@ -9,19 +9,16 @@ const nextConfig = {
   turbopack: {
     root: resolve(__dirname),
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/backend/:path*',
-        destination: 'http://127.0.0.1:8000/:path*',
-      },
-    ]
-  },
+  // Backend proxy: src/app/api/backend/[...path]/route.ts (120s timeout, fit görselleri için)
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
       },
     ],
   },

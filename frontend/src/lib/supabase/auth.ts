@@ -1,3 +1,4 @@
+import { clearGuestSessionId } from '@/lib/guest-session'
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
 import type { Account } from '@/lib/types'
 
@@ -94,4 +95,6 @@ export const mergeGuestSessionForUser = async (userId: string, guestSessionId: s
     p_user_id: userId,
     p_guest_session_id: guestSessionId,
   })
+
+  clearGuestSessionId()
 }
