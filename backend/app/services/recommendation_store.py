@@ -174,6 +174,69 @@ def _item_row(recommendation_id: str, item: RecommendedItem) -> dict[str, Any]:
     }
 
 
+def attach_fit_image_if_missing(
+    *,
+    user_id: str,
+    recommendation_id: str,
+    image_base64: str,
+    mime_type: str,
+) -> bool:
+    if not is_supabase_configured():
+        return False
+
+    client = get_supabase()
+
+    if client is None:
+        return False
+
+    try:
+        result = (
+            client.table("recommendations")
+            .select("user_id, request_meta")
+            .eq("id", recommendation_id)
+            .limit(1)
+            .execute()
+        )
+    except Exception:
+        logger.exception("Failed to load recommendation for fit image attach")
+        return False
+
+    rows = result.data or []
+    row = rows[0] if rows else None
+
+    if not row or str(row.get("user_id")) != user_id:
+        return False
+
+    meta = dict(row.get("request_meta") or {})
+
+    if meta.get("uploaded_garment_path"):
+        return True
+
+    storage_path = upload_fit_image(
+        user_id=user_id,
+        recommendation_id=recommendation_id,
+        image_base64=image_base64,
+        mime_type=mime_type,
+    )
+
+    if not storage_path:
+        return False
+
+    meta["uploaded_garment_path"] = storage_path
+    meta.setdefault("image_mime_type", mime_type)
+
+    try:
+        client.table("recommendations").update({"request_meta": meta}).eq(
+            "id",
+            recommendation_id,
+        ).execute()
+    except Exception:
+        logger.exception("Failed to update recommendation with fit image on wardrobe save")
+        return False
+
+    return True
+
+
 def merge_guest_session(user_id: str, guest_session_id: str | None) -> None:
     if not guest_session_id or not is_supabase_configured():
         return

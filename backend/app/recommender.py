@@ -44,6 +44,27 @@ FIT_DEFAULT_PROMPT = (
 ALLOWED_IMAGE_MIME_TYPES = frozenset({"image/jpeg", "image/jpg", "image/png", "image/webp"})
 MAX_IMAGE_BYTES = 4 * 1024 * 1024
 
+STYLE_HINTS: dict[str, str] = {
+    "classic": "Klasik, sade ve zamansız parçalar öncelikli.",
+    "sport": "Spor, rahat ve hareketli parçalar öncelikli.",
+    "daily": "Günlük, pratik ve konforlu parçalar öncelikli.",
+    "chic": "Şık, modern ve özenli parçalar öncelikli.",
+    "vintage": "Vintage ve retro karakterli parçalar öncelikli.",
+    "minimal": "Minimal, sade çizgili parçalar öncelikli.",
+}
+
+
+def _exclude_product_ids(request: RecommendationRequest) -> set[str]:
+    return {product_id for product_id in request.exclude_product_ids if product_id}
+
+
+def _style_hint(profile: UserProfile) -> str:
+    return STYLE_HINTS.get(profile.style, STYLE_HINTS["daily"])
+
+
+def _diversity_key(request: RecommendationRequest, prompt: str) -> str:
+    return f"{prompt.strip()}|{request.profile.style}|{request.preference}"
+
 GEMINI_FIT_SYSTEM_PROMPT = """Sen Visionist fit modu asistanısın. Kullanıcı kendi kıyafetinin fotoğrafını yükledi.
 Görevin: fotoğraftaki parçanın tipini belirlemek ve katalogdan YALNIZCA tamamlayıcı parçalar seçmek.
 
@@ -200,6 +221,7 @@ def _fallback_items(
     replace_item_id: int | None = None,
     replace_request: str | None = None,
     current_items: list[RecommendedItem] | None = None,
+    exclude_ids: set[str] | None = None,
 ) -> list[RecommendedItem]:
     if current_items and replace_item_id is not None:
         used_ids: set[str] = set()
@@ -233,7 +255,7 @@ def _fallback_items(
 
         return updated
 
-    used_ids: set[str] = set()
+    used_ids: set[str] = set(exclude_ids or set())
     items: list[RecommendedItem] = []
 
     for index, slot in enumerate(OUTFIT_SLOTS, start=1):
@@ -279,10 +301,13 @@ def _gemini_pick(
     image_bytes: bytes | None = None,
     image_mime_type: str | None = None,
     is_fit: bool = False,
+    exclude_ids: list[str] | None = None,
+    style_hint: str | None = None,
 ) -> GeminiPickResponse | None:
     if not _configure_gemini():
         return None
 
+    blocked = set(exclude_ids or [])
     catalog_lines = [
         {
             "id": product.id,
@@ -296,6 +321,7 @@ def _gemini_pick(
             "discount": product.discount_rate,
         }
         for product in shortlist
+        if product.id not in blocked
     ]
 
     preference_note = {
@@ -310,7 +336,7 @@ def _gemini_pick(
         "request": prompt,
         "preference": preference_note,
         "products": catalog_lines,
-        "exclude_ids": [],
+        "exclude_ids": sorted(blocked),
         "response_format": {
             "items": [{"id": "k61.jpg", "reason": "neden"}],
             "summary": "kısa özet",
@@ -332,6 +358,9 @@ def _gemini_pick(
         }
     elif image_hint:
         user_prompt["image_hint"] = image_hint
+
+    if style_hint:
+        user_prompt["style_hint"] = style_hint
 
     system_instruction = GEMINI_FIT_SYSTEM_PROMPT if is_fit else GEMINI_SYSTEM_PROMPT
 
@@ -410,6 +439,7 @@ def _complete_gemini_items(
     *,
     excluded_slots: set[str] | None = None,
     slot_priority: list[str] | None = None,
+    hard_exclude_ids: set[str] | None = None,
 ) -> list[RecommendedItem]:
     if len(items) >= target_count:
         return items
@@ -417,7 +447,7 @@ def _complete_gemini_items(
     excluded = excluded_slots or set()
     slots_to_try = slot_priority if slot_priority else list(OUTFIT_SLOTS)
 
-    used_ids = {item.product.id for item in items}
+    used_ids = {item.product.id for item in items} | set(hard_exclude_ids or set())
     used_slots = {_slot_for_product(item.product) for item in items}
     next_slot_id = max((item.id for item in items), default=0) + 1
     completed = list(items)
@@ -696,7 +726,14 @@ def _build_fit_recommendation(
 
     image_bytes, image_mime = _parse_fit_image(request)
     effective_prompt = request.prompt.strip() or FIT_DEFAULT_PROMPT
-    shortlist = build_shortlist(all_products, request.profile, request.preference)
+    exclude_set = _exclude_product_ids(request)
+    shortlist = build_shortlist(
+        all_products,
+        request.profile,
+        request.preference,
+        diversity_key=_diversity_key(request, effective_prompt),
+        exclude_ids=exclude_set,
+    )
 
     gemini_result = _gemini_pick(
         request.profile,
@@ -706,6 +743,8 @@ def _build_fit_recommendation(
         image_bytes=image_bytes,
         image_mime_type=image_mime,
         is_fit=True,
+        exclude_ids=sorted(exclude_set),
+        style_hint=_style_hint(request.profile),
     )
 
     if not gemini_result or not gemini_result.items:
@@ -729,6 +768,7 @@ def _build_fit_recommendation(
         target_count=3,
         excluded_slots=excluded_slots,
         slot_priority=slot_priority,
+        hard_exclude_ids=exclude_set,
     )
     items = _filter_items_by_excluded_slots(items, excluded_slots)
 
@@ -741,6 +781,7 @@ def _build_fit_recommendation(
             target_count=2,
             excluded_slots=excluded_slots,
             slot_priority=slot_priority,
+            hard_exclude_ids=exclude_set,
         )
         items = _filter_items_by_excluded_slots(items, excluded_slots)
 
@@ -828,7 +869,14 @@ def build_recommendation(request: RecommendationRequest) -> RecommendationRespon
             source=source,
         )
 
-    shortlist = build_shortlist(all_products, request.profile, request.preference)
+    exclude_set = _exclude_product_ids(request)
+    shortlist = build_shortlist(
+        all_products,
+        request.profile,
+        request.preference,
+        diversity_key=_diversity_key(request, request.prompt),
+        exclude_ids=exclude_set,
+    )
 
     gemini_result = _gemini_pick(
         request.profile,
@@ -836,6 +884,8 @@ def build_recommendation(request: RecommendationRequest) -> RecommendationRespon
         request.preference,
         shortlist,
         request.image_hint,
+        exclude_ids=sorted(exclude_set),
+        style_hint=_style_hint(request.profile),
     )
 
     if gemini_result and gemini_result.items:
@@ -860,6 +910,7 @@ def build_recommendation(request: RecommendationRequest) -> RecommendationRespon
         request.replace_item_id,
         request.item_update_note,
         request.current_items,
+        exclude_ids=exclude_set,
     )
 
     if not items:

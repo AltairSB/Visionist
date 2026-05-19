@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.jwt import extract_bearer_token, get_user_id_from_token
 from app.catalog import load_products
-from app.db.supabase_client import is_supabase_configured
+from app.db.supabase_client import get_supabase, is_supabase_configured
 from app.models import (
     GuestProfileResponse,
     GuestProfileUpdateRequest,
@@ -28,6 +28,7 @@ from app.services.profile_store import (
 )
 from app.services.guest_profile_store import upsert_guest_profile
 from app.services.recommendation_store import persist_recommendation
+from app.services.recommendation_store import attach_fit_image_if_missing
 from app.services.wardrobe_store import save_outfit
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
@@ -158,6 +159,11 @@ def recommend(
     authorization: str | None = Header(default=None),
     x_guest_session_id: str | None = Header(default=None),
 ) -> RecommendationResponse:
+    user_id = _resolve_user_id(authorization)
+
+    if not user_id:
+        request = request.model_copy(update={"preference": "balanced"})
+
     try:
         response = build_recommendation(request)
     except ValueError as error:
@@ -169,7 +175,6 @@ def recommend(
             detail="Kombin önerisi oluşturulurken bir hata oluştu.",
         ) from error
 
-    user_id = _resolve_user_id(authorization)
     recommendation_id, guest_session_id = persist_recommendation(
         response=response,
         request=request,
@@ -199,7 +204,36 @@ def post_wardrobe(
     if not saved_id:
         raise HTTPException(status_code=503, detail="Kombin dolaba kaydedilemedi.")
 
+    if body.image_base64 and body.image_mime_type:
+        attach_fit_image_if_missing(
+            user_id=user_id,
+            recommendation_id=body.recommendation_id,
+            image_base64=body.image_base64,
+            mime_type=body.image_mime_type,
+        )
+
     return {"id": saved_id}
+
+
+@app.delete("/me/account")
+def delete_account(authorization: str | None = Header(default=None)) -> dict[str, bool]:
+    user_id = _require_user_id(authorization)
+
+    if not is_supabase_configured():
+        raise HTTPException(status_code=503, detail="Veritabanı yapılandırılmamış.")
+
+    client = get_supabase()
+
+    if client is None:
+        raise HTTPException(status_code=503, detail="Veritabanı bağlantısı yok.")
+
+    try:
+        client.auth.admin.delete_user(user_id)
+    except Exception as error:
+        logger.exception("Failed to delete user account")
+        raise HTTPException(status_code=500, detail="Hesap silinemedi.") from error
+
+    return {"ok": True}
 
 
 @app.delete("/wardrobe/{outfit_id}")
@@ -211,8 +245,6 @@ def delete_wardrobe(
 
     if not is_supabase_configured():
         raise HTTPException(status_code=503, detail="Veritabanı yapılandırılmamış.")
-
-    from app.db.supabase_client import get_supabase
 
     client = get_supabase()
 

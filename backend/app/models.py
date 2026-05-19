@@ -73,6 +73,7 @@ class RecommendationRequest(BaseModel):
     replace_item_id: int | None = None
     item_update_note: str | None = None
     current_items: list[RecommendedItem] | None = None
+    exclude_product_ids: list[str] = Field(default_factory=list)
 
 
 class RecommendationResponse(BaseModel):
@@ -92,6 +93,8 @@ class SaveOutfitRequest(BaseModel):
     recommendation_id: str
     prompt: str
     title: str | None = None
+    image_base64: str | None = None
+    image_mime_type: str | None = None
 
 
 class ProfileUpdateRequest(BaseModel):

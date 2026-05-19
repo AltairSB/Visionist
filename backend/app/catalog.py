@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import random
 from pathlib import Path
 
 from app.models import ClothingSize, FrontendProduct, PreferenceMode, Product, UserProfile
@@ -104,17 +106,35 @@ def sort_by_preference(products: list[Product], preference: PreferenceMode) -> l
     return sorted(products, key=lambda product: (-discount_score(product), product.sale_price))
 
 
+def _diversity_seed(diversity_key: str) -> int:
+    normalized = diversity_key.strip().lower()
+    if not normalized:
+        return 0
+    digest = hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+    return int(digest[:8], 16)
+
+
 def build_shortlist(
     products: list[Product],
     profile: UserProfile,
     preference: PreferenceMode,
     limit: int = 60,
+    *,
+    diversity_key: str | None = None,
+    exclude_ids: set[str] | None = None,
 ) -> list[Product]:
     pool = filter_for_profile(products, profile)
     if not pool:
         return []
 
-    ranked = sort_by_preference(pool, preference)
+    blocked = exclude_ids or set()
+    ranked = [product for product in sort_by_preference(pool, preference) if product.id not in blocked]
+
+    if diversity_key and diversity_key.strip():
+        shuffled = list(ranked)
+        random.Random(_diversity_seed(diversity_key)).shuffle(shuffled)
+        ranked = shuffled
+
     picked: list[Product] = []
     seen_ids: set[str] = set()
 
