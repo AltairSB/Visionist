@@ -2,7 +2,7 @@
 
 **Visionist**, e-ticaret ve moda vitrinlerine entegre edilebilen, **Gemini 2.5 Flash** destekli akıllı bir stil asistanıdır. Kullanıcılarınızı tanır, beden ve stok kurallarına göre ürünleri süzer, en uygun kombinleri önerir ve sonucu şık bir **Akıllı Kolaj** ile sunar.
 
-Misafir olarak hemen deneyebilir; hesap açtığınızda tercihleriniz ve kayıtlı kombinleriniz **Supabase** üzerinde güvenle saklanır.
+Misafir olarak hemen deneyebilirsiniz; hesap açtığınızda tercihleriniz ve kayıtlı kombinleriniz **Supabase** üzerinde güvenle saklanır.
 
 ---
 
@@ -90,7 +90,7 @@ Ana sayfada doğal dilde bir istek yazabilirsiniz (*“Yazlık, uygun fiyatlı b
 
 ### Giriş, kayıt veya misafir devam
 
-**Sign in** ve **Sign up** ile e-posta hesabı açabilirsiniz. İsterseniz **“Hesap olmadan devam et”** ile misafir olarak da kombin alırsınız — hesap yalnızca kayıtlı profil ve **Dolabım** için gerekir.
+**Sign in** ve **Sign up** ile üyelik hesabı açabilirsiniz. İsterseniz **“Hesap olmadan devam et”** ile misafir olarak da kombin alırsınız — hesap yalnızca kayıtlı profil ve **Dolabım** için gerekir.
 
 ![Giriş yap ekranı](docs/screenshots/05-giris-yap.png)
 
@@ -252,9 +252,10 @@ BTK_Hackathon/
 
 ## Ekip
 
-BTK Hackathon — **Visionist**  
+Altair — **Visionist**  
 Stil asistanınız; bütçenizi ve dolabınızı sizin yerinize düşünür.
 
 ---
 
-© 2026 Visionist. Tüm hakları saklıdır.
+Sitemizi incelemek için: https://visionistassistant.vercel.app/
+
