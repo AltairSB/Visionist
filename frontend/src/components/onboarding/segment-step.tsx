@@ -1,8 +1,12 @@
 'use client'
 
-import { ArrowRight, Baby, Rocket, Sparkles, UserRound, Users } from 'lucide-react'
+import type { ReactNode } from 'react'
+
+import { ArrowRight, Baby } from 'lucide-react'
+import Image from 'next/image'
 
 import { Button } from '@/components/ui/button'
+import { genderIconSrc, segmentIconSrc } from '@/lib/onboarding-icons'
 import { getGenderCards } from '@/lib/style-images'
 import type { Gender, Segment } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -12,21 +16,46 @@ const segments = [
     id: 'child',
     title: 'Çocuk',
     description: 'Dayanıklı, rahat ve ekonomik çocuk kombinleri.',
-    icon: Baby,
   },
   {
     id: 'young',
     title: 'Genç',
     description: 'Trendleri yakalayan dinamik ve bütçe dostu öneriler.',
-    icon: Rocket,
   },
   {
     id: 'adult',
     title: 'Yetişkin',
     description: 'Profesyonel, şık ve uzun ömürlü yatırım parçaları.',
-    icon: Sparkles,
   },
 ] as const
+
+type CardIconProps = {
+  imageSrc?: string
+  alt: string
+  isSelected: boolean
+  fallback?: ReactNode
+}
+
+const CardIcon = ({ imageSrc, alt, isSelected, fallback }: CardIconProps) => (
+  <span
+    className={cn(
+      'inline-flex size-16 items-center justify-center overflow-hidden rounded-full',
+      isSelected ? 'bg-white/15' : 'bg-lilac',
+    )}
+  >
+    {imageSrc ? (
+      <Image
+        src={imageSrc}
+        alt={alt}
+        width={40}
+        height={40}
+        className="object-contain"
+      />
+    ) : (
+      fallback
+    )}
+  </span>
+)
 
 type SegmentStepProps = {
   selectedGender: Gender
@@ -57,12 +86,12 @@ export const SegmentStep = ({
           Cinsiyet ve yaş grubunu seçin; stil önerileri ve görseller buna göre kişiselleştirilsin.
         </p>
       </div>
+
       <div className="mt-10">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink">Cinsiyet</p>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
           {genderCards.map((option) => {
             const isSelected = selectedGender === option.id
-            const Icon = option.id === 'female' ? UserRound : Users
 
             return (
               <button
@@ -77,14 +106,11 @@ export const SegmentStep = ({
                     : 'border-white/80 bg-white/82 text-ink shadow-card hover:-translate-y-1 hover:border-violet/25 hover:bg-white',
                 )}
               >
-                <span
-                  className={cn(
-                    'inline-flex size-16 items-center justify-center rounded-full',
-                    isSelected ? 'bg-white/15 text-white' : 'bg-lilac text-plum',
-                  )}
-                >
-                  <Icon size={30} />
-                </span>
+                <CardIcon
+                  imageSrc={genderIconSrc[option.id]}
+                  alt={option.title}
+                  isSelected={isSelected}
+                />
                 <h2 className="mt-7 text-2xl font-bold">{option.title}</h2>
                 <p className={cn('mt-3 leading-6', isSelected ? 'text-white/78' : 'text-ink/62')}>
                   {option.description}
@@ -94,12 +120,13 @@ export const SegmentStep = ({
           })}
         </div>
       </div>
+
       <div className="mt-10">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-ink">Yaş Grubu</p>
         <div className="mt-4 grid gap-5 md:grid-cols-3">
           {segments.map((segment) => {
-            const Icon = segment.icon
             const isSelected = selectedSegment === segment.id
+            const imageSrc = segmentIconSrc[segment.id]
 
             return (
               <button
@@ -114,14 +141,18 @@ export const SegmentStep = ({
                 )}
                 aria-pressed={isSelected}
               >
-                <span
-                  className={cn(
-                    'inline-flex size-16 items-center justify-center rounded-full',
-                    isSelected ? 'bg-white/15 text-white' : 'bg-lilac text-plum',
-                  )}
-                >
-                  <Icon size={30} />
-                </span>
+                <CardIcon
+                  imageSrc={imageSrc}
+                  alt={segment.title}
+                  isSelected={isSelected}
+                  fallback={
+                    <Baby
+                      size={30}
+                      className={isSelected ? 'text-white' : 'text-plum'}
+                      aria-hidden
+                    />
+                  }
+                />
                 <h2 className="mt-7 text-2xl font-bold">{segment.title}</h2>
                 <p className={cn('mt-3 leading-6', isSelected ? 'text-white/78' : 'text-ink/62')}>
                   {segment.description}
@@ -131,12 +162,14 @@ export const SegmentStep = ({
           })}
         </div>
       </div>
+
       <div className="mt-10 flex justify-center">
         <Button type="button" className="min-w-48" onClick={onContinue} disabled={!canContinue}>
           Devam Et
           <ArrowRight size={18} />
         </Button>
       </div>
+
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         <div className="rounded-2xl border border-plum/10 bg-white/80 p-6 shadow-card backdrop-blur">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-plum">Yapay Zeka Destekli Stil</p>

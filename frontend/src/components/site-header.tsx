@@ -1,6 +1,7 @@
 'use client'
 
-import { Bell, CircleUserRound, LogIn, UserPlus, X } from 'lucide-react'
+import { Bell, CircleUserRound, LogIn, Pencil, UserPlus, X } from 'lucide-react'
+import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
 import type { Account } from '@/lib/types'
@@ -9,10 +10,11 @@ import { cn } from '@/lib/utils'
 type SiteHeaderProps = {
   account: Account | null
   compact?: boolean
-  view: 'assistant' | 'account' | 'wardrobe'
+  view: 'assistant' | 'account' | 'account-settings' | 'wardrobe'
   onSignInClick: () => void
   onSignUpClick: () => void
   onAccountClick: () => void
+  onAccountSettingsClick: () => void
   onLogoClick: () => void
   onAssistantClick: () => void
   onWardrobeClick: () => void
@@ -25,6 +27,7 @@ export const SiteHeader = ({
   onSignInClick,
   onSignUpClick,
   onAccountClick,
+  onAccountSettingsClick,
   onLogoClick,
   onAssistantClick,
   onWardrobeClick,
@@ -71,8 +74,15 @@ export const SiteHeader = ({
           className="group flex items-center gap-3 rounded-full pr-2 text-left transition hover:-translate-y-0.5"
           aria-label="Visionist ana sayfasına git"
         >
-          <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-plum text-lilac shadow-card transition group-hover:bg-violet group-hover:shadow-atelier">
-            <span className="font-display text-3xl font-bold leading-none tracking-[-0.08em]">V</span>
+          <span className="relative inline-flex size-11 shrink-0 overflow-hidden rounded-2xl shadow-card ring-0 ring-violet/0 transition group-hover:shadow-atelier group-hover:ring-2 group-hover:ring-violet/35 group-hover:brightness-110">
+            <Image
+              src="/logo/visionist-mark.png"
+              alt=""
+              width={44}
+              height={44}
+              className="size-full object-cover"
+              priority
+            />
           </span>
           <span className="bg-gradient-to-r from-ink via-plum to-violet bg-clip-text font-display text-[2rem] font-bold tracking-[-0.06em] text-transparent sm:text-[2.45rem]">
             Visionist
@@ -105,9 +115,6 @@ export const SiteHeader = ({
             >
               Dolabım{account ? '' : ' · Üye'}
             </button>
-            <a className="text-ink/60 transition hover:text-plum" href="#deals">
-              Fırsatlar
-            </a>
           </nav>
         ) : null}
         <div className="flex items-center gap-2 text-ink sm:gap-3">
@@ -151,17 +158,27 @@ export const SiteHeader = ({
             ) : null}
           </div>
           {account ? (
-            <button
-              type="button"
-              onClick={onAccountClick}
-              aria-label="Hesap sayfasını aç"
-              className="group flex items-center gap-2 rounded-full bg-plum py-2 pl-2 pr-3 text-white transition hover:-translate-y-0.5 hover:bg-violet hover:shadow-card"
-            >
-              <span className="inline-flex size-7 items-center justify-center rounded-full bg-white/15">
-                <CircleUserRound size={17} />
-              </span>
-              <span className="hidden max-w-24 truncate text-sm font-bold sm:block">{account.name}</span>
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={onAccountClick}
+                aria-label="Hesap sayfasını aç"
+                className="group flex items-center gap-2 rounded-full bg-plum py-2 pl-2 pr-2 text-white transition hover:-translate-y-0.5 hover:bg-violet hover:shadow-card sm:pr-3"
+              >
+                <span className="inline-flex size-7 items-center justify-center rounded-full bg-white/15">
+                  <CircleUserRound size={17} />
+                </span>
+                <span className="hidden max-w-24 truncate text-sm font-bold sm:block">{account.name}</span>
+              </button>
+              <button
+                type="button"
+                onClick={onAccountSettingsClick}
+                aria-label="Hesap ayarlarını düzenle"
+                className="rounded-full border border-plum/10 bg-white p-2 text-plum transition hover:-translate-y-0.5 hover:bg-lilac"
+              >
+                <Pencil size={16} />
+              </button>
+            </div>
           ) : (
             <div className="flex items-center gap-2">
               <button

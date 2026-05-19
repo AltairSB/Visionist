@@ -5,7 +5,7 @@ export const SiteFooter = () => {
         <div>
           <p className="text-xl font-semibold">Visionist</p>
           <p className="mt-1 text-sm text-white/70">
-            © 2024 Visionist. Tüm hakları saklıdır.
+            © 2026 Visionist. Tüm hakları saklıdır.
           </p>
         </div>
         <nav aria-label="Alt menü" className="flex flex-wrap gap-5 text-sm text-white/75">

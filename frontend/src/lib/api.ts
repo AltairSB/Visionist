@@ -6,8 +6,8 @@ import type { RecommendationRequest, RecommendationResponse } from '@/lib/types'
 /** Same-origin proxy via next.config rewrites → avoids CORS / localhost issues on Windows */
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api/backend'
 const USE_LIVE_API = process.env.NEXT_PUBLIC_USE_LIVE_API !== 'false'
-const RECOMMENDATION_TIMEOUT_MS = 30000
-const FIT_RECOMMENDATION_TIMEOUT_MS = 120000
+const RECOMMENDATION_TIMEOUT_MS = 90_000
+const FIT_RECOMMENDATION_TIMEOUT_MS = 120_000
 
 type RecommendationOptions = {
   replaceItemId?: number
@@ -103,7 +103,7 @@ export const requestRecommendation = async (
     if (error instanceof Error && error.name === 'AbortError') {
       const timeoutHint = isFitMode
         ? 'Görsel analizi uzun sürebilir; tekrar deneyin veya daha küçük bir fotoğraf yükleyin.'
-        : 'Backend çalışıyor mu kontrol edin.'
+        : 'Gemini yanıtı gecikmiş olabilir; bir kez daha deneyin.'
       throw new Error(`Kombin isteği zaman aşımına uğradı. ${timeoutHint}`)
     }
     throw new Error(
@@ -143,4 +143,34 @@ export const requestRecommendation = async (
   }
 
   return data
+}
+
+export const deleteAccount = async (): Promise<void> => {
+  const token = await getAccessToken()
+
+  if (!token) {
+    throw new Error('Oturum açmanız gerekiyor.')
+  }
+
+  const response = await fetch(`${API_URL}/me/account`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    let detail = 'Hesap silinemedi'
+
+    try {
+      const errorBody = await response.json()
+      detail = parseApiErrorDetail(errorBody, detail)
+    } catch {
+      if (response.status >= 500) {
+        detail = 'Sunucu hatası. Backend terminalindeki logları kontrol edin.'
+      }
+    }
+
+    throw new Error(detail)
+  }
 }

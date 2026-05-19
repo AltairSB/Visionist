@@ -1,21 +1,31 @@
 'use client'
 
-import { ArrowRight, BadgePercent, Camera, Lock, PiggyBank, Sparkles, UsersRound } from 'lucide-react'
+import { ArrowRight, Camera, Lock, Sparkles } from 'lucide-react'
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import type { CompressedImage } from '@/lib/compress-image'
 import { pickRandomPromptSuggestions } from '@/lib/prompt-suggestions'
+import type { PreferenceMode } from '@/lib/types'
+import { cn } from '@/lib/utils'
+
+const preferenceOptions: { id: PreferenceMode; label: string }[] = [
+  { id: 'balanced', label: 'Dengeli' },
+  { id: 'cheaper', label: 'Daha ucuz' },
+  { id: 'sportier', label: 'Sportif' },
+  { id: 'elegant', label: 'Şık' },
+]
 
 type AssistantHomeProps = {
   prompt: string
+  preference: PreferenceMode
   isLoading: boolean
   fitMode: boolean
   fitImage: CompressedImage | null
   onPromptChange: (prompt: string) => void
-  onSubmit: () => void
-  onCheaperRequest: () => void
+  onPreferenceChange: (preference: PreferenceMode) => void
+  onSubmit: (preference?: PreferenceMode) => void
   onOpenFitModal: () => void
   onFitImageClear: () => void
   isAuthenticated: boolean
@@ -24,12 +34,13 @@ type AssistantHomeProps = {
 
 export const AssistantHome = ({
   prompt,
+  preference,
   isLoading,
   fitMode,
   fitImage,
   onPromptChange,
+  onPreferenceChange,
   onSubmit,
-  onCheaperRequest,
   onOpenFitModal,
   onFitImageClear,
   isAuthenticated,
@@ -43,7 +54,7 @@ export const AssistantHome = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onSubmit()
+    onSubmit(preference)
   }
 
   const canSubmit = fitMode ? Boolean(fitImage) : prompt.trim().length >= 3
@@ -64,6 +75,7 @@ export const AssistantHome = ({
             : 'Stil asistanın hem bütçeni hem dolabını senin için düşünsün.'}
         </p>
       </div>
+
       <form
         onSubmit={handleSubmit}
         className="mx-auto mt-9 max-w-4xl rounded-[2rem] border border-white/80 bg-white/82 p-4 shadow-atelier backdrop-blur"
@@ -124,24 +136,55 @@ export const AssistantHome = ({
             />
           )}
 
-          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-            <Button
-              type="button"
-              variant={hasFitPhoto ? 'primary' : 'secondary'}
-              aria-label="Buna ne uyar — fotoğraf yükle"
-              aria-pressed={hasFitPhoto}
-              onClick={onOpenFitModal}
-            >
-              <Camera size={17} />
-              Buna ne uyar?
-            </Button>
-            <Button type="submit" disabled={isLoading || !canSubmit}>
-              {isLoading ? 'Düşünüyor...' : 'Kombin Bul'}
-              <ArrowRight size={18} />
-            </Button>
+          <div
+            className={cn(
+              'mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-3',
+              isAuthenticated ? 'sm:justify-between' : 'sm:justify-end',
+            )}
+          >
+            {isAuthenticated ? (
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+              <p className="w-full shrink-0 text-xs font-bold uppercase tracking-[0.18em] text-ink/55 sm:w-auto">
+                Öncelik
+              </p>
+              {preferenceOptions.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => onPreferenceChange(option.id)}
+                  aria-pressed={preference === option.id}
+                  className={cn(
+                    'rounded-full border px-3 py-1.5 text-sm font-semibold transition',
+                    preference === option.id
+                      ? 'border-violet bg-violet text-white'
+                      : 'border-plum/15 bg-white text-plum hover:bg-lilac/60',
+                  )}
+                >
+                  {option.label}
+                </button>
+              ))}
+              </div>
+            ) : null}
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
+              <Button
+                type="button"
+                variant={hasFitPhoto ? 'primary' : 'secondary'}
+                aria-label="Buna ne uyar — fotoğraf yükle"
+                aria-pressed={hasFitPhoto}
+                onClick={onOpenFitModal}
+              >
+                <Camera size={17} />
+                Buna ne uyar?
+              </Button>
+              <Button type="submit" disabled={isLoading || !canSubmit}>
+                {isLoading ? 'Düşünüyor...' : 'Kombin Bul'}
+                <ArrowRight size={18} />
+              </Button>
+            </div>
           </div>
         </div>
       </form>
+
       <div className="mt-7 text-center">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-ink/45">İlham al</p>
         <div className="mt-4 flex flex-wrap justify-center gap-3">
@@ -157,60 +200,8 @@ export const AssistantHome = ({
           ))}
         </div>
       </div>
-      <div className="mt-14 grid gap-5 lg:grid-cols-[0.8fr_1.6fr]">
-        <aside className="rounded-[2rem] border border-plum/10 bg-white/80 p-6 shadow-card backdrop-blur">
-          <div className="inline-flex rounded-xl bg-plum p-3 text-white">
-            <PiggyBank size={22} />
-          </div>
-          <h2 className="mt-5 text-sm font-bold uppercase tracking-[0.18em] text-plum">Akıllı Tasarruf</h2>
-          <p className="mt-4 leading-7 text-ink/70">
-            Asistanımız ürünlerin fiyat geçmişini ve indirim oranını yorumlayarak en doğru alım zamanını simüle eder.
-          </p>
-          <button
-            type="button"
-            onClick={onCheaperRequest}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-violet px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-plum hover:shadow-card"
-          >
-            <BadgePercent size={17} />
-            Daha ucuzunu ara
-          </button>
-          <div className="mt-14 flex items-center">
-            <span className="size-9 rounded-full border-2 border-lilac bg-[url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80')] bg-cover" />
-            <span className="-ml-3 size-9 rounded-full border-2 border-lilac bg-[url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80')] bg-cover" />
-            <span className="-ml-3 inline-flex size-9 items-center justify-center rounded-full border-2 border-lilac bg-plum text-xs font-bold text-white">
-              +12k
-            </span>
-          </div>
-        </aside>
-        <div className="relative min-h-[28rem] overflow-hidden rounded-[2rem] bg-plum p-6 shadow-atelier">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(232,222,251,0.35),transparent_26rem)]" />
-          <div className="relative mx-auto max-w-3xl rounded-2xl border border-white/10 bg-white/10 p-5">
-            <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.2em] text-white/60">
-              <span>Dolabım</span>
-              <span>AI Öncesi</span>
-            </div>
-            <div className="mt-5 grid grid-cols-5 gap-2">
-              {Array.from({ length: 15 }).map((_, index) => (
-                <span
-                  key={index}
-                  className="h-24 rounded-t-full bg-gradient-to-b from-white/85 to-lilac/30"
-                />
-              ))}
-            </div>
-          </div>
-          <div className="relative mt-8 max-w-md rounded-2xl border border-white/15 bg-white/15 p-5 text-white backdrop-blur">
-            <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-lilac">
-              <Sparkles size={18} />
-              Günün Tavsiyesi
-            </p>
-            <p className="mt-3 leading-7 text-white/80">
-              Dolabındaki lacivert tonlarla bu haftaki indirimli ipek gömlek harika bir sessiz lüks kombini oluşturur.
-            </p>
-          </div>
-          <UsersRound className="absolute bottom-6 right-6 text-lilac/50" size={42} />
-        </div>
-      </div>
-      <section className="mt-6 rounded-[2rem] border border-plum/10 bg-white/82 p-6 shadow-card backdrop-blur md:flex md:items-center md:justify-between md:gap-6">
+
+      <section className="mt-14 rounded-[2rem] border border-plum/10 bg-white/82 p-6 shadow-card backdrop-blur md:flex md:items-center md:justify-between md:gap-6">
         <div>
           <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-violet">
             <Lock size={17} />

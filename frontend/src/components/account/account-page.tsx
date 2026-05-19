@@ -1,6 +1,6 @@
 'use client'
 
-import { CheckCircle2, LogOut, Save, Sparkles, UserRound, X } from 'lucide-react'
+import { CheckCircle2, LogOut, Save, Settings, Sparkles, UserRound, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -28,6 +28,7 @@ type AccountPageProps = {
   profile: UserProfile
   onProfileSave: (profile: UserProfile) => void
   onBackToAssistant: () => void
+  onOpenAccountSettings: () => void
   onSignOut: () => void
 }
 
@@ -36,6 +37,7 @@ export const AccountPage = ({
   profile,
   onProfileSave,
   onBackToAssistant,
+  onOpenAccountSettings,
   onSignOut,
 }: AccountPageProps) => {
   const [draftProfile, setDraftProfile] = useState(profile)
@@ -78,6 +80,10 @@ export const AccountPage = ({
               </p>
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Button type="button" variant="secondary" onClick={onOpenAccountSettings}>
+                <Settings size={18} />
+                Hesap ayarları
+              </Button>
               <Button type="button" variant="secondary" onClick={onBackToAssistant}>
                 <Sparkles size={18} />
                 Asistana Dön

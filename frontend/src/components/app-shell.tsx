@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccountPage } from '@/components/account/account-page'
+import { AccountSettingsPage } from '@/components/account/account-settings-page'
 import { WardrobePage } from '@/components/wardrobe/wardrobe-page'
 import { AssistantHome } from '@/components/assistant/assistant-home'
 import { AuthModal, type AuthMode } from '@/components/auth/auth-modal'
@@ -25,7 +26,11 @@ import {
   signOut,
 } from '@/lib/supabase/auth'
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
-import { fetchUserData, saveUserProfile } from '@/lib/supabase/profile'
+import {
+  fetchUserData,
+  saveUserProfile,
+  updateDefaultPreference,
+} from '@/lib/supabase/profile'
 import { saveOutfitToWardrobe } from '@/lib/wardrobe-storage'
 import type {
   Account,
@@ -39,8 +44,9 @@ import type {
 } from '@/lib/types'
 
 const VIEW_KEY = 'visionist-view'
+const DEFAULT_ASSISTANT_PROMPT = 'Yazlık, uygun fiyatlı bir akşam yemeği kombini'
 
-type AppView = 'assistant' | 'account' | 'wardrobe'
+type AppView = 'assistant' | 'account' | 'account-settings' | 'wardrobe'
 
 const getStoredView = (): AppView => {
   if (typeof window === 'undefined') {
@@ -65,10 +71,10 @@ export const AppShell = () => {
   const [view, setView] = useState<AppView>('assistant')
   const [step, setStep] = useState(1)
   const [profile, setProfile] = useState<UserProfile>(defaultProfile)
-  const [defaultPreference, setDefaultPreference] = useState<PreferenceMode>('balanced')
+  const [sessionPreference, setSessionPreference] = useState<PreferenceMode>('balanced')
   const [account, setAccount] = useState<Account | null>(null)
   const [authReady, setAuthReady] = useState(false)
-  const [prompt, setPrompt] = useState('Yazlık, uygun fiyatlı bir akşam yemeği kombini')
+  const [prompt, setPrompt] = useState(DEFAULT_ASSISTANT_PROMPT)
   const [recommendation, setRecommendation] = useState<RecommendationResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -81,8 +87,22 @@ export const AppShell = () => {
   const [isFitModalOpen, setIsFitModalOpen] = useState(false)
   const [lastRecommendationWasFit, setLastRecommendationWasFit] = useState(false)
   const skipGuestProfileDebounceRef = useRef(true)
+  const lastSyncedUserIdRef = useRef<string | null>(null)
+  const lastSuggestedProductIdsRef = useRef<string[]>([])
 
   const isAuthenticated = authReady && Boolean(account)
+
+  const resetAssistantChatState = useCallback(() => {
+    setPrompt(DEFAULT_ASSISTANT_PROMPT)
+    setSessionPreference('balanced')
+    setFitMode(false)
+    setFitImage(null)
+    setRecommendation(null)
+    setLastRecommendationWasFit(false)
+    setErrorMessage('')
+    setIsLoading(false)
+    setIsFitModalOpen(false)
+  }, [])
 
   const syncUserSession = useCallback(async () => {
     setAuthReady(false)
@@ -104,9 +124,21 @@ export const AppShell = () => {
       setAccount(null)
       setHasCompletedOnboarding(false)
       setStep(1)
+      if (lastSyncedUserIdRef.current !== null) {
+        resetAssistantChatState()
+        lastSuggestedProductIdsRef.current = []
+      }
+      lastSyncedUserIdRef.current = null
       setAuthReady(true)
       return
     }
+
+    const userId = session.user.id
+    if (lastSyncedUserIdRef.current !== null && lastSyncedUserIdRef.current !== userId) {
+      resetAssistantChatState()
+      lastSuggestedProductIdsRef.current = []
+    }
+    lastSyncedUserIdRef.current = userId
 
     await migrateLocalStorageToSupabase(session.user.id)
     await mergeGuestSessionForUser(session.user.id, getGuestSessionId())
@@ -115,20 +147,22 @@ export const AppShell = () => {
 
     if (userData) {
       setProfile(userData.profile)
-      setDefaultPreference(userData.defaultPreference)
+      setSessionPreference(userData.defaultPreference)
       setHasCompletedOnboarding(userData.onboardingCompleted)
       setStep(userData.onboardingCompleted ? 3 : 1)
-      setAccount(
-        mapSessionToAccount(
-          {
-            id: session.user.id,
-            email: session.user.email,
-            created_at: session.user.created_at,
-            user_metadata: session.user.user_metadata,
-          },
-          userData.onboardingCompleted,
-        ),
+      const mappedAccount = mapSessionToAccount(
+        {
+          id: session.user.id,
+          email: session.user.email,
+          created_at: session.user.created_at,
+          user_metadata: session.user.user_metadata,
+        },
+        userData.onboardingCompleted,
       )
+      setAccount({
+        ...mappedAccount,
+        name: userData.displayName || mappedAccount.name,
+      })
       setAuthReady(true)
       return
     }
@@ -145,7 +179,7 @@ export const AppShell = () => {
       ),
     )
     setAuthReady(true)
-  }, [])
+  }, [resetAssistantChatState])
 
   useEffect(() => {
     const freshGuestProfile = bootstrapGuestOnPageLoad()
@@ -223,6 +257,10 @@ export const AppShell = () => {
       return
     }
 
+    if (view === 'account-settings') {
+      return
+    }
+
     window.localStorage.setItem(VIEW_KEY, view)
   }, [hasHydratedStorage, view])
 
@@ -237,9 +275,24 @@ export const AppShell = () => {
     )
 
     if (isSupabaseConfigured) {
-      await saveUserProfile(account.id, profile, defaultPreference, true)
+      await saveUserProfile(account.id, profile, sessionPreference, true)
     }
   }
+
+  const handlePreferenceChange = useCallback(
+    (preference: PreferenceMode) => {
+      if (!account) {
+        return
+      }
+
+      setSessionPreference(preference)
+
+      if (isSupabaseConfigured) {
+        void updateDefaultPreference(account.id, preference)
+      }
+    },
+    [account],
+  )
 
   const handleSegmentChange = (segment: Segment) => {
     setProfile((currentProfile) => ({ ...currentProfile, segment }))
@@ -267,7 +320,7 @@ export const AppShell = () => {
 
   const handleProfileContinue = async () => {
     if (account && isSupabaseConfigured) {
-      await saveUserProfile(account.id, profile, defaultPreference, true)
+      await saveUserProfile(account.id, profile, sessionPreference, true)
     } else {
       await saveGuestProfile(profile)
     }
@@ -283,7 +336,7 @@ export const AppShell = () => {
     setProfile(nextProfile)
 
     if (account && isSupabaseConfigured) {
-      await saveUserProfile(account.id, nextProfile, defaultPreference, hasCompletedOnboarding)
+      await saveUserProfile(account.id, nextProfile, sessionPreference, hasCompletedOnboarding)
     }
   }
 
@@ -321,7 +374,8 @@ export const AppShell = () => {
     }
   }
 
-  const handleRecommendation = async (preference: PreferenceMode = defaultPreference) => {
+  const handleRecommendation = async (preference: PreferenceMode = sessionPreference) => {
+    const effectivePreference: PreferenceMode = isAuthenticated ? preference : 'balanced'
     const trimmedPrompt = prompt.trim()
 
     if (fitMode) {
@@ -341,14 +395,20 @@ export const AppShell = () => {
       const response = await requestRecommendation({
         profile,
         prompt: trimmedPrompt,
-        preference,
+        preference: effectivePreference,
         mode: fitMode ? 'fit' : 'text',
         image_base64: fitMode && fitImage ? fitImage.base64 : undefined,
         image_mime_type: fitMode && fitImage ? fitImage.mimeType : undefined,
+        exclude_product_ids: lastSuggestedProductIdsRef.current,
       })
 
+      lastSuggestedProductIdsRef.current = response.items.map((item) => item.product.id)
       setRecommendation(response)
       setLastRecommendationWasFit(fitMode)
+
+      if (account && isSupabaseConfigured) {
+        void updateDefaultPreference(account.id, effectivePreference)
+      }
 
       if (!response.recommendation_id) {
         setErrorMessage(
@@ -365,10 +425,6 @@ export const AppShell = () => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const handleCheaperRequest = () => {
-    void handleRecommendation('cheaper')
   }
 
   const handleCloseRecommendation = () => {
@@ -399,6 +455,9 @@ export const AppShell = () => {
       savedRecommendation.recommendation_id,
       prompt,
       token,
+      lastRecommendationWasFit && fitImage
+        ? { base64: fitImage.base64, mimeType: fitImage.mimeType }
+        : undefined,
     )
 
     if (!result.ok) {
@@ -411,6 +470,8 @@ export const AppShell = () => {
   }
 
   const handleAuthSuccess = async () => {
+    resetAssistantChatState()
+    lastSuggestedProductIdsRef.current = []
     await syncUserSession()
     setIsAuthOpen(false)
     setView('assistant')
@@ -421,6 +482,9 @@ export const AppShell = () => {
     setAccount(null)
     setProfile(defaultProfile)
     resetGuestClientState()
+    resetAssistantChatState()
+    lastSyncedUserIdRef.current = null
+    lastSuggestedProductIdsRef.current = []
     skipGuestProfileDebounceRef.current = true
     await initGuestSession(defaultProfile)
     setView('assistant')
@@ -459,6 +523,15 @@ export const AppShell = () => {
     setView('account')
   }
 
+  const handleAccountSettingsClick = () => {
+    if (!isAuthenticated) {
+      handleOpenAuth('signin')
+      return
+    }
+
+    setView('account-settings')
+  }
+
   const handleWardrobeClick = () => {
     if (!isAuthenticated) {
       handleOpenAuth('signin')
@@ -479,6 +552,7 @@ export const AppShell = () => {
         onSignInClick={() => handleOpenAuth('signin')}
         onSignUpClick={() => handleOpenAuth('signup')}
         onAccountClick={handleAccountClick}
+        onAccountSettingsClick={handleAccountSettingsClick}
         onLogoClick={handleLogoClick}
         onAssistantClick={handleAssistantNavClick}
         onWardrobeClick={handleWardrobeClick}
@@ -490,7 +564,15 @@ export const AppShell = () => {
             profile={profile}
             onProfileSave={(nextProfile) => void handleProfileSave(nextProfile)}
             onBackToAssistant={handleLogoClick}
+            onOpenAccountSettings={handleAccountSettingsClick}
             onSignOut={() => void handleSignOut()}
+          />
+        ) : view === 'account-settings' && account ? (
+          <AccountSettingsPage
+            account={account}
+            onBack={() => setView('account')}
+            onAccountUpdated={(nextAccount: Account) => setAccount(nextAccount)}
+            onAccountDeleted={() => void handleSignOut()}
           />
         ) : view === 'wardrobe' && account ? (
           <WardrobePage />
@@ -521,12 +603,13 @@ export const AppShell = () => {
               <>
                 <AssistantHome
                   prompt={prompt}
+                  preference={sessionPreference}
                   isLoading={isLoading}
                   fitMode={fitMode}
                   fitImage={fitImage}
                   onPromptChange={setPrompt}
-                  onSubmit={() => void handleRecommendation()}
-                  onCheaperRequest={handleCheaperRequest}
+                  onPreferenceChange={handlePreferenceChange}
+                  onSubmit={(preference) => void handleRecommendation(preference)}
                   onOpenFitModal={handleOpenFitModal}
                   onFitImageClear={handleFitImageClear}
                   isAuthenticated={isAuthenticated}
@@ -570,6 +653,7 @@ export const AppShell = () => {
           onSaveToWardrobe={handleSaveToWardrobe}
           onRecommendationChange={(next) => {
             setRecommendation(next)
+            lastSuggestedProductIdsRef.current = next.items.map((item) => item.product.id)
             if (!next.recommendation_id) {
               setErrorMessage(
                 'Kombin güncellendi ancak veritabanına kaydedilemedi. Dolaba kaydetme çalışmayabilir.',

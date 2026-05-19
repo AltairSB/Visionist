@@ -80,6 +80,20 @@ export const mapSessionToAccount = (
   }
 }
 
+export const updatePassword = async (newPassword: string) => {
+  const supabase = getSupabase()
+
+  if (!supabase) {
+    throw new Error('Supabase yapılandırılmamış.')
+  }
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword })
+
+  if (error) {
+    throw error
+  }
+}
+
 export const mergeGuestSessionForUser = async (userId: string, guestSessionId: string | null) => {
   if (!guestSessionId || !isSupabaseConfigured) {
     return

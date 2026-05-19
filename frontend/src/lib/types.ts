@@ -63,6 +63,7 @@ export type RecommendationRequest = {
   image_mime_type?: string
   image_hint?: string
   preference: PreferenceMode
+  exclude_product_ids?: string[]
 }
 
 export const CLOTHING_SIZES: ClothingSize[] = ['S', 'M', 'L', 'XL']

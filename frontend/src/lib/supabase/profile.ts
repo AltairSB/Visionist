@@ -120,9 +120,75 @@ export const saveUserProfile = async (
   return true
 }
 
+export const updateDefaultPreference = async (
+  userId: string,
+  defaultPreference: PreferenceMode,
+): Promise<boolean> => {
+  if (!isSupabaseConfigured) {
+    return false
+  }
+
+  const supabase = getSupabase()
+
+  if (!supabase) {
+    return false
+  }
+
+  const { error } = await supabase
+    .from('user_style_profiles')
+    .update({ default_preference: defaultPreference })
+    .eq('user_id', userId)
+
+  if (error) {
+    console.error('updateDefaultPreference', error)
+    return false
+  }
+
+  return true
+}
+
 export const getDefaultUserData = (): LoadedUserData => ({
   profile: defaultProfile,
   defaultPreference: 'balanced',
   onboardingCompleted: false,
   displayName: '',
 })
+
+export const updateDisplayName = async (userId: string, displayName: string): Promise<boolean> => {
+  const trimmed = displayName.trim()
+
+  if (!trimmed) {
+    return false
+  }
+
+  if (!isSupabaseConfigured) {
+    return false
+  }
+
+  const supabase = getSupabase()
+
+  if (!supabase) {
+    return false
+  }
+
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .update({ display_name: trimmed })
+    .eq('user_id', userId)
+
+  if (profileError) {
+    console.error('updateDisplayName profiles', profileError)
+    return false
+  }
+
+  const { error: authError } = await supabase.auth.updateUser({
+    data: { display_name: trimmed },
+  })
+
+  if (authError) {
+    console.error('updateDisplayName auth', authError)
+    return false
+  }
+
+  return true
+}

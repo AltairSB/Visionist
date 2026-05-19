@@ -166,10 +166,16 @@ export type SaveOutfitResult = {
   error?: string
 }
 
+type FitImagePayload = {
+  base64: string
+  mimeType: string
+}
+
 export const saveOutfitToDatabase = async (
   recommendationId: string,
   prompt: string,
   accessToken?: string | null,
+  fitImage?: FitImagePayload,
 ): Promise<SaveOutfitResult> => {
   const token = accessToken ?? (await getAccessToken())
 
@@ -192,6 +198,12 @@ export const saveOutfitToDatabase = async (
       body: JSON.stringify({
         recommendation_id: recommendationId,
         prompt,
+        ...(fitImage
+          ? {
+              image_base64: fitImage.base64,
+              image_mime_type: fitImage.mimeType,
+            }
+          : {}),
       }),
     })
   } catch {
