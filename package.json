@@ -1,0 +1,14 @@
+{
+  "name": "visionist-assistant",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"uv run --project backend uvicorn app.main:app --reload --app-dir backend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "uv run --project backend uvicorn app.main:app --reload --app-dir backend",
+    "lint": "npm run lint --prefix frontend",
+    "build": "npm run build --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "latest"
+  }
+}
